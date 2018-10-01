@@ -3,7 +3,7 @@ canvas = null,
 glProgram = null,
 fragmentShader = null,
 vertexShader = null;
-cube = null;
+box = null;
 currentAngle = [0.0, 0.0]; // [x-axis, y-axis] degrees
 
 var mvMatrix = mat4.create();
@@ -107,24 +107,8 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  // MOVER A UNA FUNCION DESPUES
-  cube = new Node();
-  cube.position_buffer = [0.5,  0.5,  0.5,  -0.5, 0.5,  0.5,  -0.5, -0.5,  0.5,   0.5, -0.5,  0.5,
-                          0.5, -0.5, -0.5,   0.5, 0.5, -0.5,  -0.5,  0.5, -0.5,  -0.5, -0.5, -0.5];
-  cube.color_buffer = [];
-  for(var i = 0; i < cube.position_buffer.length / 3; i++) {
-    cube.color_buffer.push(0);
-    cube.color_buffer.push(0);
-    cube.color_buffer.push(1);
-  }
-  cube.index_buffer = [0, 1, 2,  0, 2, 3,
-                       0, 3, 4,  0, 4, 5,
-                       0, 5, 6,  0, 6, 1,
-                       6, 1, 7,  7, 1, 2,
-                       7, 2, 3,  7, 3, 4,
-                       4, 7, 6,  4, 6, 5];
-
-  cube.setupWebGLBuffers();
+  box = new Box();
+  box.setupWebGLBuffers();
 }
 
 function initEventHandlers(c, currentAngle) {
@@ -173,7 +157,7 @@ function drawScene() {
   mat4.rotateY(mvMatrix, mvMatrix, currentAngle[1]);
   gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 
-  cube.draw();
+  box.draw();
 }
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -181,7 +165,6 @@ function drawScene() {
 ///////////////////////////////////////////////////////////////////////////////
 
 // Esta "clase" es el nodo del arbol de la escena
-
 function Node() {
   this.children = [];
   this.localMatrix = mat4.create();
@@ -243,21 +226,41 @@ function Node() {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
   }
+}
 
-  this.draw = function() {
-    var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
-    gl.enableVertexAttribArray(vertexPositionAttribute);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-    var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-    gl.enableVertexAttribArray(vertexColorAttribute);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-    gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-
-    // Dibujamos.
-    gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+// Clase box
+function Box() {
+  this.position_buffer = [0.5,  0.5,  0.5,  -0.5, 0.5,  0.5,  -0.5, -0.5,  0.5,   0.5, -0.5,  0.5,
+                          0.5, -0.5, -0.5,   0.5, 0.5, -0.5,  -0.5,  0.5, -0.5,  -0.5, -0.5, -0.5];
+  this.color_buffer = [];
+  for(var i = 0; i < this.position_buffer.length / 3; i++) {
+    this.color_buffer.push(0);
+    this.color_buffer.push(0);
+    this.color_buffer.push(1);
   }
+  this.index_buffer = [0, 1, 2,  0, 2, 3,
+                       0, 3, 4,  0, 4, 5,
+                       0, 5, 6,  0, 6, 1,
+                       6, 1, 7,  7, 1, 2,
+                       7, 2, 3,  7, 3, 4,
+                       4, 7, 6,  4, 6, 5];
+}
+
+Box.prototype = new Node();
+Box.prototype.constructor = Box;
+Box.prototype.draw = function() {
+  var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+  gl.enableVertexAttribArray(vertexPositionAttribute);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+  var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+  gl.enableVertexAttribArray(vertexColorAttribute);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+  gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+
+  // Dibujamos.
+  gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
 }
