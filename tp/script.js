@@ -2,9 +2,9 @@ var gl = null,
 canvas = null,
 glProgram = null,
 fragmentShader = null,
-vertexShader = null,
-t = 0.0;
+vertexShader = null;
 cube = null;
+currentAngle = [0.0, 0.0]; // [x-axis, y-axis] degrees
 
 var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
@@ -22,6 +22,7 @@ function initWebGL() {
     setupWebGL();
     initShaders();
     setupBuffers();
+    initEventHandlers(canvas, currentAngle);
     setInterval(drawScene, 10);
   } else{
     alert("Error: Your browser does not appear to support WebGL.");
@@ -126,6 +127,37 @@ function setupBuffers() {
   cube.setupWebGLBuffers();
 }
 
+function initEventHandlers(c, currentAngle) {
+  var dragging = false; // Dragging or not
+  var lastX = -1, lastY = -1; // Last position of the mouse
+
+  c.onmousedown = function(event) { // Mouse is pressed
+    var x = event.clientX, y = event.clientY;
+    // Start dragging if a mouse is in <canvas>
+    var rect = event.target.getBoundingClientRect();
+    if (rect.left <= x && x < rect.right && rect.top <= y && y < rect.bottom) {
+      lastX = x; lastY = y;
+      dragging = true;
+    }
+  };
+
+  // Mouse is released
+  c.onmouseup = function(event) { dragging = false; };
+
+  c.onmousemove = function(event) { // Mouse is moved
+    var x = event.clientX, y = event.clientY;
+    if (dragging) {
+      var factor = 100/c.height; // The rotation ratio
+      var dx = factor * (x - lastX);
+      var dy = factor * (y - lastY);
+      // Limit x-axis rotation angle to -90 to 90 degrees
+      currentAngle[0] = Math.max(Math.min(currentAngle[0] + dy, 90.0), -90.0);
+      currentAngle[1] = currentAngle[1] + dx;
+    }
+    lastX = x, lastY = y;
+  };
+}
+
 function drawScene() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
@@ -137,9 +169,8 @@ function drawScene() {
   // Preparamos una matriz de modelo+vista.
   mat4.identity(mvMatrix);
   mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -5.0]);
-  mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
-  t = t + 0.01;
-
+  mat4.rotateX(mvMatrix, mvMatrix, currentAngle[0]);
+  mat4.rotateY(mvMatrix, mvMatrix, currentAngle[1]);
   gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 
   cube.draw();
