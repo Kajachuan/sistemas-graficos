@@ -5,8 +5,6 @@ fragmentShader = null,
 vertexShader = null;
 objects = [];
 currentAngle = [0.0, 0.0]; // [x-axis, y-axis] degrees
-b1 = null;
-b2 = null;
 
 var vMatrix = mat4.create();
 var pMatrix = mat4.create();
@@ -109,21 +107,32 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  b1 = new Box(0.282, 0.286, 0.749);
-  b1.setupWebGLBuffers();
-  m = mat4.create();
-  mat4.scale(m, m, vec3.fromValues(1.5, 2, 1.3));
-  b1.localMatrix = m;
+  floor = new Box(0.686, 0.686, 0.686);
+  floor.setupWebGLBuffers();
+  m1 = mat4.create();
+  mat4.scale(m1, m1, vec3.fromValues(10, 0.1, 10));
+  floor.localMatrix = m1;
+  objects.push(floor);
 
-  b2 = new Box(0.463, 0.463, 0.463);
-  b2.setupWebGLBuffers();
+  box = new Box(0.282, 0.286, 0.749);
+  box.setupWebGLBuffers();
   m2 = mat4.create();
-  mat4.scale(m2, m2, vec3.fromValues(0.8, 0.1, 5));
-  mat4.translate(m2, m2, vec3.fromValues(0, -3, 0.78));
-  b2.localMatrix = m2;
-  b2.setParent(b1);
+  mat4.scale(m2, m2, vec3.fromValues(0.1, 10, 0.1));
+  mat4.translate(m2, m2, vec3.fromValues(0.1, 0.1, 0.1));
+  box.localMatrix = m2;
+  box.setParent(floor)
+  objects.push(box);
 
-  b1.updateWorldMatrix();
+  // line = new Box(0.463, 0.463, 0.463);
+  // line.setupWebGLBuffers();
+  // m3 = mat4.create();
+  // mat4.scale(m3, m3, vec3.fromValues(0.8, 0.1, 5));
+  // mat4.translate(m3, m3, vec3.fromValues(0, -3, 0.78));
+  // line.localMatrix = m3;
+  // line.setParent(box);
+  // objects.push(line);
+
+  floor.updateWorldMatrix();
 }
 
 function initEventHandlers(c, currentAngle) {
@@ -173,11 +182,11 @@ function drawScene() {
   gl.uniformMatrix4fv(u_view_matrix, false, vMatrix);
 
   var u_model_matrix = gl.getUniformLocation(glProgram, "uMMatrix");
-  gl.uniformMatrix4fv(u_model_matrix, false, b1.worldMatrix);
-  b1.draw();
 
-  gl.uniformMatrix4fv(u_model_matrix, false, b2.worldMatrix);
-  b2.draw();
+  objects.forEach(function(object) {
+    gl.uniformMatrix4fv(u_model_matrix, false, object.worldMatrix);
+    object.draw();
+  });
 }
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
