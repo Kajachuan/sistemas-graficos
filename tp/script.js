@@ -109,24 +109,19 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  b1 = new Box(0, 0, 1);
+  b1 = new Box(0.282, 0.286, 0.749);
   b1.setupWebGLBuffers();
   m = mat4.create();
   mat4.scale(m, m, vec3.fromValues(1.5, 2, 1.3));
   b1.localMatrix = m;
 
-  b2 = new Box(1, 0, 0);
+  b2 = new Box(0.463, 0.463, 0.463);
   b2.setupWebGLBuffers();
   m2 = mat4.create();
-  mat4.translate(m2, m2, vec3.fromValues(1.9, 0, 0));
+  mat4.scale(m2, m2, vec3.fromValues(0.8, 0.1, 5));
+  mat4.translate(m2, m2, vec3.fromValues(0, -3, 0.78));
   b2.localMatrix = m2;
   b2.setParent(b1);
-
-  // b3 = new Box(0, 1, 0);
-  // b3.setupWebGLBuffers();
-  // m3 = mat4.create();
-  // b3.localMatrix = m3;
-
 
   b1.updateWorldMatrix();
 }
