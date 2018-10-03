@@ -1,0 +1,51 @@
+<html>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>TP1 - Sistemas Gr&aacute;ficos</title>
+	<style>
+		body{ background-color: grey; }
+		canvas{ background-color: midnightblue; }
+		textarea{ background-color: white; foreground-color: white;}
+	</style>
+
+	<!-- ENTREGO SIN LA ISLA NI EL BARCO -->
+	<script type="text/javascript" src="js/gl-matrix.js"></script>
+  <script type="text/javascript" src="js/webgl-utils.js"></script>
+
+	<script type="text/javascript" src="shaders/shader-fs.js"></script>
+	<script type="text/javascript" src="shaders/shader-vs.js"></script>
+
+	<script type="text/javascript" src="curvas/CurvaBSpline.js"></script>
+	<script type="text/javascript" src="curvas/CurvaBezier.js"></script>
+	<script type="text/javascript" src="curvas/Curva.js"></script>
+
+	<script type="text/javascript" src="geometria/GeometriaCubo.js"></script>
+	<script type="text/javascript" src="geometria/GeometriaContenedor.js"></script>
+	<script type="text/javascript" src="geometria/GeometriaCilindro.js"></script>
+	<script type="text/javascript" src="geometria/GeometriaCurva.js"></script>
+
+	<script type="text/javascript" src="objetos/Objeto3D.js"></script>
+	<script type="text/javascript" src="objetos/Sea.js"></script>
+	<script type="text/javascript" src="objetos/Caja.js"></script>
+	<script type="text/javascript" src="objetos/Cabina.js"></script>
+	<script type="text/javascript" src="objetos/Pinzas.js"></script>
+	<script type="text/javascript" src="objetos/Cables.js"></script>
+	<script type="text/javascript" src="objetos/Cilindro.js"></script>
+	<script type="text/javascript" src="objetos/Grua.js"></script>
+	<script type="text/javascript" src="objetos/Barco.js"></script>
+	<script type="text/javascript" src="objetos/Isla.js"></script>
+
+	<script type="text/javascript" src="CG/canvas7.js"></script>
+
+	<script type="text/javascript" src="camera/CameraHandler.js"></script>
+
+	<script type="text/javascript" src="index.js"></script>
+
+	<body onload="start()" id="glbody">
+  	<center>
+      <h3>TP1 - Sistemas Gr&aacute;ficos - Cozza, Fabrizio Luis - Padr&oacute;n 97.402</h3>
+  			<canvas id="glcanvas" style="border: none;" width="1300" height="550">
+  				Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+  			</canvas>
+  	</center
+	</body>
+</html>
