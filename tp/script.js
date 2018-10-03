@@ -5,6 +5,8 @@ fragmentShader = null,
 vertexShader = null;
 objects = [];
 currentAngle = [0.0, 0.0]; // [x-axis, y-axis] degrees
+b1 = null;
+b2 = null;
 
 var vMatrix = mat4.create();
 var pMatrix = mat4.create();
@@ -116,7 +118,7 @@ function setupBuffers() {
   b2 = new Box(1, 0, 0);
   b2.setupWebGLBuffers();
   m2 = mat4.create();
-  mat4.translate(m, m, vec3.fromValues(0.5, 0, 0));
+  mat4.translate(m2, m2, vec3.fromValues(1.9, 0, 0));
   b2.localMatrix = m2;
   b2.setParent(b1);
 
@@ -127,8 +129,6 @@ function setupBuffers() {
 
 
   b1.updateWorldMatrix();
-  console.log(b1.worldMatrix)
-  console.log(b2.worldMatrix)
 }
 
 function initEventHandlers(c, currentAngle) {
