@@ -3,10 +3,10 @@ canvas = null,
 glProgram = null,
 fragmentShader = null,
 vertexShader = null;
-box = null;
+objects = [];
 currentAngle = [0.0, 0.0]; // [x-axis, y-axis] degrees
 
-var mvMatrix = mat4.create();
+var vMatrix = mat4.create();
 var pMatrix = mat4.create();
 
 // ESTO ES LO MISMO DE SIEMPRE
@@ -107,8 +107,32 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  box = new Box();
-  box.setupWebGLBuffers();
+  objects.push(new Box(0, 0, 1));
+  objects[0].setupWebGLBuffers();
+  m = mat4.create();
+  mat4.scale(m, m, vec3.fromValues(1.5, 2, 1.3));
+  objects[0].localMatrix = m;
+
+  objects.push(new Box(1, 0, 0));
+  objects[1].setupWebGLBuffers();
+  objects[1].setParent(objects[0]);
+  m2 = mat4.create();
+  objects[1].localMatrix = m2;
+
+  objects.push(new Box(0, 1, 0));
+  objects[2].setupWebGLBuffers();
+  objects[2].setParent(objects[1]);
+  m3 = mat4.create();
+  objects[2].localMatrix = m3;
+
+  console.log(objects[0].parent)
+  console.log(objects[0].children)
+  console.log(objects[1].parent)
+  console.log(objects[1].children)
+  console.log(objects[2].parent)
+  console.log(objects[2].children)
+
+  objects[0].updateWorldMatrix();
 }
 
 function initEventHandlers(c, currentAngle) {
@@ -149,15 +173,20 @@ function drawScene() {
   mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
   gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
-  var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
-  // Preparamos una matriz de modelo+vista.
-  mat4.identity(mvMatrix);
-  mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -5.0]);
-  mat4.rotateX(mvMatrix, mvMatrix, currentAngle[0]);
-  mat4.rotateY(mvMatrix, mvMatrix, currentAngle[1]);
-  gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+  var u_view_matrix = gl.getUniformLocation(glProgram, "uVMatrix");
+  // Preparamos una matriz de vista.
+  mat4.identity(vMatrix);
+  mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -5.0]);
+  mat4.rotateX(vMatrix, vMatrix, currentAngle[0] + Math.PI/8);
+  mat4.rotateY(vMatrix, vMatrix, currentAngle[1] - Math.PI/5);
+  gl.uniformMatrix4fv(u_view_matrix, false, vMatrix);
 
-  box.draw();
+  var u_model_matrix = gl.getUniformLocation(glProgram, "uMMatrix");
+  gl.uniformMatrix4fv(u_model_matrix, false, objects[0].worldMatrix);
+  objects[0].draw();
+
+  gl.uniformMatrix4fv(u_model_matrix, false, objects[1].worldMatrix);
+  objects[1].draw();
 }
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,71 +201,72 @@ function Node() {
   this.index_buffer = null;
   this.position_buffer = null;
   this.color_buffer = null;
+  this.parent = null;
+}
 
-  // Método que setea el padre del nodo
-  this.setParent = function(parent) {
-    // Elimina el padre actual
-    if (this.parent) {
-      var ndx = this.parent.children.indexOf(this);
-      if (ndx >= 0) {
-        this.parent.children.splice(ndx, 1);
-      }
-    }
+// Método que setea el padre del nodo
+Node.prototype.setParent = function(parent) {
+  // Elimina el padre actual
+  // if (this.parent) {
+  //   var ndx = this.parent.children.indexOf(this);
+  //   if (ndx >= 0) {
+  //     this.parent.children.splice(ndx, 1);
+  //   }
+  // }
 
-    // Agrega el nuevo padre
-    if (parent) {
-      parent.children.append(this);
-    }
+  // Agrega el nuevo padre
+  if (parent) {
+    parent.children.push(this);
     this.parent = parent;
-  }
-
-  // Método que actualiza la matriz del mundo
-  this.updateWorldMatrix = function(parentWorldMatrix) {
-    if (parentWorldMatrix) {
-      mat4.multiply(this.localMatrix, this.worldMatrix, parentWorldMatrix);
-    } else {
-      mat4.copy(this.worldMatrix, this.localMatrix);
-    }
-
-    // Actualiza la matriz de todos los hijos
-    var worldMatrix = this.worldMatrix;
-    this.children.forEach(function(child) {
-      child.updateWorldMatrix(worldMatrix);
-    });
-  }
-
-  this.setupWebGLBuffers = function() {
-    // 1. Creamos un buffer para las posicioens dentro del pipeline.
-    this.webgl_position_buffer = gl.createBuffer();
-    // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
-    // hemos creado.
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-    // 3. Cargamos datos de las posiciones en el buffer.
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
-
-    // Repetimos los pasos 1. 2. y 3. para la información del color
-    this.webgl_color_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
-
-    // Repetimos los pasos 1. 2. y 3. para la información de los índices
-    // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-    // Notar también que se usa un array de enteros en lugar de floats.
-    this.webgl_index_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
   }
 }
 
+// Método que actualiza la matriz del mundo
+Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
+  if (parentWorldMatrix) {
+    mat4.multiply(this.worldMatrix, this.localMatrix, parentWorldMatrix);
+  } else {
+    mat4.copy(this.worldMatrix, this.localMatrix);
+  }
+
+  // Actualiza la matriz de todos los hijos
+  var worldMatrix = this.worldMatrix;
+  this.children.forEach(function(child) {
+    child.updateWorldMatrix(worldMatrix);
+  });
+}
+
+Node.prototype.setupWebGLBuffers = function() {
+  // 1. Creamos un buffer para las posicioens dentro del pipeline.
+  this.webgl_position_buffer = gl.createBuffer();
+  // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
+  // hemos creado.
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+  // 3. Cargamos datos de las posiciones en el buffer.
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
+
+  // Repetimos los pasos 1. 2. y 3. para la información del color
+  this.webgl_color_buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
+
+  // Repetimos los pasos 1. 2. y 3. para la información de los índices
+  // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
+  // Notar también que se usa un array de enteros en lugar de floats.
+  this.webgl_index_buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
+}
+
 // Clase box
-function Box() {
+function Box(r, g, b) {
   this.position_buffer = [0.5,  0.5,  0.5,  -0.5, 0.5,  0.5,  -0.5, -0.5,  0.5,   0.5, -0.5,  0.5,
                           0.5, -0.5, -0.5,   0.5, 0.5, -0.5,  -0.5,  0.5, -0.5,  -0.5, -0.5, -0.5];
   this.color_buffer = [];
   for(var i = 0; i < this.position_buffer.length / 3; i++) {
-    this.color_buffer.push(0);
-    this.color_buffer.push(0);
-    this.color_buffer.push(1);
+    this.color_buffer.push(r);
+    this.color_buffer.push(g);
+    this.color_buffer.push(b);
   }
   this.index_buffer = [0, 1, 2,  0, 2, 3,
                        0, 3, 4,  0, 4, 5,

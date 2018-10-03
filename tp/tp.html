@@ -23,7 +23,8 @@
 
       // Los uniforms son características propias de una etapa de dibujado completa.
       // Son comunes a todos los vertices involucrados en el dibujado.
-      uniform mat4 uMVMatrix;
+      uniform mat4 uMMatrix;
+      uniform mat4 uVMatrix;
       uniform mat4 uPMatrix;
 
       // Los varying son propiedades que toman valor para cada fragmento a partir
@@ -34,7 +35,7 @@
       void main(void) {
         // gl_Position es una variable "built-in" de GLSL que es usada para
         // almacenar la posición resultante del fragmento.
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
         vColor = vec4(aVertexColor,1.0);
       }
     </script>
@@ -61,7 +62,7 @@
   <body onload="initWebGL()">
     <center>
       <h1>Trabajo Práctico - Sistemas Gráficos</h1>
-      <h2>Nombre</h2>
+      <h2>Nombres</h2>
       <canvas id="my-canvas" width="900" height="500">
         Your browser does not support the HTML5 canvas element.
       </scanvas>
