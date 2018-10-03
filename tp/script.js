@@ -107,32 +107,28 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  objects.push(new Box(0, 0, 1));
-  objects[0].setupWebGLBuffers();
+  b1 = new Box(0, 0, 1);
+  b1.setupWebGLBuffers();
   m = mat4.create();
   mat4.scale(m, m, vec3.fromValues(1.5, 2, 1.3));
-  objects[0].localMatrix = m;
+  b1.localMatrix = m;
 
-  objects.push(new Box(1, 0, 0));
-  objects[1].setupWebGLBuffers();
-  objects[1].setParent(objects[0]);
+  b2 = new Box(1, 0, 0);
+  b2.setupWebGLBuffers();
   m2 = mat4.create();
-  objects[1].localMatrix = m2;
+  mat4.translate(m, m, vec3.fromValues(0.5, 0, 0));
+  b2.localMatrix = m2;
+  b2.setParent(b1);
 
-  objects.push(new Box(0, 1, 0));
-  objects[2].setupWebGLBuffers();
-  objects[2].setParent(objects[1]);
-  m3 = mat4.create();
-  objects[2].localMatrix = m3;
+  // b3 = new Box(0, 1, 0);
+  // b3.setupWebGLBuffers();
+  // m3 = mat4.create();
+  // b3.localMatrix = m3;
 
-  console.log(objects[0].parent)
-  console.log(objects[0].children)
-  console.log(objects[1].parent)
-  console.log(objects[1].children)
-  console.log(objects[2].parent)
-  console.log(objects[2].children)
 
-  objects[0].updateWorldMatrix();
+  b1.updateWorldMatrix();
+  console.log(b1.worldMatrix)
+  console.log(b2.worldMatrix)
 }
 
 function initEventHandlers(c, currentAngle) {
@@ -182,11 +178,11 @@ function drawScene() {
   gl.uniformMatrix4fv(u_view_matrix, false, vMatrix);
 
   var u_model_matrix = gl.getUniformLocation(glProgram, "uMMatrix");
-  gl.uniformMatrix4fv(u_model_matrix, false, objects[0].worldMatrix);
-  objects[0].draw();
+  gl.uniformMatrix4fv(u_model_matrix, false, b1.worldMatrix);
+  b1.draw();
 
-  gl.uniformMatrix4fv(u_model_matrix, false, objects[1].worldMatrix);
-  objects[1].draw();
+  gl.uniformMatrix4fv(u_model_matrix, false, b2.worldMatrix);
+  b2.draw();
 }
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,30 +194,14 @@ function Node() {
   this.children = [];
   this.localMatrix = mat4.create();
   this.worldMatrix = mat4.create();
-  this.index_buffer = null;
-  this.position_buffer = null;
-  this.color_buffer = null;
   this.parent = null;
 }
 
-// Método que setea el padre del nodo
 Node.prototype.setParent = function(parent) {
-  // Elimina el padre actual
-  // if (this.parent) {
-  //   var ndx = this.parent.children.indexOf(this);
-  //   if (ndx >= 0) {
-  //     this.parent.children.splice(ndx, 1);
-  //   }
-  // }
-
-  // Agrega el nuevo padre
-  if (parent) {
-    parent.children.push(this);
-    this.parent = parent;
-  }
+  parent.children.push(this);
+  this.parent = parent;
 }
 
-// Método que actualiza la matriz del mundo
 Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
   if (parentWorldMatrix) {
     mat4.multiply(this.worldMatrix, this.localMatrix, parentWorldMatrix);
@@ -263,7 +243,7 @@ function Box(r, g, b) {
   this.position_buffer = [0.5,  0.5,  0.5,  -0.5, 0.5,  0.5,  -0.5, -0.5,  0.5,   0.5, -0.5,  0.5,
                           0.5, -0.5, -0.5,   0.5, 0.5, -0.5,  -0.5,  0.5, -0.5,  -0.5, -0.5, -0.5];
   this.color_buffer = [];
-  for(var i = 0; i < this.position_buffer.length / 3; i++) {
+  for(var i = 0; i < this.position_buffer.length; i+=3) {
     this.color_buffer.push(r);
     this.color_buffer.push(g);
     this.color_buffer.push(b);
@@ -274,10 +254,12 @@ function Box(r, g, b) {
                        6, 1, 7,  7, 1, 2,
                        7, 2, 3,  7, 3, 4,
                        4, 7, 6,  4, 6, 5];
+
+  Node.call(this);
 }
 
-Box.prototype = new Node();
-Box.prototype.constructor = Box;
+Box.prototype = Object.create(Node.prototype);
+
 Box.prototype.draw = function() {
   var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
   gl.enableVertexAttribArray(vertexPositionAttribute);
