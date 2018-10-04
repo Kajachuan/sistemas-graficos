@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Layer(0.82, 0.753, 0.306);
+  o = new Tube(0, 0, 1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -348,19 +348,19 @@ Ball.prototype = Object.create(Node.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase Layer
-function Layer(r, g, b) {
-  nPoints = 20;
-  angle = Math.PI / (nPoints - 1);
+// Clase Tube
+function Tube(r, g, b) {
   this.position_buffer = [];
-  this.position_buffer.push(0, 0.1, 0);
-  for(var i = 0; i < nPoints; i++) {
-    this.position_buffer.push(1 + 0.1 * Math.sin(i * angle));
-    this.position_buffer.push(0.1 * Math.cos(i * angle));
-    this.position_buffer.push(0);
-  }
-  this.position_buffer.push(0, -0.1, 0);
+  this.position_buffer.push(0, 1.7, 0);
+  this.position_buffer.push(0.1, 1.7, 0);
+  this.position_buffer.push(0.1, 2, 0);
+  this.position_buffer.push(0.2, 2, 0);
+  this.position_buffer.push(0.2, -2, 0);
+  this.position_buffer.push(0.1, -2, 0);
+  this.position_buffer.push(0.1, -1.7, 0);
+  this.position_buffer.push(0, -1.7, 0);
 
+  nPoints = 8;
   levels = 50;
   angle = 2 * Math.PI / levels;
   rot = vec3.create();
@@ -383,11 +383,6 @@ function Layer(r, g, b) {
   }
 
   this.index_buffer = [];
-  for(var i = 0; i < this.position_buffer.length / 3; i++) {
-    this.index_buffer.push(i);
-  }
-
-  this.index_buffer = [];
   for (var i = 0; i < levels; i++) {
     column1Offset = i * nPoints;
     column2Offset = column1Offset + nPoints;
@@ -399,4 +394,4 @@ function Layer(r, g, b) {
   Node.call(this);
 }
 
-Layer.prototype = Object.create(Node.prototype);
+Tube.prototype = Object.create(Node.prototype);
