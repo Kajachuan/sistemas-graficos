@@ -107,11 +107,17 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Ball(0.757, 0.227, 0.251);
+  o = new Layer(0.82, 0.753, 0.306);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
   objects.push(o);
+
+  // Amarillo = 0.82, 0.753, 0.306
+  // Rojo = 0.757, 0.227, 0.251
+  // Gris del piso = 0.686, 0.686, 0.686
+  // Azul = 0.282, 0.286, 0.749
+  // Gris de la cinta = 0.463, 0.463, 0.463
 
   // floor = new Box(0.686, 0.686, 0.686);
   // floor.setupWebGLBuffers();
@@ -248,9 +254,25 @@ Node.prototype.setupWebGLBuffers = function() {
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
 }
 
+Node.prototype.draw = function() {
+  var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+  gl.enableVertexAttribArray(vertexPositionAttribute);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+  var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+  gl.enableVertexAttribArray(vertexColorAttribute);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+  gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+
+  // Dibujamos.
+  gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+}
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase box
+// Clase Box
 function Box(r, g, b) {
   this.position_buffer = [1,  1,  1,  -1, 1,  1,  -1, -1,  1,   1, -1,  1,
                           1, -1, -1,   1, 1, -1,  -1,  1, -1,  -1, -1, -1];
@@ -272,27 +294,10 @@ function Box(r, g, b) {
 
 Box.prototype = Object.create(Node.prototype);
 
-Box.prototype.draw = function() {
-  var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
-  gl.enableVertexAttribArray(vertexPositionAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-  var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-  gl.enableVertexAttribArray(vertexColorAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-  gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
-
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-
-  // Dibujamos.
-  gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase ball
+// Clase Ball
 function Ball(r, g, b) {
   nPoints = 20;
   angle = Math.PI / (nPoints - 1);
@@ -340,19 +345,58 @@ function Ball(r, g, b) {
 
 Ball.prototype = Object.create(Node.prototype);
 
-Ball.prototype.draw = function() {
-  var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
-  gl.enableVertexAttribArray(vertexPositionAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
-  var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-  gl.enableVertexAttribArray(vertexColorAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-  gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+// Clase Layer
+function Layer(r, g, b) {
+  nPoints = 20;
+  angle = Math.PI / (nPoints - 1);
+  this.position_buffer = [];
+  this.position_buffer.push(0, 0.1, 0);
+  for(var i = 0; i < nPoints; i++) {
+    this.position_buffer.push(1 + 0.1 * Math.sin(i * angle));
+    this.position_buffer.push(0.1 * Math.cos(i * angle));
+    this.position_buffer.push(0);
+  }
+  this.position_buffer.push(0, -0.1, 0);
 
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+  levels = 50;
+  angle = 2 * Math.PI / levels;
+  rot = vec3.create();
+  origin = vec3.fromValues(0, 0, 0);
 
-  // Dibujamos.
-  gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+  for(var i = 0; i < levels; i++) {
+    for(var j = 0; j < nPoints * 3; j += 3) {
+      x = this.position_buffer[j];
+      y = this.position_buffer[j + 1];
+      z = this.position_buffer[j + 2];
+      a = vec3.fromValues(x, y, z);
+      vec3.rotateY(rot, a, origin, angle * (i + 1));
+      this.position_buffer.push(rot[0], rot[1], rot[2]);
+    }
+  }
+
+  this.color_buffer = [];
+  for(var i = 0; i < this.position_buffer.length; i+=3) {
+    this.color_buffer.push(r, g, b);
+  }
+
+  this.index_buffer = [];
+  for(var i = 0; i < this.position_buffer.length / 3; i++) {
+    this.index_buffer.push(i);
+  }
+
+  this.index_buffer = [];
+  for (var i = 0; i < levels; i++) {
+    column1Offset = i * nPoints;
+    column2Offset = column1Offset + nPoints;
+    for (let j = 0; j < nPoints - 1; j++) {
+      this.index_buffer.push(column1Offset + j, column2Offset + j, column1Offset + j + 1);
+      this.index_buffer.push(column1Offset + j + 1, column2Offset + j, column2Offset + j + 1);
+    }
+  }
+  Node.call(this);
 }
+
+Layer.prototype = Object.create(Node.prototype);
