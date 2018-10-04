@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Disk(0, 0, 1);
+  o = new Base(0, 0, 1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -391,7 +391,7 @@ function Tube(r, g, b) {
       this.index_buffer.push(column1Offset + j + 1, column2Offset + j, column2Offset + j + 1);
     }
   }
-  
+
   Node.call(this);
 }
 
@@ -444,3 +444,37 @@ function Disk(r, g, b) {
 }
 
 Disk.prototype = Object.create(Node.prototype);
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Clase Base
+function Base(r, g, b) {
+
+  this.position_buffer = [];
+  for(var u = 0; u <= 1; u += 0.1) {
+    b0 = 0.5 * Math.pow(1 - u, 2);
+    b1 = -Math.pow(u, 2) + u + 0.5;
+    b2 = 0.5 * Math.pow(u, 2);
+    xu = b0 * 0 + b1 * 2 + b2 * 2;
+    yu = b0 * 2 + b1 * 2 + b2 * 0;
+    zu = 0;
+    this.position_buffer.push(xu, yu, zu);
+  }
+  console.log(this.position_buffer);
+
+
+  this.color_buffer = [];
+  for(var i = 0; i < this.position_buffer.length; i+=3) {
+    this.color_buffer.push(r, g, b);
+  }
+
+  this.index_buffer = [];
+  for(var i = 0; i < this.position_buffer.length / 3; i++) {
+    this.index_buffer.push(i);
+  }
+
+  Node.call(this);
+}
+
+Base.prototype = Object.create(Node.prototype);
