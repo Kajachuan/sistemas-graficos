@@ -483,15 +483,32 @@ Base.prototype = Object.create(Node.prototype);
 // Clase ring
 function Ring(r, g, b) {
   angle = Math.PI / 6;
+  nPoints = 13;
   this.position_buffer = [];
-  for(var i = 0; i < 13; i++) {
-    this.position_buffer.push(2 * Math.cos(i * angle));
-    this.position_buffer.push(2 * Math.sin(i * angle));
+  for(var i = 0; i < nPoints; i++) {
+    this.position_buffer.push(3 + 0.5 * Math.cos(i * angle));
+    this.position_buffer.push(0.5 * Math.sin(i * angle));
     this.position_buffer.push(0);
     i++;
-    this.position_buffer.push(Math.cos(i * angle));
-    this.position_buffer.push(Math.sin(i * angle));
+    if(i == nPoints) break;
+    this.position_buffer.push(3 + 0.25 * Math.cos(i * angle));
+    this.position_buffer.push(0.25 * Math.sin(i * angle));
     this.position_buffer.push(0);
+  }
+
+  levels = 20;
+  ang = 2 * Math.PI / levels;
+  new_pos = vec3.create();
+  origin = vec3.fromValues(0, 0, 0);
+  for(var i = 0; i < levels; i++) {
+    for(var j = 0; j < nPoints * 3; j+=3) {
+      x = this.position_buffer[j];
+      y = this.position_buffer[j + 1];
+      z = this.position_buffer[j + 2];
+      a = vec3.fromValues(x, y, z);
+      vec3.rotateY(new_pos, a, origin, ang * (i + 1));
+      this.position_buffer.push(new_pos[0], new_pos[1], new_pos[2]);
+    }
   }
 
   this.color_buffer = [];
@@ -499,9 +516,19 @@ function Ring(r, g, b) {
     this.color_buffer.push(r, g, b);
   }
 
+  // this.index_buffer = [];
+  // for(var i = 0; i < this.position_buffer.length / 3; i++) {
+  //   this.index_buffer.push(i);
+  // }
+
   this.index_buffer = [];
-  for(var i = 0; i < this.position_buffer.length / 3; i++) {
-    this.index_buffer.push(i);
+  for (var i = 0; i < levels; i++) {
+    column1Offset = i * nPoints;
+    column2Offset = column1Offset + nPoints;
+    for (let j = 0; j < nPoints - 1; j++) {
+      this.index_buffer.push(column1Offset + j, column2Offset + j, column1Offset + j + 1);
+      this.index_buffer.push(column1Offset + j + 1, column2Offset + j, column2Offset + j + 1);
+    }
   }
 
   Node.call(this);
