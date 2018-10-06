@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Base(0, 0, 1);
+  o = new Ring(0.757, 0.227, 0.251);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -448,7 +448,7 @@ Disk.prototype = Object.create(Node.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase Base
+// Clase Base incompleta
 function Base(r, g, b) {
 
   this.position_buffer = [];
@@ -461,8 +461,6 @@ function Base(r, g, b) {
     zu = 0;
     this.position_buffer.push(xu, yu, zu);
   }
-  console.log(this.position_buffer);
-
 
   this.color_buffer = [];
   for(var i = 0; i < this.position_buffer.length; i+=3) {
@@ -478,3 +476,35 @@ function Base(r, g, b) {
 }
 
 Base.prototype = Object.create(Node.prototype);
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Clase ring
+function Ring(r, g, b) {
+  angle = Math.PI / 6;
+  this.position_buffer = [];
+  for(var i = 0; i < 13; i++) {
+    this.position_buffer.push(2 * Math.cos(i * angle));
+    this.position_buffer.push(2 * Math.sin(i * angle));
+    this.position_buffer.push(0);
+    i++;
+    this.position_buffer.push(Math.cos(i * angle));
+    this.position_buffer.push(Math.sin(i * angle));
+    this.position_buffer.push(0);
+  }
+
+  this.color_buffer = [];
+  for(var i = 0; i < this.position_buffer.length; i+=3) {
+    this.color_buffer.push(r, g, b);
+  }
+
+  this.index_buffer = [];
+  for(var i = 0; i < this.position_buffer.length / 3; i++) {
+    this.index_buffer.push(i);
+  }
+
+  Node.call(this);
+}
+
+Ring.prototype = Object.create(Node.prototype);
