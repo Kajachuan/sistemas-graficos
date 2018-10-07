@@ -27,7 +27,6 @@
       uniform vec3 uAmbientColor;
       uniform vec3 uLightPosition;
       uniform vec3 uDirectionalColor;
-      uniform bool uUseLighting;
 
       varying vec3 vLightWeighting;
       varying vec3 vColor;
@@ -40,15 +39,10 @@
         // Cálculos de la iluminación
         vec3 light_dir = uLightPosition - vec3(pos_camera_view);
         normalize(light_dir);
-        if(!uUseLighting) {
-          vLightWeighting = vec3(1.0, 1.0, 1.0);
-        }
-        else {
-          vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
-          float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
-          vLightWeighting = uAmbientColor * uDirectionalColor * directionalLightWeighting;
-          //normalize(vLightWeighting);
-        }
+        vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
+        float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
+        vLightWeighting = uAmbientColor * uDirectionalColor * directionalLightWeighting;
+        normalize(vLightWeighting);
       }
     </script>
 

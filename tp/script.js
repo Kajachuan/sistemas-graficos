@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Box(0.757, 0.227, 0.251);
+  o = new Ball(0,0,1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -194,18 +194,13 @@ function drawScene() {
   gl.uniformMatrix4fv(u_view_matrix, false, vMatrix);
 
   var ambient_color = gl.getUniformLocation(glProgram, "uAmbientColor");
-  // gl.uniform3f(ambient_color, 0.1, 0.1, 0.1);
 
   var lighting_direction = gl.getUniformLocation(glProgram, "uLightPosition");
   var lightPosition = [0, 5, 5];
   gl.uniform3fv(lighting_direction, lightPosition);
 
   var directional_color = gl.getUniformLocation(glProgram, "uDirectionalColor");
-  // gl.uniform3f(directional_color, 0.12, 0.12, 0.10);
-  gl.uniform3f(directional_color, 0.2, 0.2, 0.2);
-
-  var use_lighting = gl.getUniformLocation(glProgram, "uUseLighting");
-  gl.uniform1i(use_lighting, true);
+  gl.uniform3f(directional_color, 1, 1, 1);
 
   var u_model_matrix = gl.getUniformLocation(glProgram, "uMMatrix");
   var u_normal_matrix = gl.getUniformLocation(glProgram, "uNMatrix");
@@ -213,9 +208,7 @@ function drawScene() {
   objects.forEach(function(object) {
     gl.uniform3f(ambient_color, object.r, object.g, object.b);
     nMatrix = mat3.create();
-    mvMatrix = mat4.create();
-    mat4.multiply(mvMatrix, object.worldMatrix, vMatrix);
-    mat3.normalFromMat4(nMatrix, mvMatrix);
+    mat3.normalFromMat4(nMatrix, object.worldMatrix);
     gl.uniformMatrix3fv(u_normal_matrix, false, nMatrix);
     gl.uniformMatrix4fv(u_model_matrix, false, object.worldMatrix);
     object.draw();
@@ -313,6 +306,9 @@ Box.prototype = Object.create(Node.prototype);
 
 // Clase Ball
 function Ball(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
   nPoints = 20;
   angle = Math.PI / (nPoints - 1);
   this.position_buffer = []
@@ -339,10 +335,7 @@ function Ball(r, g, b) {
     }
   }
 
-  this.color_buffer = [];
-  for(var i = 0; i < this.position_buffer.length; i+=3) {
-    this.color_buffer.push(r, g, b);
-  }
+  this.normal_buffer = this.position_buffer;
 
   this.index_buffer = [];
   for (var i = 0; i < levels; i++) {
