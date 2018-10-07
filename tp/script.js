@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Tube(0,0,1);
+  o = new Ring(0,0,1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -552,26 +552,58 @@ Base.prototype = Object.create(Node.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase ring incompleta
+// Clase ring
 function Ring(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
+
   angle = Math.PI / 6;
-  nPoints = 13;
+  nPoints = 26;
   this.position_buffer = [];
-  for(var i = 0; i < nPoints; i++) {
-    this.position_buffer.push(3 + 0.5 * Math.cos(i * angle));
-    this.position_buffer.push(0.5 * Math.sin(i * angle));
-    this.position_buffer.push(0);
+  this.normal_buffer = [];
+  origin = vec3.fromValues(0,0,0);
+
+  for(var i = 0; i < nPoints / 2; i++) {
+    x = Math.cos(i * angle);
+    y = Math.sin(i * angle);
+    this.position_buffer.push(3 + 0.5 * x, 0.5 * y, 0);
+    this.position_buffer.push(3 + 0.5 * x, 0.5 * y, 0);
+
+    x1 = Math.cos((i - 1) * angle) - x;
+    y1 = Math.cos((i - 1) * angle) - y;
+    n1 = vec3.fromValues(x1, y1, 0);
+    vec3.rotateZ(n1, n1, origin, Math.PI / 2);
+    this.normal_buffer.push(n1[0], n1[1], n1[2]);
+    x2 = Math.cos((i + 1) * angle) - x;
+    y2 = Math.cos((i + 1) * angle) - y;
+    n2 = vec3.fromValues(x2, y2, 0);
+    vec3.rotateZ(n2, n2, origin, -Math.PI / 2);
+    this.normal_buffer.push(n2[0], n2[1], n2[2]);
+
     i++;
-    if(i == nPoints) break;
-    this.position_buffer.push(3 + 0.25 * Math.cos(i * angle));
-    this.position_buffer.push(0.25 * Math.sin(i * angle));
-    this.position_buffer.push(0);
+    if(i == 13) break;
+    x = Math.cos(i * angle);
+    y = Math.sin(i * angle);
+    this.position_buffer.push(3 + 0.25 * x, 0.25 * y, 0);
+    this.position_buffer.push(3 + 0.25 * x, 0.25 * y, 0);
+
+    x1 = Math.cos((i - 1) * angle) - x;
+    y1 = Math.cos((i - 1) * angle) - y;
+    n1 = vec3.fromValues(x1, y1, 0);
+    vec3.rotateZ(n1, n1, origin, Math.PI / 2);
+    this.normal_buffer.push(n1[0], n1[1], n1[2]);
+    x2 = Math.cos((i + 1) * angle) - x;
+    y2 = Math.cos((i + 1) * angle) - y;
+    n2 = vec3.fromValues(x2, y2, 0);
+    vec3.rotateZ(n2, n2, origin, -Math.PI / 2);
+    this.normal_buffer.push(n2[0], n2[1], n2[2]);
   }
 
-  levels = 20;
+  levels = 50;
   ang = 2 * Math.PI / levels;
   new_pos = vec3.create();
-  origin = vec3.fromValues(0, 0, 0);
+  nrot = vec3.create();
   for(var i = 0; i < levels; i++) {
     for(var j = 0; j < nPoints * 3; j+=3) {
       x = this.position_buffer[j];
@@ -580,18 +612,15 @@ function Ring(r, g, b) {
       a = vec3.fromValues(x, y, z);
       vec3.rotateY(new_pos, a, origin, ang * (i + 1));
       this.position_buffer.push(new_pos[0], new_pos[1], new_pos[2]);
+
+      nx = this.normal_buffer[j];
+      ny = this.normal_buffer[j + 1];
+      nz = this.normal_buffer[j + 2];
+      n = vec3.fromValues(nx, ny, nz);
+      vec3.rotateY(nrot, n, origin, angle * (i + 1));
+      this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
     }
   }
-
-  this.color_buffer = [];
-  for(var i = 0; i < this.position_buffer.length; i+=3) {
-    this.color_buffer.push(r, g, b);
-  }
-
-  // this.index_buffer = [];
-  // for(var i = 0; i < this.position_buffer.length / 3; i++) {
-  //   this.index_buffer.push(i);
-  // }
 
   this.index_buffer = [];
   for (var i = 0; i < levels; i++) {
