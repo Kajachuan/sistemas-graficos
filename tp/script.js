@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Disk(0,0,1);
+  o = new Tube(0,0,1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -366,20 +366,54 @@ Ball.prototype = Object.create(Node.prototype);
 
 // Clase Tube
 function Tube(r, g, b) {
-  this.position_buffer = [];
-  this.position_buffer.push(0, 1.7, 0);
-  this.position_buffer.push(0.1, 1.7, 0);
-  this.position_buffer.push(0.1, 2, 0);
-  this.position_buffer.push(0.2, 2, 0);
-  this.position_buffer.push(0.2, -2, 0);
-  this.position_buffer.push(0.1, -2, 0);
-  this.position_buffer.push(0.1, -1.7, 0);
-  this.position_buffer.push(0, -1.7, 0);
+  this.r = r;
+  this.g = g;
+  this.b = b;
 
-  nPoints = 8;
+  this.position_buffer = [];
+  this.normal_buffer = [];
+
+  this.position_buffer.push(0, 1.85, 0);
+  this.normal_buffer.push(0, 1, 0);
+
+  this.position_buffer.push(0.12, 1.85, 0);
+  this.normal_buffer.push(0, 1, 0);
+  this.position_buffer.push(0.12, 1.85, 0);
+  this.normal_buffer.push(-1, 0, 0);
+
+  this.position_buffer.push(0.12, 2, 0);
+  this.normal_buffer.push(-1, 0, 0);
+  this.position_buffer.push(0.12, 2, 0);
+  this.normal_buffer.push(0, 1, 0);
+
+  this.position_buffer.push(0.2, 2, 0);
+  this.normal_buffer.push(0, 1, 0);
+  this.position_buffer.push(0.2, 2, 0);
+  this.normal_buffer.push(1, 0, 0);
+
+  this.position_buffer.push(0.2, -2, 0);
+  this.normal_buffer.push(1, 0, 0);
+  this.position_buffer.push(0.2, -2, 0);
+  this.normal_buffer.push(0, -1, 0);
+
+  this.position_buffer.push(0.12, -2, 0);
+  this.normal_buffer.push(0, -1, 0);
+  this.position_buffer.push(0.12, -2, 0);
+  this.normal_buffer.push(-1, 0, 0);
+
+  this.position_buffer.push(0.12, -1.85, 0);
+  this.normal_buffer.push(-1, 0, 0);
+  this.position_buffer.push(0.12, -1.85, 0);
+  this.normal_buffer.push(0, -1, 0);
+
+  this.position_buffer.push(0, -1.85, 0);
+  this.normal_buffer.push(0, -1, 0);
+
+  nPoints = 14;
   levels = 50;
   angle = 2 * Math.PI / levels;
   rot = vec3.create();
+  nrot = vec3.create();
   origin = vec3.fromValues(0, 0, 0);
 
   for(var i = 0; i < levels; i++) {
@@ -390,19 +424,21 @@ function Tube(r, g, b) {
       a = vec3.fromValues(x, y, z);
       vec3.rotateY(rot, a, origin, angle * (i + 1));
       this.position_buffer.push(rot[0], rot[1], rot[2]);
-    }
-  }
 
-  this.color_buffer = [];
-  for(var i = 0; i < this.position_buffer.length; i+=3) {
-    this.color_buffer.push(r, g, b);
+      nx = this.normal_buffer[j];
+      ny = this.normal_buffer[j + 1];
+      nz = this.normal_buffer[j + 2];
+      n = vec3.fromValues(nx, ny, nz);
+      vec3.rotateY(nrot, n, origin, angle * (i + 1));
+      this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
+    }
   }
 
   this.index_buffer = [];
   for (var i = 0; i < levels; i++) {
     column1Offset = i * nPoints;
     column2Offset = column1Offset + nPoints;
-    for (let j = 0; j < nPoints - 1; j++) {
+    for (var j = 0; j < nPoints - 1; j++) {
       this.index_buffer.push(column1Offset + j, column2Offset + j, column1Offset + j + 1);
       this.index_buffer.push(column1Offset + j + 1, column2Offset + j, column2Offset + j + 1);
     }
@@ -516,7 +552,7 @@ Base.prototype = Object.create(Node.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase ring
+// Clase ring incompleta
 function Ring(r, g, b) {
   angle = Math.PI / 6;
   nPoints = 13;
