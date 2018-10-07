@@ -9,13 +9,8 @@
       textarea{ background-color: black; foreground-color: white; }
     </style>
 
-    <script type="text/javascript" src="gl-matrix.js"> // Librería GL-MATRIX </script>
+    <script type="text/javascript" src="gl-matrix.js"></script>
 
-    <!--
-    Vertex shader
-
-    El vertex shader define la posición y forma de cada vertice de cada polígono.
-    -->
     <script id="shader-vs" type="x-shader/x-vertex">
       attribute vec3 aVertexPosition;
       attribute vec3 aVertexNormal;
@@ -32,13 +27,10 @@
       varying vec3 vColor;
 
       void main(void) {
-        // Transformamos al vértice al espacio de la cámara
-        vec4 pos_camera_view = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
-        gl_Position = uPMatrix * pos_camera_view;
+        vec4 pos_camera_view = uMMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * uVMatrix * pos_camera_view;
 
-        // Cálculos de la iluminación
-        vec3 light_dir = uLightPosition - vec3(pos_camera_view);
-        normalize(light_dir);
+        vec3 light_dir = normalize(uLightPosition - vec3(pos_camera_view));
         vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
         float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
         vLightWeighting = uAmbientColor * uDirectionalColor * directionalLightWeighting;
@@ -46,22 +38,13 @@
       }
     </script>
 
-    <!--
-    Fragment shader
-
-    Cada pixel en un polígono se llama fragmento. El fragment shader se encarga de
-    establecer el color de cada pixel. En este caso, asignamos el color blanco a
-    cada pixel.
-    -->
     <script id="shader-fs" type="x-shader/x-fragment">
       precision mediump float;
 
       varying vec3 vLightWeighting;
 
       void main(void) {
-        // gl_FragColor es una variable "built-in" de GLSL que es usada para
-        // almacenar el color resultante del fragmento.
-        gl_FragColor = vec4(vLightWeighting, 1.0); // Revisar esto
+        gl_FragColor = vec4(vLightWeighting, 1.0);
       }
     </script>
 
@@ -70,7 +53,7 @@
   <body onload="initWebGL()">
     <center>
       <h1>Trabajo Práctico - Sistemas Gráficos</h1>
-      <h2>Nombres</h2>
+      <h2>Nombre</h2>
       <canvas id="my-canvas" width="900" height="500">
         Your browser does not support the HTML5 canvas element.
       </scanvas>
