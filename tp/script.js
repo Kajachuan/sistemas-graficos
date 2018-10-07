@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Ring(0.757, 0.227, 0.251);
+  o = new Box(0.757, 0.227, 0.251);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -193,9 +193,30 @@ function drawScene() {
   mat4.rotateY(vMatrix, vMatrix, currentAngle[1] - Math.PI/5);
   gl.uniformMatrix4fv(u_view_matrix, false, vMatrix);
 
+  var ambient_color = gl.getUniformLocation(glProgram, "uAmbientColor");
+  // gl.uniform3f(ambient_color, 0.1, 0.1, 0.1);
+
+  var lighting_direction = gl.getUniformLocation(glProgram, "uLightPosition");
+  var lightPosition = [0, 5, 5];
+  gl.uniform3fv(lighting_direction, lightPosition);
+
+  var directional_color = gl.getUniformLocation(glProgram, "uDirectionalColor");
+  // gl.uniform3f(directional_color, 0.12, 0.12, 0.10);
+  gl.uniform3f(directional_color, 0.2, 0.2, 0.2);
+
+  var use_lighting = gl.getUniformLocation(glProgram, "uUseLighting");
+  gl.uniform1i(use_lighting, true);
+
   var u_model_matrix = gl.getUniformLocation(glProgram, "uMMatrix");
+  var u_normal_matrix = gl.getUniformLocation(glProgram, "uNMatrix");
 
   objects.forEach(function(object) {
+    gl.uniform3f(ambient_color, object.r, object.g, object.b);
+    nMatrix = mat3.create();
+    mvMatrix = mat4.create();
+    mat4.multiply(mvMatrix, object.worldMatrix, vMatrix);
+    mat3.normalFromMat4(nMatrix, mvMatrix);
+    gl.uniformMatrix3fv(u_normal_matrix, false, nMatrix);
     gl.uniformMatrix4fv(u_model_matrix, false, object.worldMatrix);
     object.draw();
   });
@@ -233,22 +254,14 @@ Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
 }
 
 Node.prototype.setupWebGLBuffers = function() {
-  // 1. Creamos un buffer para las posicioens dentro del pipeline.
   this.webgl_position_buffer = gl.createBuffer();
-  // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
-  // hemos creado.
   gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-  // 3. Cargamos datos de las posiciones en el buffer.
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
 
-  // Repetimos los pasos 1. 2. y 3. para la información del color
-  this.webgl_color_buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
+  this.webgl_normal_buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
 
-  // Repetimos los pasos 1. 2. y 3. para la información de los índices
-  // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-  // Notar también que se usa un array de enteros en lugar de floats.
   this.webgl_index_buffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
@@ -260,27 +273,28 @@ Node.prototype.draw = function() {
   gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
   gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-  var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-  gl.enableVertexAttribArray(vertexColorAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-  gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+  var vertexNormalAttribute= gl.getAttribLocation(glProgram, "aVertexNormal");
+  gl.enableVertexAttribArray(vertexNormalAttribute);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+  gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
   // Dibujamos.
-  gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+  gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
 // Clase Box
 function Box(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
+
   this.position_buffer = [1,  1,  1,  -1, 1,  1,  -1, -1,  1,   1, -1,  1,
                           1, -1, -1,   1, 1, -1,  -1,  1, -1,  -1, -1, -1];
 
-  this.color_buffer = [];
-  for(var i = 0; i < this.position_buffer.length; i+=3) {
-    this.color_buffer.push(r, g, b);
-  }
+  this.normal_buffer = this.position_buffer;
 
   this.index_buffer = [0, 1, 2,  0, 2, 3,
                        0, 3, 4,  0, 4, 5,

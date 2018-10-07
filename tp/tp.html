@@ -17,26 +17,38 @@
     El vertex shader define la posición y forma de cada vertice de cada polígono.
     -->
     <script id="shader-vs" type="x-shader/x-vertex">
-      // Los atributos son características propias de cada vertice.
       attribute vec3 aVertexPosition;
-      attribute vec3 aVertexColor;
+      attribute vec3 aVertexNormal;
 
-      // Los uniforms son características propias de una etapa de dibujado completa.
-      // Son comunes a todos los vertices involucrados en el dibujado.
       uniform mat4 uMMatrix;
       uniform mat4 uVMatrix;
       uniform mat4 uPMatrix;
+      uniform mat3 uNMatrix;
+      uniform vec3 uAmbientColor;
+      uniform vec3 uLightPosition;
+      uniform vec3 uDirectionalColor;
+      uniform bool uUseLighting;
 
-      // Los varying son propiedades que toman valor para cada fragmento a partir
-      // de interpolar linealmente entre los valores que se les asigna en cada
-      // vértice del polígono al cual pertenecen.
-      varying highp vec4 vColor;
+      varying vec3 vLightWeighting;
+      varying vec3 vColor;
 
       void main(void) {
-        // gl_Position es una variable "built-in" de GLSL que es usada para
-        // almacenar la posición resultante del fragmento.
-        gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
-        vColor = vec4(aVertexColor,1.0);
+        // Transformamos al vértice al espacio de la cámara
+        vec4 pos_camera_view = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * pos_camera_view;
+
+        // Cálculos de la iluminación
+        vec3 light_dir = uLightPosition - vec3(pos_camera_view);
+        normalize(light_dir);
+        if(!uUseLighting) {
+          vLightWeighting = vec3(1.0, 1.0, 1.0);
+        }
+        else {
+          vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
+          float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
+          vLightWeighting = uAmbientColor * uDirectionalColor * directionalLightWeighting;
+          //normalize(vLightWeighting);
+        }
       }
     </script>
 
@@ -48,12 +60,14 @@
     cada pixel.
     -->
     <script id="shader-fs" type="x-shader/x-fragment">
-      varying highp vec4 vColor;
+      precision mediump float;
+
+      varying vec3 vLightWeighting;
 
       void main(void) {
         // gl_FragColor es una variable "built-in" de GLSL que es usada para
         // almacenar el color resultante del fragmento.
-        gl_FragColor = vColor;
+        gl_FragColor = vec4(vLightWeighting, 1.0); // Revisar esto
       }
     </script>
 
