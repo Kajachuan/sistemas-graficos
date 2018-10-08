@@ -552,7 +552,7 @@ Base.prototype = Object.create(Node.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase ring
+// Clase Ring
 function Ring(r, g, b) {
   this.r = r;
   this.g = g;
@@ -571,12 +571,12 @@ function Ring(r, g, b) {
     this.position_buffer.push(3 + 0.2 * x, 0.2 * y, 0);
 
     x1 = Math.cos((i - 1) * angle) - x;
-    y1 = Math.cos((i - 1) * angle) - y;
+    y1 = Math.sin((i - 1) * angle) - y;
     n1 = vec3.fromValues(x1, y1, 0);
     vec3.rotateZ(n1, n1, origin, Math.PI / 2);
     this.normal_buffer.push(n1[0], n1[1], n1[2]);
     x2 = Math.cos((i + 1) * angle) - x;
-    y2 = Math.cos((i + 1) * angle) - y;
+    y2 = Math.sin((i + 1) * angle) - y;
     n2 = vec3.fromValues(x2, y2, 0);
     vec3.rotateZ(n2, n2, origin, -Math.PI / 2);
     this.normal_buffer.push(n2[0], n2[1], n2[2]);
@@ -589,12 +589,12 @@ function Ring(r, g, b) {
     this.position_buffer.push(3 + 0.1 * x, 0.1 * y, 0);
 
     x1 = Math.cos((i - 1) * angle) - x;
-    y1 = Math.cos((i - 1) * angle) - y;
+    y1 = Math.sin((i - 1) * angle) - y;
     n1 = vec3.fromValues(x1, y1, 0);
     vec3.rotateZ(n1, n1, origin, Math.PI / 2);
     this.normal_buffer.push(n1[0], n1[1], n1[2]);
     x2 = Math.cos((i + 1) * angle) - x;
-    y2 = Math.cos((i + 1) * angle) - y;
+    y2 = Math.sin((i + 1) * angle) - y;
     n2 = vec3.fromValues(x2, y2, 0);
     vec3.rotateZ(n2, n2, origin, -Math.PI / 2);
     this.normal_buffer.push(n2[0], n2[1], n2[2]);
