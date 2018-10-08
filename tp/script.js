@@ -567,8 +567,8 @@ function Ring(r, g, b) {
   for(var i = 0; i < nPoints / 2; i++) {
     x = Math.cos(i * angle);
     y = Math.sin(i * angle);
-    this.position_buffer.push(3 + 0.5 * x, 0.5 * y, 0);
-    this.position_buffer.push(3 + 0.5 * x, 0.5 * y, 0);
+    this.position_buffer.push(3 + 0.2 * x, 0.2 * y, 0);
+    this.position_buffer.push(3 + 0.2 * x, 0.2 * y, 0);
 
     x1 = Math.cos((i - 1) * angle) - x;
     y1 = Math.cos((i - 1) * angle) - y;
@@ -585,8 +585,8 @@ function Ring(r, g, b) {
     if(i == 13) break;
     x = Math.cos(i * angle);
     y = Math.sin(i * angle);
-    this.position_buffer.push(3 + 0.25 * x, 0.25 * y, 0);
-    this.position_buffer.push(3 + 0.25 * x, 0.25 * y, 0);
+    this.position_buffer.push(3 + 0.1 * x, 0.1 * y, 0);
+    this.position_buffer.push(3 + 0.1 * x, 0.1 * y, 0);
 
     x1 = Math.cos((i - 1) * angle) - x;
     y1 = Math.cos((i - 1) * angle) - y;
@@ -600,24 +600,26 @@ function Ring(r, g, b) {
     this.normal_buffer.push(n2[0], n2[1], n2[2]);
   }
 
-  levels = 50;
+  levels = 64;
   ang = 2 * Math.PI / levels;
-  new_pos = vec3.create();
-  nrot = vec3.create();
+  torsion = -8 * Math.PI / levels;
   for(var i = 0; i < levels; i++) {
     for(var j = 0; j < nPoints * 3; j+=3) {
       x = this.position_buffer[j];
       y = this.position_buffer[j + 1];
       z = this.position_buffer[j + 2];
-      a = vec3.fromValues(x, y, z);
-      vec3.rotateY(new_pos, a, origin, ang * (i + 1));
+      new_pos = vec3.fromValues(x - 3, y, z);
+      vec3.rotateZ(new_pos, new_pos, origin, torsion * (i + 1));
+      new_pos[0] += 3;
+      vec3.rotateY(new_pos, new_pos, origin, ang * (i + 1));
       this.position_buffer.push(new_pos[0], new_pos[1], new_pos[2]);
 
       nx = this.normal_buffer[j];
       ny = this.normal_buffer[j + 1];
       nz = this.normal_buffer[j + 2];
-      n = vec3.fromValues(nx, ny, nz);
-      vec3.rotateY(nrot, n, origin, angle * (i + 1));
+      nrot = vec3.fromValues(nx, ny, nz);
+      vec3.rotateZ(nrot, nrot, origin, torsion * (i + 1));
+      vec3.rotateY(nrot, nrot, origin, ang * (i + 1));
       this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
     }
   }
