@@ -171,7 +171,7 @@ Objeto3D.prototype.draw = function(mMatrix){
                     this.webgl_position_buffer.stride,
                     this.webgl_position_buffer.uvOffset
                   );
-                  gl.uniformMatrix4fv(shaderProgram.nMatrixUniform, false, mat4.invert(mat4.tranpose(mMatrix*viewMatrix));
+                  gl.uniformMatrix4fv(shaderProgram.nMatrixUniform, false, mat4.invert(mat4.tranpose(mMatrix*viewMatrix)));
                   gl.uniform1fv(shaderProgram.p, defaults.p);
                   gl.uniform3fv(shaderProgram.lDir, defaults.lDir);
                   gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.webgl_position_buffer);

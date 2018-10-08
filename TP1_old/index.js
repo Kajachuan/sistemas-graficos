@@ -339,11 +339,11 @@ function initGL(canvas) {
   }
 
 function initShaders() {
-    //var fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
-    //var vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+    var fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+    var vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
 
-    var fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, txfsSource);
-    var vertexShader = loadShader(gl, gl.VERTEX_SHADER, txvsSource);
+    //var fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, txfsSource);
+    //var vertexShader = loadShader(gl, gl.VERTEX_SHADER, txvsSource);
 
     // Create the shader program
     shaderProgram = gl.createProgram();
@@ -423,7 +423,7 @@ function drawScene() {
 
       mat4.identity(viewMatrix);
       cameraHandler.modifyvMatrix();
-/*
+
       mat4.identity(modMatrix);
       muelle.draw();
 
@@ -445,7 +445,7 @@ function drawScene() {
 
       mat4.identity(modMatrix);
       isla.draw();
-*/
+
       mat4.identity(modMatrix);
       sea.draw();
 }
