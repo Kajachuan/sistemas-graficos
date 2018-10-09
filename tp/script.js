@@ -107,7 +107,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Ring(0,0,1);
+  o = new Pallet(0,0,1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -638,3 +638,69 @@ function Ring(r, g, b) {
 }
 
 Ring.prototype = Object.create(Node.prototype);
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Clase Pallet
+function Pallet(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
+
+  this.position_buffer = [];
+  this.normal_buffer = [];
+
+  nPoints = 2;
+  for(var u = 0; u <= 1; u += 0.001) {
+    b0 = Math.pow(1 - u, 2);
+    b1 = 2 * (1 - u) * u;
+    b2 = Math.pow(u, 2);
+    x = -2.5 * b0 + b2 * 1.5;
+    y = 2 * b1;
+    this.position_buffer.push(x, y, 0);
+    this.normal_buffer.push(0, 0, 1);
+
+    db0 = -2 * (1 - u);
+    db1 = 2 - 4 * u;
+    db2 = 2 * u;
+    tx = -2.5 * db0 + db2 * 1.5;
+    ty = 2 * db1;
+    this.position_buffer.push(x, y, 0);
+    this.normal_buffer.push(-ty, tx, 0);
+    nPoints += 2;
+  }
+  this.position_buffer.push(-2.5, 0, 0);
+  this.normal_buffer.push(0, -1, 0);
+  this.position_buffer.push(1.5, 0, 0);
+  this.normal_buffer.push(0, -1, 0);
+
+  for(var i = 0; i < nPoints * 3; i+=3) {
+    x = this.position_buffer[i];
+    y = this.position_buffer[i + 1];
+    z = this.position_buffer[i + 2];
+    this.position_buffer.push(x, y, z - 0.2);
+
+    nx = this.normal_buffer[i];
+    ny = this.normal_buffer[i + 1];
+    nz = this.normal_buffer[i + 2];
+    this.normal_buffer.push(nx, ny, -nz);
+  }
+
+  this.index_buffer = [];
+  for (i = 2; i < nPoints - 2; i+=2) {
+    this.index_buffer.push(0, i);
+  }
+  for (i = nPoints; i < 2 * nPoints - 2; i+=2) {
+    this.index_buffer.push(nPoints, i);
+  }
+  this.index_buffer.push(2 * nPoints - 2, nPoints - 1, nPoints - 2);
+  for (i = 1; i < nPoints - 2; i+=2) {
+    this.index_buffer.push(i, i + 2, nPoints + i + 2);
+    this.index_buffer.push(i, nPoints + i + 2, nPoints + i);
+  }
+
+  Node.call(this);
+}
+
+Pallet.prototype = Object.create(Node.prototype);
