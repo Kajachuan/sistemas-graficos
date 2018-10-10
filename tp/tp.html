@@ -10,6 +10,7 @@
     </style>
 
     <script type="text/javascript" src="gl-matrix.js"></script>
+    <script type="text/javascript" src="camera/CameraHandler.js"></script>
 
     <script id="shader-vs" type="x-shader/x-vertex">
       attribute vec3 aVertexPosition;
@@ -50,7 +51,7 @@
 
     <script type="text/javascript" src="script.js"></script>
   </head>
-  <body onload="initWebGL()">
+  <body onload="initWebGL()" id="my-body">
     <center>
       <h1>Trabajo Práctico - Sistemas Gráficos</h1>
       <h2>Nombre</h2>

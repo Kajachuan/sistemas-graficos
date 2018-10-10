@@ -5,24 +5,35 @@ fragmentShader = null,
 vertexShader = null;
 objects = [];
 currentAngle = [0.0, 0.0]; // [x-axis, y-axis] degrees
+var cameraHandler;
 
-var vMatrix = mat4.create();
+var viewMatrix = mat4.create();
 var pMatrix = mat4.create();
 
 // ESTO ES LO MISMO DE SIEMPRE
+
+function degToRad(degrees) {
+  return degrees * Math.PI / 180;
+}
 
 function initWebGL() {
   canvas = document.getElementById("my-canvas");
   try {
     gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    gl.viewportWidth = canvas.width;
+    gl.viewportHeight = canvas.height;
   } catch(e) {
   }
 
   if(gl) {
     setupWebGL();
     initShaders();
+
+    cameraHandler = new CameraHandler();
+    cameraHandler.setupHandlers();
+
     setupBuffers();
-    initEventHandlers(canvas, currentAngle);
+    //initEventHandlers(canvas, currentAngle);
     setInterval(drawScene, 10);
   } else{
     alert("Error: Your browser does not appear to support WebGL.");
@@ -187,11 +198,15 @@ function drawScene() {
 
   var u_view_matrix = gl.getUniformLocation(glProgram, "uVMatrix");
   // Preparamos una matriz de vista.
+/*
   mat4.identity(vMatrix);
   mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -5.0]);
   mat4.rotateX(vMatrix, vMatrix, currentAngle[0] + Math.PI/8);
-  mat4.rotateY(vMatrix, vMatrix, currentAngle[1] - Math.PI/5);
-  gl.uniformMatrix4fv(u_view_matrix, false, vMatrix);
+  mat4.rotateY(vMatrix, vMatrix, currentAngle[1] - Math.PI/5);*/
+  gl.uniformMatrix4fv(u_view_matrix, false, viewMatrix);
+
+  mat4.identity(viewMatrix);
+  cameraHandler.modifyvMatrix();
 
   var ambient_color = gl.getUniformLocation(glProgram, "uAmbientColor");
 
