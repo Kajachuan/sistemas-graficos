@@ -118,7 +118,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Base(0,0,1, 1,5);
+  o = new Base(0,0,1, 1,5,1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -536,7 +536,7 @@ Disk.prototype = Object.create(Node.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 
 // Clase Base
-function Base(r, g, b, rad, cycles) {
+function Base(r, g, b, rad, cycles, h) {
   this.r = r;
   this.g = g;
   this.b = b;
@@ -545,14 +545,15 @@ function Base(r, g, b, rad, cycles) {
   this.normal_buffer = [];
   // cp = [0,0,  0,0,  rad,0,  rad + 0.5,0.1,  rad + 0.5,0.2,  rad + 0.25,0.3,
   //       rad + 0.25,0.4,  rad + 0.5,0.5,  rad + 0.5,0.6,  rad,0.7,  0,0.7,  0,0.7];
-  cp = [0,0,  0,0,  rad,0,  rad + 0.5,0.1,  rad + 0.5,0.2];
+  d = h / (4 * cycles - 1);
+  cp = [0,0,  0,0,  rad,0,  rad + 0.5,d,  rad + 0.5,2 * d];
   for(i = 1; i < cycles; i++) {
     ly = cp[cp.length - 1];
-    cp.push(rad + 0.25,ly + 0.1,  rad + 0.25,ly + 0.2);
-    cp.push(rad + 0.5,ly + 0.3,  rad + 0.5,ly + 0.4);
+    cp.push(rad + 0.25,ly + d,  rad + 0.25,ly + 2 * d);
+    cp.push(rad + 0.5,ly + 3 * d,  rad + 0.5,ly + 4 * d);
   }
   ly = cp[cp.length - 1];
-  cp.push(rad,ly + 0.1,  0,ly + 0.1,  0,ly + 0.1);
+  cp.push(rad,ly + d,  0,ly + d,  0,ly + d);
 
   nPoints = 0;
   for(var i = 0; i < cp.length - 4; i += 2) {
