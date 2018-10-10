@@ -118,7 +118,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Pallet(0,0,1);
+  o = new Base(0,0,1);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -537,26 +537,65 @@ Disk.prototype = Object.create(Node.prototype);
 
 // Clase Base incompleta
 function Base(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
 
   this.position_buffer = [];
-  for(var u = 0; u <= 1; u += 0.1) {
-    b0 = 0.5 * Math.pow(1 - u, 2);
-    b1 = -Math.pow(u, 2) + u + 0.5;
-    b2 = 0.5 * Math.pow(u, 2);
-    xu = b0 * 0 + b1 * 2 + b2 * 2;
-    yu = b0 * 2 + b1 * 2 + b2 * 0;
-    zu = 0;
-    this.position_buffer.push(xu, yu, zu);
+  this.normal_buffer = [];
+  cp = [0,0,  0,0,  2,0,  2.5,0.1,  2.5,0.2,  2.25,0.3,  2.25,0.4,  2.5,0.5,  2.5,0.6,  2,0.7,  0,0.7,  0,0.7];
+  nPoints = 0;
+  for(var i = 0; i < cp.length - 4; i += 2) {
+    for(var u = 0; u <= 1; u += 0.01) {
+      b0 = 0.5 * Math.pow(1 - u, 2);
+      b1 = -Math.pow(u, 2) + u + 0.5;
+      b2 = 0.5 * Math.pow(u, 2);
+      x = b0 * cp[i] + b1 * cp[i + 2] + b2 * cp[i + 4];
+      y = b0 * cp[i + 1] + b1 * cp[i + 3] + b2 * cp[i + 5];
+      this.position_buffer.push(x, y, 0);
+      nPoints++;
+
+      db0 = u - 1;
+      db1 = 1 - 2 * u;
+      db2 = u;
+      tx = db0 * cp[i] + db1 * cp[i + 2] + db2 * cp[i + 4];
+      ty = db0 * cp[i + 1] + db1 * cp[i + 3] + db2 * cp[i + 5];
+      this.normal_buffer.push(ty, -tx, 0);
+    }
   }
 
-  this.color_buffer = [];
-  for(var i = 0; i < this.position_buffer.length; i+=3) {
-    this.color_buffer.push(r, g, b);
+  levels = 50;
+  angle = 2 * Math.PI / levels;
+  rot = vec3.create();
+  nrot = vec3.create();
+  origin = vec3.fromValues(0, 0, 0);
+
+  for(var i = 0; i < levels; i++) {
+    for(var j = 0; j < nPoints * 3; j += 3) {
+      x = this.position_buffer[j];
+      y = this.position_buffer[j + 1];
+      z = this.position_buffer[j + 2];
+      a = vec3.fromValues(x, y, z);
+      vec3.rotateY(rot, a, origin, angle * (i + 1));
+      this.position_buffer.push(rot[0], rot[1], rot[2]);
+
+      nx = this.normal_buffer[j];
+      ny = this.normal_buffer[j + 1];
+      nz = this.normal_buffer[j + 2];
+      n = vec3.fromValues(nx, ny, nz);
+      vec3.rotateY(nrot, n, origin, angle * (i + 1));
+      this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
+    }
   }
 
   this.index_buffer = [];
-  for(var i = 0; i < this.position_buffer.length / 3; i++) {
-    this.index_buffer.push(i);
+  for (var i = 0; i < levels; i++) {
+    column1Offset = i * nPoints;
+    column2Offset = column1Offset + nPoints;
+    for (var j = 0; j < nPoints - 1; j++) {
+      this.index_buffer.push(column1Offset + j, column2Offset + j, column1Offset + j + 1);
+      this.index_buffer.push(column1Offset + j + 1, column2Offset + j, column2Offset + j + 1);
+    }
   }
 
   Node.call(this);
