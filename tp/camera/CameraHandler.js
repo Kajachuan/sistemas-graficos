@@ -2,7 +2,6 @@ function CameraHandler(){
 
   var vMatrix = null;
   var mouseDown = null;
-  var mode = null;
 
   this.mouseCoordinates = {
     cur_x: 0.0,
@@ -22,24 +21,6 @@ function CameraHandler(){
     speed: 0.01
 	};
 
-  this.fpCam = {
-    posX: 0.0,
-    posY: -2.5,
-    posZ: -24.0,
-    theta: 0.0,		//xz
-    phi: 0.0,			//xy
-    speed: 0.2
-  };
-
-  this.cCam = {
-    posX: -15.75,
-    posY: -8.1,
-    posZ: -6.25,
-    theta: degToRad(-90),		//xz
-    phi: degToRad(70),			//xy
-    speed: 0.2
-  };
-
   this.setupHandlers = function(e) {
     var body = document.getElementById("my-body");
 		var canvas = document.getElementById("my-canvas");
@@ -49,20 +30,8 @@ function CameraHandler(){
 
 		this.vMatrix = mat4.create();
 		mat4.identity(this.vMatrix);
+
 		this.setO();
-  };
-
-  this.setFp = function() {
-    var body = document.getElementById("glbody");
-    var canvas = document.getElementById("glcanvas");
-
-    body.onkeydown = this.onKeyDownFp;
-    canvas.onmousemove = this.onMouseMoveFp;
-    canvas.onmousedown = this.onMouseDownFp;
-    canvas.onmouseup = this.onMouseUpFp;
-
-    this.mode = "fp";
-    this.modifyvMatrix();
   };
 
   this.setO = function() {
@@ -75,111 +44,63 @@ function CameraHandler(){
     canvas.onmouseup = this.onMouseUpO;
     canvas.onwheel = this.onMouseWheelO;
 
-    this.mode = "o";
     this.modifyvMatrix();
   };
 
-  this.setC = function() {
-    var body = document.getElementById("glbody");
-    var canvas = document.getElementById("glcanvas");
+  this.setOrt = function () {
+    var body = document.getElementById("my-body");
+    var canvas = document.getElementById("my-canvas");
 
-    body.onkeydown = this.onKeyDownC;
-    canvas.onmousemove = this.onMouseMoveC;
-    canvas.onmousedown = this.onMouseDownC;
-    canvas.onmouseup = this.onMouseUpC;
+    body.onkeydown = this.onKeyDownOrt;
+    canvas.onmousemove = null;
+    canvas.onmousedown = null;
+    canvas.onmouseup = null;
+    canvas.onwheel = null;
 
-    this.mode = "c";
     this.modifyvMatrix();
   };
 
-  this.onKeyDownFp = function(e) {
+  this.onKeyDownOrt = function(e) {
+    switch (e.keyCode) {
+    case 49:		//'1'
+    case 97:		//'1' numpad
+      this.handler.oCam.centerX = 0.0;
+      this.handler.oCam.centerY = 0.0;
+      this.handler.oCam.centerZ = 0.0;
+      this.setO();
+      break;
+    case 50:		//'2'
+    case 98:		//'2' numpad
+      this.handler.oCam.centerX = 2.0; //getCakeStation1PositionX()
+      this.handler.oCam.centerY = 2.0; //getCakeStation1PositionY()
+      this.handler.oCam.centerZ = 2.0; //getCakeStation1PositionZ()
+      this.setO();
+      break;
+    case 51:		//'3'
+    case 99:		//'3' numpad
+      this.handler.oCam.centerX = -2.0; //getCakeStation2PositionX()
+      this.handler.oCam.centerY = -2.0; //getCakeStation2PositionY()
+      this.handler.oCam.centerZ = -2.0; //getCakeStation2PositionZ()
+      this.setO();
+      break;
+    case 52:		//'4'
+    case 100:		//'4' numpad
+      this.handler.oCam.centerX = 0.0;
+      this.handler.oCam.centerY = 0.0;
+      this.handler.oCam.centerZ = 0.0;
+      this.handler.oCam.theta = 0.0;
+      this.handler.oCam.phi = degToRad(0.0);
+      break;
+    case 53:		//'5'
+    case 101:		//'5' numpad
+      this.handler.oCam.centerX = 0.0;
+      this.handler.oCam.centerY = 0.0;
+      this.handler.oCam.centerZ = 0.0;
+      this.handler.oCam.theta = 0.0;
+      this.handler.oCam.phi = degToRad(90.0);
+      break;
 
-  	switch (e.keyCode) {
-  		case 38:	//'flecha arriba'
-        this.handler.fpCam.posZ += Math.cos(this.handler.fpCam.theta) * this.handler.fpCam.speed;
-        this.handler.fpCam.posX += Math.sin(this.handler.fpCam.theta) * this.handler.fpCam.speed;
-  			break;
-  		case 40:			//'flecha abajo'
-        this.handler.fpCam.posZ -= Math.cos(this.handler.fpCam.theta) * this.handler.fpCam.speed;
-        this.handler.fpCam.posX -= Math.sin(this.handler.fpCam.theta) * this.handler.fpCam.speed;
-    		break;
-      case 17:			//'cntrl'
-        this.handler.setC();
-        break;
-      }
-  		this.handler.modifyvMatrix();
-  }
-
-	this.onMouseMoveFp = function(e) {
-		if (this.handler.mouseDown) {
-			var deltaX = this.handler.previousX - e.clientX;
-			var deltaY = this.handler.previousY - e.clientY;
-
-			this.handler.previousX = e.clientX;
-			this.handler.previousY = e.clientY;
-
-			this.handler.fpCam.theta += deltaX * this.handler.mouseCoordinates.speedFactor;
-			this.handler.fpCam.phi -= deltaY * this.handler.mouseCoordinates.speedFactor;
-
-			if (this.handler.fpCam.phi < -Math.PI/2)
-				this.handler.fpCam.phi = -Math.PI/2;
-
-			if (this.handler.fpCam.phi > Math.PI/2)
-				this.handler.fpCam.phi = Math.PI/2;
-
-			this.handler.modifyvMatrix();
-		}
-	};
-
-	this.onMouseUpFp = function(e) {
-		this.handler.mouseDown = false;
-	};
-
-	this.onMouseDownFp = function(e) {
-		this.handler.previousX = e.clientX;
-		this.handler.previousY = e.clientY;
-		this.handler.mouseDown = true;
-	};
-
-  this.onKeyDownC = function(e) {
-
-  	switch (e.keyCode) {
-      case 17:			//'cntrl'
-        this.handler.setO();
-        break;
-      }
-  		this.handler.modifyvMatrix();
-  }
-
-  this.onMouseMoveC = function(e) {
-    if (this.handler.mouseDown) {
-      var deltaX = this.handler.previousX - e.clientX;
-      var deltaY = this.handler.previousY - e.clientY;
-
-      this.handler.previousX = e.clientX;
-      this.handler.previousY = e.clientY;
-
-      this.handler.cCam.theta += deltaX * this.handler.mouseCoordinates.speedFactor;
-      this.handler.cCam.phi -= deltaY * this.handler.mouseCoordinates.speedFactor;
-
-      if (this.handler.cCam.phi < -Math.PI/2)
-        this.handler.cCam.phi = -Math.PI/2;
-
-      if (this.handler.cCam.phi > Math.PI/2)
-        this.handler.cCam.phi = Math.PI/2;
-
-      this.handler.modifyvMatrix();
     }
-  };
-
-  this.onMouseUpC = function(e) {
-    this.handler.mouseDown = false;
-  };
-
-  this.onMouseDownC = function(e) {
-    this.handler.previousX = e.clientX;
-    this.handler.previousY = e.clientY;
-    this.handler.mouseDown = true;
   };
 
   this.onKeyDownO = function(e) {
@@ -188,19 +109,57 @@ function CameraHandler(){
       this.handler.oCam.radius -= this.handler.oCam.speed * 50;
       if (this.handler.oCam.radius < 0)
         this.handler.oCam.radius = 0;
-      //this.handler.modifyvMatrix();
       break;
+
     case 109:		// '-'
       this.handler.oCam.radius += this.handler.oCam.speed * 50;
       if (this.handler.oCam.radius < 0)
         this.handler.oCam.radius = 0;
-      //this.handler.modifyvMatrix();
       break;
-    case 17:		//'cntrl'
-      this.handler.setFp();
+
+    case 49:		//'1'
+    case 97:		//'1' numpad
+      this.handler.oCam.centerX = 0.0;
+      this.handler.oCam.centerY = 0.0;
+      this.handler.oCam.centerZ = 0.0;
+      break;
+
+    case 50:		//'2'
+    case 98:		//'2' numpad
+      this.handler.oCam.centerX = 2.0; //getCakeStation1PositionX()
+      this.handler.oCam.centerY = 2.0; //getCakeStation1PositionY()
+      this.handler.oCam.centerZ = 2.0; //getCakeStation1PositionZ()
+      break;
+
+    case 51:		//'3'
+    case 99:		//'3' numpad
+      this.handler.oCam.centerX = -2.0; //getCakeStation2PositionX()
+      this.handler.oCam.centerY = -2.0; //getCakeStation2PositionY()
+      this.handler.oCam.centerZ = -2.0; //getCakeStation2PositionZ()
+      break;
+
+    case 52:		//'4'
+    case 100:		//'4' numpad
+      this.handler.oCam.centerX = 0.0;
+      this.handler.oCam.centerY = 0.0;
+      this.handler.oCam.centerZ = 0.0;
+      this.handler.oCam.theta = 0.0;
+      this.handler.oCam.phi = degToRad(0.0);
+      this.setOrt();
+      break;
+
+    case 53:		//'5'
+    case 101:		//'5' numpad
+      this.handler.oCam.centerX = 0.0;
+      this.handler.oCam.centerY = 0.0;
+      this.handler.oCam.centerZ = 0.0;
+      this.handler.oCam.theta = 0.0;
+      this.handler.oCam.phi = degToRad(90.0);
+      this.setOrt();
       break;
     }
-  }
+  };
+
   this.onMouseMoveO = function(e) {
     if (this.handler.mouseDown) {
       var deltaX = this.handler.previousX - e.clientX;
@@ -217,53 +176,33 @@ function CameraHandler(){
 
       if (this.handler.oCam.phi > Math.PI/2)
         this.handler.oCam.phi = Math.PI/2;
-
-      //this.handler.modifyvMatrix();
     }
   };
+
   this.onMouseUpO = function(e) {
     this.handler.mouseDown = false;
   };
+
   this.onMouseDownO = function(e) {
     this.handler.previousX = e.clientX;
     this.handler.previousY = e.clientY;
     this.handler.mouseDown = true;
   };
+
   this.onMouseWheelO = function(e) {
     this.handler.oCam.radius += e.deltaY * Math.sign(this.handler.oCam.speed);
 
     if (this.handler.oCam.radius < 0)
       this.handler.oCam.radius = 0;
-
-    //this.handler.modifyvMatrix();
   };
-
-
-  this.actualizarPosicionCabina = function(x,y,z) {
-      this.cCam.posX -= x;
-      this.cCam.posY -= y;
-      this.cCam.posZ -= z;
-      this.modifyvMatrix();
-    };
 
   this.modifyvMatrix = function() {
     mat4.identity(this.vMatrix);
-    if (this.mode == "fp") {
-      mat4.rotate(this.vMatrix, this.vMatrix, this.fpCam.phi, [1.0, 0.0, 0.0]);
-      mat4.rotate(this.vMatrix, this.vMatrix, this.fpCam.theta, [0.0, -1.0, 0.0]);
-      mat4.translate(this.vMatrix, this.vMatrix, [this.fpCam.posX,this.fpCam.posY,this.fpCam.posZ]);
-      mat4.multiply(viewMatrix,this.vMatrix,viewMatrix);
-    } else if (this.mode == "o") {
-      mat4.translate(this.vMatrix, this.vMatrix, [0.0, 0.0, -this.oCam.radius]);
-      mat4.rotate(this.vMatrix, this.vMatrix, this.oCam.phi, [1.0, 0.0, 0.0]);
-      mat4.rotate(this.vMatrix, this.vMatrix, this.oCam.theta, [0.0, -1.0, 0.0]);
-      mat4.multiply(viewMatrix,this.vMatrix,viewMatrix);
-    } else if (this.mode == "c") {
-      mat4.rotate(this.vMatrix, this.vMatrix, this.cCam.phi, [1.0, 0.0, 0.0]);
-      mat4.rotate(this.vMatrix, this.vMatrix, this.cCam.theta, [0.0, -1.0, 0.0]);
-      mat4.translate(this.vMatrix, this.vMatrix, [this.cCam.posX,this.cCam.posY,this.cCam.posZ]);
-      mat4.multiply(viewMatrix,this.vMatrix,viewMatrix);
-    }
+    mat4.translate(this.vMatrix, this.vMatrix, [this.oCam.centerX, this.oCam.centerY, this.oCam.centerZ]);
+    mat4.translate(this.vMatrix, this.vMatrix, [0.0, 0.0, -this.oCam.radius]);
+    mat4.rotate(this.vMatrix, this.vMatrix, this.oCam.phi, [1.0, 0.0, 0.0]);
+    mat4.rotate(this.vMatrix, this.vMatrix, this.oCam.theta, [0.0, -1.0, 0.0]);
+    mat4.multiply(viewMatrix,this.vMatrix,viewMatrix);
   };
 
   this.getvMode = function() {
