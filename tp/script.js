@@ -34,6 +34,7 @@ function initWebGL() {
 
     setupBuffers();
     //initEventHandlers(canvas, currentAngle);
+    GUI();
     setInterval(drawScene, 10);
   } else{
     alert("Error: Your browser does not appear to support WebGL.");

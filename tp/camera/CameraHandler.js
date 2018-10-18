@@ -48,6 +48,8 @@ function CameraHandler(){
   };
 
   this.setOrt = function () {
+     console.log("entra aca");
+/*
     var body = document.getElementById("my-body");
     var canvas = document.getElementById("my-canvas");
 
@@ -58,6 +60,7 @@ function CameraHandler(){
     canvas.onwheel = null;
 
     this.modifyvMatrix();
+    */
   };
 
   this.onKeyDownOrt = function(e) {
@@ -105,41 +108,40 @@ function CameraHandler(){
 
   this.onKeyDownO = function(e) {
     switch (e.keyCode) {
-    case 107:		// '+'
-      this.handler.oCam.radius -= this.handler.oCam.speed * 50;
-      if (this.handler.oCam.radius < 0)
-        this.handler.oCam.radius = 0;
-      break;
-
-    case 109:		// '-'
+      case 107:		// '+'
+        this.handler.oCam.radius -= this.handler.oCam.speed * 50;
+        if (this.handler.oCam.radius < 0)
+          this.handler.oCam.radius = 0;
+          break;
+      case 109:		// '-'
       this.handler.oCam.radius += this.handler.oCam.speed * 50;
       if (this.handler.oCam.radius < 0)
         this.handler.oCam.radius = 0;
       break;
 
-    case 49:		//'1'
-    case 97:		//'1' numpad
+      case 49:		//'1'
+      case 97:		//'1' numpad
       this.handler.oCam.centerX = 0.0;
       this.handler.oCam.centerY = 0.0;
       this.handler.oCam.centerZ = 0.0;
       break;
 
-    case 50:		//'2'
-    case 98:		//'2' numpad
+      case 50:		//'2'
+      case 98:		//'2' numpad
       this.handler.oCam.centerX = 2.0; //getCakeStation1PositionX()
       this.handler.oCam.centerY = 2.0; //getCakeStation1PositionY()
       this.handler.oCam.centerZ = 2.0; //getCakeStation1PositionZ()
       break;
 
-    case 51:		//'3'
-    case 99:		//'3' numpad
+      case 51:		//'3'
+      case 99:		//'3' numpad
       this.handler.oCam.centerX = -2.0; //getCakeStation2PositionX()
       this.handler.oCam.centerY = -2.0; //getCakeStation2PositionY()
       this.handler.oCam.centerZ = -2.0; //getCakeStation2PositionZ()
       break;
 
-    case 52:		//'4'
-    case 100:		//'4' numpad
+      case 52:		//'4'
+      case 100:		//'4' numpad
       this.handler.oCam.centerX = 0.0;
       this.handler.oCam.centerY = 0.0;
       this.handler.oCam.centerZ = 0.0;
@@ -148,16 +150,16 @@ function CameraHandler(){
       this.setOrt();
       break;
 
-    case 53:		//'5'
-    case 101:		//'5' numpad
-      this.handler.oCam.centerX = 0.0;
-      this.handler.oCam.centerY = 0.0;
-      this.handler.oCam.centerZ = 0.0;
-      this.handler.oCam.theta = 0.0;
-      this.handler.oCam.phi = degToRad(90.0);
-      this.setOrt();
-      break;
-    }
+      case 53:		//'5'
+      case 101:		//'5' numpad
+        this.handler.oCam.centerX = 0.0;
+        this.handler.oCam.centerY = 0.0;
+        this.handler.oCam.centerZ = 0.0;
+        this.handler.oCam.theta = 0.0;
+        this.handler.oCam.phi = degToRad(90.0);
+        this.setOrt();
+        break;
+    };
   };
 
   this.onMouseMoveO = function(e) {
