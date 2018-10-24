@@ -119,7 +119,7 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Bell(0,0,1);
+  o = new Ring(0,0,1,4);
   o.setupWebGLBuffers();
   m = mat4.create();
   o.localMatrix = m;
@@ -199,7 +199,7 @@ function drawScene() {
 
   var u_view_matrix = gl.getUniformLocation(glProgram, "uVMatrix");
   // Preparamos una matriz de vista.
-/*
+  /*
   mat4.identity(vMatrix);
   mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -5.0]);
   mat4.rotateX(vMatrix, vMatrix, currentAngle[0] + Math.PI/8);
@@ -617,7 +617,7 @@ Base.prototype = Object.create(Node.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 
 // Clase Ring
-function Ring(r, g, b) {
+function Ring(r, g, b, turns) {
   this.r = r;
   this.g = g;
   this.b = b;
@@ -664,9 +664,9 @@ function Ring(r, g, b) {
     this.normal_buffer.push(n2[0], n2[1], n2[2]);
   }
 
-  levels = 64;
+  levels = 50 * (turns + 1);
   ang = 2 * Math.PI / levels;
-  torsion = -8 * Math.PI / levels;
+  torsion = -turns * ang;
   for(var i = 0; i < levels; i++) {
     for(var j = 0; j < nPoints * 3; j+=3) {
       x = this.position_buffer[j];
