@@ -119,11 +119,11 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-  o = new Ring(0,0,1,4);
-  o.setupWebGLBuffers();
-  m = mat4.create();
-  o.localMatrix = m;
-  objects.push(o);
+  //  o = new Ring(0,0,1,4);
+  //o.setupWebGLBuffers();
+  //m = mat4.create();
+  //o.localMatrix = m;
+  //objects.push(o);
 
   // Amarillo = 0.82, 0.753, 0.306
   // Rojo = 0.757, 0.227, 0.251
@@ -131,32 +131,57 @@ function setupBuffers() {
   // Azul = 0.282, 0.286, 0.749
   // Gris de la cinta = 0.463, 0.463, 0.463
 
-  // floor = new Box(0.686, 0.686, 0.686);
-  // floor.setupWebGLBuffers();
-  // m1 = mat4.create();
-  // mat4.scale(m1, m1, vec3.fromValues(10, 0.1, 10));
-  // floor.localMatrix = m1;
-  // objects.push(floor);
+  //objects[0].updateWorldMatrix();
 
-  // box = new Box(0.282, 0.286, 0.749);
-  // box.setupWebGLBuffers();
-  // m2 = mat4.create();
-  // mat4.scale(m2, m2, vec3.fromValues(0.1, 10, 0.1));
-  // mat4.translate(m2, m2, vec3.fromValues(0.1, 0.1, 0.1));
-  // box.localMatrix = m2;
-  // box.setParent(floor)
-  // objects.push(box);
-
-  // line = new Box(0.463, 0.463, 0.463);
-  // line.setupWebGLBuffers();
-  // m3 = mat4.create();
-  // mat4.scale(m3, m3, vec3.fromValues(0.8, 0.1, 5));
-  // mat4.translate(m3, m3, vec3.fromValues(0, -3, 0.78));
-  // line.localMatrix = m3;
-  // line.setParent(box);
-  // objects.push(line);
-
+  floor = new Box(0.686, 0.686, 0.686);
+  floor.setupWebGLBuffers();
+  m1 = mat4.create();
+  mat4.scale(m1, m1, vec3.fromValues(25, 0.1, 25));
+  floor.localMatrix = m1;
+  objects.push(floor);
   objects[0].updateWorldMatrix();
+
+  mSupportBoxes = mat4.create();
+  mat4.translate(mSupportBoxes, mSupportBoxes, vec3.fromValues(-12, 0.85, 0));
+  mat4.scale(mSupportBoxes, mSupportBoxes, vec3.fromValues(0.1, 0.75, 0.1));
+  var box = [];
+  var boxPadding = 2;
+  var suppBoxesQuant = 10;
+  for (i = 1; i < suppBoxesQuant; i++){
+    box[i] = new Box(0.757, 0.227, 0.251);
+    box[i].setupWebGLBuffers();
+    mBox = mat4.create();
+    mat4.translate(mBox, mBox, vec3.fromValues(boxPadding, 0, 0));
+    mat4.multiply(mBox,mBox,mSupportBoxes);
+    box[i].localMatrix = mBox;
+    box[i].setParent(floor);
+    objects.push(box[i]);
+    objects[i].updateWorldMatrix();
+    boxPadding += 2;
+  }
+
+  bigBox = new Box(0.282, 0.286, 0.749);
+  bigBox.setupWebGLBuffers();
+  mBb = mat4.create();
+  mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
+  mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
+  bigBox.localMatrix = mBb;
+  bigBox.setParent(floor);
+  objects.push(bigBox);
+  objects[10].updateWorldMatrix();
+
+  line = new Box(0.463, 0.463, 0.463);
+  line.setupWebGLBuffers();
+  m3 = mat4.create();
+  mat4.translate(m3, m3, vec3.fromValues(-2, 1.85, 0));
+  mat4.rotate(m3, m3, Math.PI/2, [0, 1, 0]);
+  mat4.scale(m3, m3, vec3.fromValues(1.5, 0.25, 10));
+  line.localMatrix = m3;
+  line.setParent(bigBox);
+  objects.push(line);
+  objects[11].updateWorldMatrix();
+
+
 }
 
 function initEventHandlers(c, currentAngle) {

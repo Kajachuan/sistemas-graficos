@@ -17,9 +17,9 @@ function CameraHandler(){
 		centerX: 0.0,
     centerY: 0.0,
     centerZ: 0.0,
-		radius: 5.0,
-		phi: degToRad(60.0),
-		theta: 0.0,
+		radius: 20.0,
+		phi: degToRad(45.0),
+		theta: 50.0,
     speed: 0.01
 	};
 
@@ -79,9 +79,10 @@ function CameraHandler(){
     case 52:		//'4'
     case 100:		//'4' numpad
       this.handler.oCam.centerX = 0.0;
-      this.handler.oCam.centerY = 0.0;
+      this.handler.oCam.centerY = -1.85;
       this.handler.oCam.centerZ = 0.0;
       this.handler.oCam.theta = 0.0;
+      this.handler.oCam.radius = 20.0,
       this.handler.oCam.phi = degToRad(0.0);
       break;
     case 53:		//'5'
@@ -90,6 +91,7 @@ function CameraHandler(){
       this.handler.oCam.centerY = 0.0;
       this.handler.oCam.centerZ = 0.0;
       this.handler.oCam.theta = 0.0;
+      this.handler.oCam.radius = 20.0,
       this.handler.oCam.phi = degToRad(90.0);
       break;
 
@@ -133,9 +135,10 @@ function CameraHandler(){
       case 52:		//'4'
       case 100:		//'4' numpad
         this.handler.oCam.centerX = 0.0;
-        this.handler.oCam.centerY = 0.0;
+        this.handler.oCam.centerY = -1.85;
         this.handler.oCam.centerZ = 0.0;
         this.handler.oCam.theta = 0.0;
+        this.handler.oCam.radius = 20.0,
         this.handler.oCam.phi = degToRad(0.0);
         this.handler.setOrt();
         break;
@@ -146,6 +149,7 @@ function CameraHandler(){
         this.handler.oCam.centerY = 0.0;
         this.handler.oCam.centerZ = 0.0;
         this.handler.oCam.theta = 0.0;
+        this.handler.oCam.radius = 20.0,
         this.handler.oCam.phi = degToRad(90.0);
         this.handler.setOrt();
         break;
