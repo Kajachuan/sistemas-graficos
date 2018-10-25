@@ -218,17 +218,25 @@ function initEventHandlers(c, currentAngle) {
 function drawScene() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
+
+  if(cameraHandler.getvMode() == 1){
+    mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
+  } else
+  if(cameraHandler.getvMode() == 2){
+    mat4.ortho(pMatrix, -13.0, 13.0, -10.0, 10.0, 0.1, 100);
+    mat4.lookAt(viewMatrix, [0, 1.85, 1], [0, 1.85, 0], [0, 1, 0]);
+  } else
+  if(cameraHandler.getvMode() == 3){
+    mat4.ortho(pMatrix, -13.0, 13.0, -5.0, 5.0, 0.1, 100);
+    mat4.lookAt(viewMatrix, [0, 12, 0.000000001], [0, 0, 0], [0, 1, 0]);
+  }
+
   // Preparamos una matriz de perspectiva.
-  mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
   gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
   var u_view_matrix = gl.getUniformLocation(glProgram, "uVMatrix");
+
   // Preparamos una matriz de vista.
-  /*
-  mat4.identity(vMatrix);
-  mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -5.0]);
-  mat4.rotateX(vMatrix, vMatrix, currentAngle[0] + Math.PI/8);
-  mat4.rotateY(vMatrix, vMatrix, currentAngle[1] - Math.PI/5);*/
   gl.uniformMatrix4fv(u_view_matrix, false, viewMatrix);
 
   mat4.identity(viewMatrix);
