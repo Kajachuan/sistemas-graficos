@@ -70,28 +70,28 @@ function CameraHandler(){
       case 49:		//'1'
       case 97:		//'1' numpad
         this.handler.mode = 1;
-        this.handler.setO();
         this.handler.oCam.centerX = 0.0;
         this.handler.oCam.centerY = 0.0;
         this.handler.oCam.centerZ = 0.0;
+        this.handler.setO();
       break;
 
       case 50:		//'2'
       case 98:		//'2' numpad
         this.handler.mode = 1;
+        this.handler.oCam.centerX = -2.0; //getCakeStation1PositionX()
+        this.handler.oCam.centerY = 0.0; //getCakeStation1PositionY()
+        this.handler.oCam.centerZ = -10.0; //getCakeStation1PositionZ()
         this.handler.setO();
-        this.handler.oCam.centerX = 2.0; //getCakeStation1PositionX()
-        this.handler.oCam.centerY = 2.0; //getCakeStation1PositionY()
-        this.handler.oCam.centerZ = 2.0; //getCakeStation1PositionZ()
       break;
 
       case 51:		//'3'
       case 99:		//'3' numpad
         this.handler.mode = 1;
+        this.handler.oCam.centerX = 5.0; //getCakeStation2PositionX()
+        this.handler.oCam.centerY = 0.0; //getCakeStation2PositionY()
+        this.handler.oCam.centerZ = -10.0; //getCakeStation2PositionZ()
         this.handler.setO();
-        this.handler.oCam.centerX = -2.0; //getCakeStation2PositionX()
-        this.handler.oCam.centerY = -2.0; //getCakeStation2PositionY()
-        this.handler.oCam.centerZ = -2.0; //getCakeStation2PositionZ()
       break;
 
       case 52:		//'4'
