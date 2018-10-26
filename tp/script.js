@@ -125,6 +125,12 @@ function setupBuffers() {
   // Gris del piso = 0.686, 0.686, 0.686
   // Azul = 0.282, 0.286, 0.749
   // Gris de la cinta = 0.463, 0.463, 0.463
+  // Rosa = 0.6196, 0.235, 0.663
+  // Violeta = 0.5804, 0.325, 0.8196
+  // Verde = 0.176, 0.627, 0.169
+  // Marron = 0.882, 0.667, 0.416
+  // Plato = 0.851, 0.941, 0.776
+  // Celeste anillo = 0.871, 1.0, 0.984
 
   floor = new Box(0.686, 0.686, 0.686);
   floor.setupWebGLBuffers();
@@ -141,7 +147,7 @@ function setupBuffers() {
   var boxPadding = 2;
   var suppBoxesQuant = 10;
   for (i = 1; i < suppBoxesQuant; i++){
-    box[i] = new Box(0.757, 0.227, 0.251);
+    box[i] = new Box(0.176, 0.627, 0.169);
     box[i].setupWebGLBuffers();
     mBox = mat4.create();
     mat4.translate(mBox, mBox, vec3.fromValues(boxPadding, 0, 0));
@@ -174,7 +180,7 @@ function setupBuffers() {
   objects.push(line);
   objects[11].updateWorldMatrix();
 
-  box1Station1 = new Box(0.282, 0.286, 0.749);
+  box1Station1 = new Box(0.6196, 0.235, 0.663);
   box1Station1.setupWebGLBuffers();
   mB1s1 = mat4.create();
   mat4.translate(mB1s1, mB1s1, vec3.fromValues(2, 3.1, -3.7));
@@ -184,7 +190,7 @@ function setupBuffers() {
   objects.push(box1Station1);
   objects[12].updateWorldMatrix();
 
-  box2Station1 = new Box(0.282, 0.286, 0.749);
+  box2Station1 = new Box(0.5804, 0.325, 0.8196);
   box2Station1.setupWebGLBuffers();
   mB2s1 = mat4.create();
   mat4.translate(mB2s1, mB2s1, vec3.fromValues(2, 1.3, -3));
@@ -194,7 +200,7 @@ function setupBuffers() {
   objects.push(box2Station1);
   objects[13].updateWorldMatrix();
 
-  box3Station1 = new Box(0.282, 0.286, 0.749);
+  box3Station1 = new Box(0.882, 0.667, 0.416);
   box3Station1.setupWebGLBuffers();
   mB3s1 = mat4.create();
   mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.5));
@@ -204,7 +210,7 @@ function setupBuffers() {
   objects.push(box3Station1);
   objects[14].updateWorldMatrix();
 
-  box1Station2 = new Box(0.282, 0.286, 0.749);
+  box1Station2 = new Box(0.6196, 0.235, 0.663);
   box1Station2.setupWebGLBuffers();
   mB1s2 = mat4.create();
   mat4.translate(mB1s2, mB1s2, vec3.fromValues(-5, 1.85, -3.7));
@@ -214,7 +220,7 @@ function setupBuffers() {
   objects.push(box1Station2);
   objects[15].updateWorldMatrix();
 
-  box2Station2 = new Box(0.282, 0.286, 0.749);
+  box2Station2 = new Box(0.882, 0.667, 0.416);
   box2Station2.setupWebGLBuffers();
   mB2s2 = mat4.create();
   mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.5));
@@ -224,7 +230,7 @@ function setupBuffers() {
   objects.push(box2Station2);
   objects[16].updateWorldMatrix();
 
-  box3Station2 = new Box(0.282, 0.286, 0.749);
+  box3Station2 = new Box(0.882, 0.667, 0.416);
   box3Station2.setupWebGLBuffers();
   mB2s2 = mat4.create();
   mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.1));
@@ -235,7 +241,7 @@ function setupBuffers() {
   objects[17].updateWorldMatrix();
 
 
-  ringCake = new Ring(0,0,1,4);
+  ringCake = new Ring(0.871, 1.0, 0.984,4);
   ringCake.setupWebGLBuffers();
   mRing = mat4.create();
   mat4.translate(mRing, mRing, vec3.fromValues(2, 2.7, 0));
@@ -244,7 +250,7 @@ function setupBuffers() {
   objects.push(ringCake);
   objects[18].updateWorldMatrix();
 
-  baseCake = new Base(0.82, 0.753, 0.306, 1, 3, 0.5, 0.5)
+  baseCake = new Base(0.82, 0.753, 0.306, 1, 3, 0.5, 0.2)
   baseCake.setupWebGLBuffers();
   mBase = mat4.create();
   mat4.translate(mBase, mBase, vec3.fromValues(2, 2.2, 0));
@@ -252,7 +258,7 @@ function setupBuffers() {
   objects.push(baseCake);
   objects[19].updateWorldMatrix();
 
-  plateCake = new Base(0,0,1, 1.2, 1, 0.1, 0.1)
+  plateCake = new Base(0.851, 0.941, 0.776, 1.2, 1, 0.1, 0.1)
   plateCake.setupWebGLBuffers();
   mPlate = mat4.create();
   mat4.translate(mPlate, mPlate, vec3.fromValues(2, 2.1, 0));
@@ -394,7 +400,7 @@ function drawScene() {
   var ambient_color = gl.getUniformLocation(glProgram, "uAmbientColor");
 
   var lighting_direction = gl.getUniformLocation(glProgram, "uLightPosition");
-  var lightPosition = [0, 3, 4];
+  var lightPosition = [5, 10, 10];
   gl.uniform3fv(lighting_direction, lightPosition);
 
   var directional_color = gl.getUniformLocation(glProgram, "uDirectionalColor");
