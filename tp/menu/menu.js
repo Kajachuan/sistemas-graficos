@@ -1,9 +1,3 @@
-var menu = {
-	reiniciar:function(){
-		alert("Se reiniciaron los parámetros");
-	},
-};
-
 radioTotal = 2;
 altura = 2;
 ciclos = 2;
@@ -17,23 +11,23 @@ function GUI (){
 
 		var gui = new dat.GUI();
 
-		gui.add(menu,"reiniciar").name("Reiniciar"); // Este debe ser el botón reiniciar que aun no funciona
+		gui.add(window, "drawScene").name("Reiniciar"); // Este debe ser el botón reiniciar que aun no funciona
 
 		var f1 = gui.addFolder('Base');
-		f1.add(window, 'radioTotal', 1, 10).name("Radio");
-		f1.add(window, 'altura', 1, 5).name("Altura");
-		f1.add(window, 'ciclos', 1, 5).name("Ciclos");
+		f1.add(window, 'radioTotal', 1, 10).name("Radio").step(1);
+		f1.add(window, 'altura', 1, 5).name("Altura").step(1);
+		f1.add(window, 'ciclos', 1, 5).name("Ciclos").step(1);
 
 		var f2 = gui.addFolder('Anillo');
-		f2.add(window, 'vueltas', 1, 6).name("Torsión");
+		f2.add(window, 'vueltas', 1, 6).name("Torsión").step(1);
 
 		var f3 = gui.addFolder('Decoradores');
 		f3.add(window, 'decorador', ["Bola", "Campana", "Paleta"]).name("Tipo");
-		f3.add(window, 'cantidadDecoradores', 1, 10).name("Cantidad");
+		f3.add(window, 'cantidadDecoradores', 1, 10).name("Cantidad").step(1);
 
 		var f4 = gui.addFolder('Contorno');
 		f4.add(window, 'contorno', ["Tubo", "Barra"]).name("Tipo");
-		f4.add(window, 'cantidadContorno', 2, 20).name("Cantidad");
+		f4.add(window, 'cantidadContorno', 2, 20).name("Cantidad").step(1);
 
 		f1.open();
 		f2.open();

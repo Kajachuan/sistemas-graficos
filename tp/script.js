@@ -400,7 +400,7 @@ function drawScene() {
   var ambient_color = gl.getUniformLocation(glProgram, "uAmbientColor");
 
   var lighting_direction = gl.getUniformLocation(glProgram, "uLightPosition");
-  var lightPosition = [5, 10, 10];
+  var lightPosition = [-10, 15, 10];
   gl.uniform3fv(lighting_direction, lightPosition);
 
   var directional_color = gl.getUniformLocation(glProgram, "uDirectionalColor");
