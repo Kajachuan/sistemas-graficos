@@ -245,7 +245,7 @@ function setupBuffers() {
   ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
   ringCake.setupWebGLBuffers();
   mRing = mat4.create();
-  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.15 + 0.1 * altura, 0));
+  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.18 + altura * (0.1 - 0.03 / ciclos), 0));
   mat4.scale(mRing, mRing, vec3.fromValues(0.063 * radioTotal, 0.063 * radioTotal, 0.063 * radioTotal));
   ringCake.localMatrix = mRing;
   objects.push(ringCake);
@@ -271,7 +271,7 @@ function setupBuffers() {
   ball1Cake = new Ball(0.757, 0.227, 0.251);
   ball1Cake.setupWebGLBuffers();
   mBall1 = mat4.create();
-  mat4.translate(mBall1, mBall1, vec3.fromValues(1.4, 2.12 + 0.1 * altura, 0));
+  mat4.translate(mBall1, mBall1, vec3.fromValues(1.4, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
   mat4.scale(mBall1, mBall1, vec3.fromValues(0.1, 0.1, 0.1));
   ball1Cake.localMatrix = mBall1;
   objects.push(ball1Cake);
@@ -280,7 +280,7 @@ function setupBuffers() {
   ball2Cake = new Ball(0.757, 0.227, 0.251);
   ball2Cake.setupWebGLBuffers();
   mBall2 = mat4.create();
-  mat4.translate(mBall2, mBall2, vec3.fromValues(2.6, 2.12 + 0.1 * altura, 0));
+  mat4.translate(mBall2, mBall2, vec3.fromValues(2.6, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
   mat4.scale(mBall2, mBall2, vec3.fromValues(0.1, 0.1, 0.1));
   ball2Cake.localMatrix = mBall2;
   objects.push(ball2Cake);
@@ -289,7 +289,7 @@ function setupBuffers() {
   ball3Cake = new Ball(0.757, 0.227, 0.251);
   ball3Cake.setupWebGLBuffers();
   mBall3 = mat4.create();
-  mat4.translate(mBall3, mBall3, vec3.fromValues(2, 2.12 + 0.1 * altura, 0.6));
+  mat4.translate(mBall3, mBall3, vec3.fromValues(2, 2.12 + altura * (0.1 - 0.008 / ciclos), 0.6));
   mat4.scale(mBall3, mBall3, vec3.fromValues(0.1, 0.1, 0.1));
   ball3Cake.localMatrix = mBall3;
   objects.push(ball3Cake);
@@ -298,7 +298,7 @@ function setupBuffers() {
   ball4Cake = new Ball(0.757, 0.227, 0.251);
   ball4Cake.setupWebGLBuffers();
   mBall4 = mat4.create();
-  mat4.translate(mBall4, mBall4, vec3.fromValues(1.6, 2.12 + 0.1 * altura, 0.4));
+  mat4.translate(mBall4, mBall4, vec3.fromValues(1.6, 2.12 + altura * (0.1 - 0.008 / ciclos), 0.4));
   mat4.scale(mBall4, mBall4, vec3.fromValues(0.1, 0.1, 0.1));
   ball4Cake.localMatrix = mBall4;
   objects.push(ball4Cake);
@@ -307,7 +307,7 @@ function setupBuffers() {
   ball5Cake = new Ball(0.757, 0.227, 0.251);
   ball5Cake.setupWebGLBuffers();
   mBall5 = mat4.create();
-  mat4.translate(mBall5, mBall5, vec3.fromValues(2.4, 2.12 + 0.1 * altura, 0.4));
+  mat4.translate(mBall5, mBall5, vec3.fromValues(2.4, 2.12 + altura * (0.1 - 0.008 / ciclos), 0.4));
   mat4.scale(mBall5, mBall5, vec3.fromValues(0.1, 0.1, 0.1));
   ball5Cake.localMatrix = mBall5;
   objects.push(ball5Cake);
@@ -316,7 +316,7 @@ function setupBuffers() {
   ball6Cake = new Ball(0.757, 0.227, 0.251);
   ball6Cake.setupWebGLBuffers();
   mBall6 = mat4.create();
-  mat4.translate(mBall6, mBall6, vec3.fromValues(2.4, 2.12 + 0.1 * altura, -0.4));
+  mat4.translate(mBall6, mBall6, vec3.fromValues(2.4, 2.12 + altura * (0.1 - 0.008 / ciclos), -0.4));
   mat4.scale(mBall6, mBall6, vec3.fromValues(0.1, 0.1, 0.1));
   ball6Cake.localMatrix = mBall6;
   objects.push(ball6Cake);
@@ -325,7 +325,7 @@ function setupBuffers() {
   ball7Cake = new Ball(0.757, 0.227, 0.251);
   ball7Cake.setupWebGLBuffers();
   mBall7 = mat4.create();
-  mat4.translate(mBall7, mBall7, vec3.fromValues(1.6, 2.12 + 0.1 * altura, -0.4));
+  mat4.translate(mBall7, mBall7, vec3.fromValues(1.6, 2.12 + altura * (0.1 - 0.008 / ciclos), -0.4));
   mat4.scale(mBall7, mBall7, vec3.fromValues(0.1, 0.1, 0.1));
   ball7Cake.localMatrix = mBall7;
   objects.push(ball7Cake);
@@ -334,7 +334,7 @@ function setupBuffers() {
   ball8Cake = new Ball(0.757, 0.227, 0.251);
   ball8Cake.setupWebGLBuffers();
   mBall8 = mat4.create();
-  mat4.translate(mBall8, mBall8, vec3.fromValues(2, 2.12 + 0.1 * altura, -0.6));
+  mat4.translate(mBall8, mBall8, vec3.fromValues(2, 2.12 + altura * (0.1 - 0.008 / ciclos), -0.6));
   mat4.scale(mBall8, mBall8, vec3.fromValues(0.1, 0.1, 0.1));
   ball8Cake.localMatrix = mBall8;
   objects.push(ball8Cake);
