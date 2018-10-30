@@ -318,7 +318,7 @@ function setupBuffers() {
     paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
 
   mContours = mat4.create();
-  mat4.translate(mContours, mContours, vec3.fromValues(1.02, 2.35, 0));
+  mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 2.35, 0));
   mat4.scale(mContours, mContours, vec3.fromValues(paramCont[4], paramCont[5], paramCont[6]));
 
   var cont = [];
