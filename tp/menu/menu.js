@@ -6,7 +6,7 @@ vueltas = 4;
 decorador = "Bola";
 cantidadDecoradores = 9;
 contorno = "Tubo";
-cantidadContorno = 2;
+cantidadContorno = 30;
 
 function GUI (){
 
@@ -29,7 +29,7 @@ function GUI (){
 
 		var f4 = gui.addFolder('Contorno');
 		f4.add(window, 'contorno', ["Tubo", "Barra"]).name("Tipo");
-		f4.add(window, 'cantidadContorno', 2, 20).name("Cantidad").step(1);
+		f4.add(window, 'cantidadContorno', 2, 50).name("Cantidad").step(1);
 
 		f1.open();
 		f2.open();

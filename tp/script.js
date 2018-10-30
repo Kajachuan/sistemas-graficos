@@ -270,7 +270,7 @@ function setupBuffers() {
   objects.push(plateCake);
   objects[20].updateWorldMatrix();
 
-  paramDec = []
+  paramDec = [];
   if (decorador == "Bola")
     paramDec.push("Ball", 0.757, 0.227, 0.251);
   else if (decorador == "Campana")
@@ -308,6 +308,32 @@ function setupBuffers() {
     dec.localMatrix = mDec;
     objects.push(dec);
     objects[21].updateWorldMatrix();
+  }
+
+
+  paramCont = [];
+  if (contorno == "Tubo")
+    paramCont.push("Tube", 0.996, 0.502, 0.996, 0.1, 0.1, 0.1);
+  else
+    paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
+
+  mContours = mat4.create();
+  mat4.translate(mContours, mContours, vec3.fromValues(1.02, 2.35, 0));
+  mat4.scale(mContours, mContours, vec3.fromValues(paramCont[4], paramCont[5], paramCont[6]));
+
+  var cont = [];
+  var angle = 2 * Math.PI / cantidadContorno;
+
+  for (i = 0; i < cantidadContorno; i++){
+    cont[i] = new window[paramCont[0]](paramCont[1], paramCont[2], paramCont[3]);
+    cont[i].setupWebGLBuffers();
+    mCont = mat4.create();
+    mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
+    mat4.rotateY(mCont, mCont, i * angle, vec3.fromValues(0, 0, 0));
+    mat4.multiply(mCont, mCont, mContours);
+    cont[i].localMatrix = mCont;
+    objects.push(cont[i]);
+    objects[21 + cantidadDecoradores + i].updateWorldMatrix();
   }
 }
 
