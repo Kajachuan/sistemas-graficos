@@ -1,10 +1,10 @@
 radioTotal = 5;
-altura = 2;
-ciclos = 2;
+altura = 5;
+ciclos = 3;
 amplitud = 2;
-vueltas = 2;
+vueltas = 4;
 decorador = "Bola";
-cantidadDecoradores = 2;
+cantidadDecoradores = 9;
 contorno = "Tubo";
 cantidadContorno = 2;
 
