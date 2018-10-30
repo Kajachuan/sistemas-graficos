@@ -1,4 +1,4 @@
-radioTotal = 2;
+radioTotal = 5;
 altura = 2;
 ciclos = 2;
 vueltas = 2;
@@ -11,15 +11,15 @@ function GUI (){
 
 		var gui = new dat.GUI();
 
-		gui.add(window, "drawScene").name("Reiniciar"); // Este debe ser el botón reiniciar que aun no funciona
+		gui.add(window, "reset").name("Reiniciar"); // Este debe ser el botón reiniciar que aun no funciona
 
 		var f1 = gui.addFolder('Base');
 		f1.add(window, 'radioTotal', 1, 10).name("Radio").step(1);
 		f1.add(window, 'altura', 1, 5).name("Altura").step(1);
-		f1.add(window, 'ciclos', 1, 5).name("Ciclos").step(1);
+		f1.add(window, 'ciclos', 1, 10).name("Ciclos").step(1);
 
 		var f2 = gui.addFolder('Anillo');
-		f2.add(window, 'vueltas', 1, 6).name("Torsión").step(1);
+		f2.add(window, 'vueltas', 1, 10).name("Torsión").step(1);
 
 		var f3 = gui.addFolder('Decoradores');
 		f3.add(window, 'decorador', ["Bola", "Campana", "Paleta"]).name("Tipo");

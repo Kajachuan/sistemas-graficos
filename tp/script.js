@@ -4,13 +4,10 @@ glProgram = null,
 fragmentShader = null,
 vertexShader = null;
 objects = [];
-currentAngle = [0.0, 0.0]; // [x-axis, y-axis] degrees
 var cameraHandler;
 
 var viewMatrix = mat4.create();
 var pMatrix = mat4.create();
-
-// ESTO ES LO MISMO DE SIEMPRE
 
 function degToRad(degrees) {
   return degrees * Math.PI / 180;
@@ -32,13 +29,17 @@ function initWebGL() {
     cameraHandler = new CameraHandler();
     cameraHandler.setupHandlers();
 
-    setupBuffers();
-    //initEventHandlers(canvas, currentAngle);
     GUI();
-    setInterval(drawScene, 10);
+    reset();
   } else{
     alert("Error: Your browser does not appear to support WebGL.");
   }
+}
+
+function reset() {
+  objects = [];
+  setupBuffers();
+  setInterval(drawScene, 100);
 }
 
 function setupWebGL() {
@@ -241,16 +242,16 @@ function setupBuffers() {
   objects[17].updateWorldMatrix();
 
 
-  ringCake = new Ring(0.871, 1.0, 0.984,4);
+  ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
   ringCake.setupWebGLBuffers();
   mRing = mat4.create();
-  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.62, 0));
-  mat4.scale(mRing, mRing, vec3.fromValues(0.325, 0.325, 0.325));
+  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.6, 0));
+  mat4.scale(mRing, mRing, vec3.fromValues(0.063 * radioTotal, 0.063 * radioTotal, 0.063 * radioTotal));
   ringCake.localMatrix = mRing;
   objects.push(ringCake);
   objects[18].updateWorldMatrix();
 
-  baseCake = new Base(0.82, 0.753, 0.306, 1, 3, 0.5, 0.2)
+  baseCake = new Base(0.82, 0.753, 0.306, radioTotal / 5, ciclos, 0.5, 0.2)
   baseCake.setupWebGLBuffers();
   mBase = mat4.create();
   mat4.translate(mBase, mBase, vec3.fromValues(2, 2.12, 0));
@@ -262,6 +263,7 @@ function setupBuffers() {
   plateCake.setupWebGLBuffers();
   mPlate = mat4.create();
   mat4.translate(mPlate, mPlate, vec3.fromValues(2, 2.12, 0));
+  mat4.scale(mPlate, mPlate, vec3.fromValues(radioTotal / 5 + 0.1, radioTotal / 5 + 0.1, radioTotal / 5 + 0.1));
   plateCake.localMatrix = mPlate;
   objects.push(plateCake);
   objects[20].updateWorldMatrix();
@@ -339,37 +341,6 @@ function setupBuffers() {
   objects[28].updateWorldMatrix();
 }
 
-function initEventHandlers(c, currentAngle) {
-  var dragging = false; // Dragging or not
-  var lastX = -1, lastY = -1; // Last position of the mouse
-
-  c.onmousedown = function(event) { // Mouse is pressed
-    var x = event.clientX, y = event.clientY;
-    // Start dragging if a mouse is in <canvas>
-    var rect = event.target.getBoundingClientRect();
-    if (rect.left <= x && x < rect.right && rect.top <= y && y < rect.bottom) {
-      lastX = x; lastY = y;
-      dragging = true;
-    }
-  };
-
-  // Mouse is released
-  c.onmouseup = function(event) { dragging = false; };
-
-  c.onmousemove = function(event) { // Mouse is moved
-    var x = event.clientX, y = event.clientY;
-    if (dragging) {
-      var factor = 100/c.height; // The rotation ratio
-      var dx = factor * (x - lastX);
-      var dy = factor * (y - lastY);
-      // Limit x-axis rotation angle to -90 to 90 degrees
-      currentAngle[0] = Math.max(Math.min(currentAngle[0] + dy, 90.0), -90.0);
-      currentAngle[1] = currentAngle[1] + dx;
-    }
-    lastX = x, lastY = y;
-  };
-}
-
 function drawScene() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
@@ -418,6 +389,7 @@ function drawScene() {
     object.draw();
   });
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
