@@ -187,7 +187,7 @@ function setupBuffers() {
   box1Station1.setupWebGLBuffers();
   mB1s1 = mat4.create();
   mat4.translate(mB1s1, mB1s1, vec3.fromValues(2, 3.1, -3.7));
-  mat4.scale(mB1s1, mB1s1, vec3.fromValues(1, 3, 0.25));
+  mat4.scale(mB1s1, mB1s1, vec3.fromValues(0.75, 3, 0.25));
   box1Station1.localMatrix = mB1s1;
   box1Station1.setParent(floor);
   objects.push(box1Station1);
@@ -197,7 +197,7 @@ function setupBuffers() {
   box2Station1.setupWebGLBuffers();
   mB2s1 = mat4.create();
   mat4.translate(mB2s1, mB2s1, vec3.fromValues(2, 1.3, -3));
-  mat4.scale(mB2s1, mB2s1, vec3.fromValues(0.75, 1.2, 0.5));
+  mat4.scale(mB2s1, mB2s1, vec3.fromValues(0.5, 1.2, 0.5));
   box2Station1.localMatrix = mB2s1;
   box2Station1.setParent(box1Station1);
   objects.push(box2Station1);
@@ -206,8 +206,8 @@ function setupBuffers() {
   box3Station1 = new Box(0.882, 0.667, 0.416);
   box3Station1.setupWebGLBuffers();
   mB3s1 = mat4.create();
-  mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.5));
-  mat4.scale(mB3s1, mB3s1, vec3.fromValues(0.5, 0.125, 2));
+  mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.1));
+  mat4.scale(mB3s1, mB3s1, vec3.fromValues(0.3, 0.125, 2.4));
   box3Station1.localMatrix = mB3s1;
   box3Station1.setParent(box1Station1);
   objects.push(box3Station1);
@@ -335,6 +335,42 @@ function setupBuffers() {
     objects.push(cont[i]);
     objects[21 + cantidadDecoradores + i].updateWorldMatrix();
   }
+
+  hookTube = new Tube(0.635, 0.976, 0.905);
+  hookTube.setupWebGLBuffers();
+  mhTube = mat4.create();
+  mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.275, 0));
+  mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.55, 0.6));
+  hookTube.localMatrix = mhTube;
+  objects.push(hookTube);
+  objects[60].updateWorldMatrix();
+
+  box1Tube = new Box(0.325, 0.564, 0.976);
+  box1Tube.setupWebGLBuffers();
+  mb1Tube = mat4.create();
+  mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.15, 0));
+  mat4.scale(mb1Tube, mb1Tube, vec3.fromValues(0.25, 0.025, 0.15));
+  box1Tube.localMatrix = mb1Tube;
+  objects.push(box1Tube);
+  objects[61].updateWorldMatrix();
+
+  box2Tube = new Box(1, 1, 1);
+  box2Tube.setupWebGLBuffers();
+  mb2Tube = mat4.create();
+  mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.025, 0));
+  mat4.scale(mb2Tube, mb2Tube, vec3.fromValues(0.025, 0.1, 0.15));
+  box2Tube.localMatrix = mb2Tube;
+  objects.push(box2Tube);
+  objects[62].updateWorldMatrix();
+
+  box3Tube = new Box(1, 1, 1);
+  box3Tube.setupWebGLBuffers();
+  mb3Tube = mat4.create();
+  mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.025, 0));
+  mat4.scale(mb3Tube, mb3Tube, vec3.fromValues(0.025, 0.1, 0.15));
+  box3Tube.localMatrix = mb3Tube;
+  objects.push(box3Tube);
+  objects[63].updateWorldMatrix();
 }
 
 function drawScene() {
