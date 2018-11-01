@@ -39,7 +39,7 @@ function initWebGL() {
 function reset() {
   objects = [];
   setupBuffers();
-  setInterval(drawScene, 100);
+  setInterval(drawScene, 75);
 }
 
 function setupWebGL() {
@@ -243,7 +243,6 @@ function setupBuffers() {
   objects.push(box3Station2);
   objects[17].updateWorldMatrix();
 
-
   ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
   ringCake.setupWebGLBuffers();
   mRing = mat4.create();
@@ -341,8 +340,8 @@ function setupBuffers() {
   hookTube = new Tube(0.635, 0.976, 0.905);
   hookTube.setupWebGLBuffers();
   mhTube = mat4.create();
-  mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.275, 0));
-  mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.55, 0.6));
+  mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.475, 0));
+  mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.45, 0.6));
   hookTube.localMatrix = mhTube;
   objects.push(hookTube);
   objects[offset + 1].updateWorldMatrix();
@@ -350,7 +349,7 @@ function setupBuffers() {
   box1Tube = new Box(0.325, 0.564, 0.976);
   box1Tube.setupWebGLBuffers();
   mb1Tube = mat4.create();
-  mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.15, 0));
+  mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.55, 0));
   mat4.scale(mb1Tube, mb1Tube, vec3.fromValues(0.25, 0.025, 0.15));
   box1Tube.localMatrix = mb1Tube;
   objects.push(box1Tube);
@@ -359,7 +358,7 @@ function setupBuffers() {
   box2Tube = new Box(0.635, 0.976, 0.905);
   box2Tube.setupWebGLBuffers();
   mb2Tube = mat4.create();
-  mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.025, 0));
+  mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.425, 0));
   mat4.scale(mb2Tube, mb2Tube, vec3.fromValues(0.025, 0.1, 0.15));
   box2Tube.localMatrix = mb2Tube;
   objects.push(box2Tube);
@@ -368,7 +367,7 @@ function setupBuffers() {
   box3Tube = new Box(0.635, 0.976, 0.905);
   box3Tube.setupWebGLBuffers();
   mb3Tube = mat4.create();
-  mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.025, 0));
+  mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.425, 0));
   mat4.scale(mb3Tube, mb3Tube, vec3.fromValues(0.025, 0.1, 0.15));
   box3Tube.localMatrix = mb3Tube;
   objects.push(box3Tube);
