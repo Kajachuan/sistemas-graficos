@@ -7,12 +7,16 @@ decorador = "Bola";
 cantidadDecoradores = 9;
 contorno = "Tubo";
 cantidadContorno = 30;
+var starttime;
+
+function beginAnimation(){
+		starttime = new Date().getTime();
+    animate(starttime,5000);
+}
 
 function GUI (){
 
 		var gui = new dat.GUI();
-
-		gui.add(window, "reset").name("Reiniciar");
 
 		var f1 = gui.addFolder('Base');
 		//gui.add(object, property, [min], [max], [step])
@@ -32,6 +36,9 @@ function GUI (){
 		var f4 = gui.addFolder('Contorno');
 		f4.add(window, 'contorno', ["Tubo", "Barra"]).name("Tipo");
 		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
+
+		gui.add(window, "beginAnimation").name("Comenzar");
+		gui.add(window, "reset").name("Reiniciar");
 
 		f1.open();
 		f2.open();

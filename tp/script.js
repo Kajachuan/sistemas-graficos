@@ -39,7 +39,7 @@ function initWebGL() {
 function reset() {
   objects = [];
   setupBuffers();
-  setInterval(drawScene, 75);
+  requestAnimationFrame(drawSceneStatic);
 }
 
 function setupWebGL() {
@@ -372,6 +372,105 @@ function setupBuffers() {
   box3Tube.localMatrix = mb3Tube;
   objects.push(box3Tube);
   objects[offset + 4].updateWorldMatrix();
+}
+
+
+/*
+Logica de animación:
+Desde menú se invoca esta función cuando se da comenzar, antes de eso la escena se puede mover con un "drawSceneStatic"
+que en teoria solo dibuja la escena "predeterminada" sin la torta.
+
+Cuando se clickea comenzar empieza un lapso que se lo ponemos nosotros y un desplazamiento que también se lo ponemos nosotros.
+Esta función verifica que desde el tiempo de comienzo y el tiempo que se quiere hacer el desplazamiento corra tanto segundos
+lo que uno quiere hacer.
+
+La idea sería cada tanto segundos hacer una cosa, cada tantos segundos hacer otra y asi hasta que se terminé la animación.
+*/
+function animate(timestamp, duration){
+   //if browser doesn't support requestAnimationFrame, generate our own timestamp using Date:
+   var timestamp = new Date().getTime();
+   var runtime = timestamp - starttime;
+   var progress = runtime / duration;
+   progress = Math.min(progress, 1);
+   mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-0.01,0,0));
+   objects[19].updateWorldMatrix();
+   if (runtime < duration){ // if duration not met yet
+        requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
+            drawScene();
+            animate(timestamp, duration);
+        })
+    }
+}
+
+function drawSceneStatic() {
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  var proj_matrix = gl.getUniformLocation(glProgram, "ProjectionMatrix");
+
+  if(cameraHandler.getvMode() == 1){
+    mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
+  } else
+  if(cameraHandler.getvMode() == 2){
+    mat4.ortho(pMatrix, -13.0, 13.0, -10.0, 10.0, 0.1, 100);
+    mat4.lookAt(viewMatrix, [0, 1.85, 1], [0, 1.85, 0], [0, 1, 0]);
+  } else
+  if(cameraHandler.getvMode() == 3){
+    mat4.ortho(pMatrix, -13.0, 13.0, -7.0, 7.0, 0.1, 100);
+    mat4.lookAt(viewMatrix, [0, 12, 0.000000001], [0, 0, 0], [0, 1, 0]);
+  }
+
+  // Preparamos una matriz de perspectiva.
+  gl.uniformMatrix4fv(proj_matrix, false, pMatrix);
+
+  var view_matrix = gl.getUniformLocation(glProgram, "ViewMatrix");
+
+  // Preparamos una matriz de vista.
+  gl.uniformMatrix4fv(view_matrix, false, viewMatrix);
+
+  mat4.identity(viewMatrix);
+  cameraHandler.modifyvMatrix();
+
+  // Preparamos la iluminación
+
+  var lp = gl.getUniformLocation(glProgram, "Light.LightPosition");
+  var la = gl.getUniformLocation(glProgram, "Light.La");
+  var ld = gl.getUniformLocation(glProgram, "Light.Ld");
+  var ls = gl.getUniformLocation(glProgram, "Light.Ls");
+
+  var light_position = [0, 0, 0, 0];
+  var light = [1, 1, 1];
+
+  gl.uniform4fv(lp, light_position);
+  gl.uniform3fv(la, light);
+  gl.uniform3fv(ld, light);
+  gl.uniform3fv(ls, light);
+
+  var ka = gl.getUniformLocation(glProgram, "Material.Ka");
+  var kd = gl.getUniformLocation(glProgram, "Material.Kd");
+  var ks = gl.getUniformLocation(glProgram, "Material.Ks");
+  var g = gl.getUniformLocation(glProgram, "Material.Glossiness");
+
+  var specular_color = [0, 0, 0];
+  var glos = 1;
+  gl.uniform3fv(ks, specular_color);
+  gl.uniform1f(g, glos);
+
+  // Preparamos las matrices propias de cada objeto
+
+  var model_matrix = gl.getUniformLocation(glProgram, "ModelMatrix");
+  var normal_matrix = gl.getUniformLocation(glProgram, "NormalMatrix");
+
+  objects.forEach(function(object) {
+    color = [object.r, object.g, object.b];
+    gl.uniform3fv(ka, [0,0,0]);
+    gl.uniform3fv(kd, color);
+    nMatrix = mat3.create();
+    mat3.normalFromMat4(nMatrix, object.worldMatrix);
+    gl.uniformMatrix3fv(normal_matrix, false, nMatrix);
+    gl.uniformMatrix4fv(model_matrix, false, object.worldMatrix);
+    object.draw();
+  });
+
+  requestAnimationFrame(drawSceneStatic);
 }
 
 function drawScene() {
