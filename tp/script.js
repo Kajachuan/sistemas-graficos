@@ -74,6 +74,19 @@ function initShaders() {
 
   glProgram.vertexNormal = gl.getAttribLocation(glProgram, "VertexNormal");
   gl.enableVertexAttribArray(glProgram.vertexNormal);
+
+  glProgram.projectionMatrix = gl.getUniformLocation(glProgram, "ProjectionMatrix");
+  glProgram.viewMatrix = gl.getUniformLocation(glProgram, "ViewMatrix");
+  glProgram.modelMatrix = gl.getUniformLocation(glProgram, "ModelMatrix");
+  glProgram.normalMatrix = gl.getUniformLocation(glProgram, "NormalMatrix");
+  glProgram.lightPosition = gl.getUniformLocation(glProgram, "Light.LightPosition");
+  glProgram.la = gl.getUniformLocation(glProgram, "Light.La");
+  glProgram.ld = gl.getUniformLocation(glProgram, "Light.Ld");
+  glProgram.ls = gl.getUniformLocation(glProgram, "Light.Ls");
+  glProgram.ka = gl.getUniformLocation(glProgram, "Material.Ka");
+  glProgram.kd = gl.getUniformLocation(glProgram, "Material.Kd");
+  glProgram.ks = gl.getUniformLocation(glProgram, "Material.Ks");
+  glProgram.glossiness = gl.getUniformLocation(glProgram, "Material.Glossiness");
 }
 
 function getShader(gl, id) {
@@ -409,7 +422,6 @@ function drawSceneStatic() {
 
 function drawScene() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  var proj_matrix = gl.getUniformLocation(glProgram, "ProjectionMatrix");
 
   if(cameraHandler.getvMode() == 1){
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
@@ -424,54 +436,39 @@ function drawScene() {
   }
 
   // Preparamos una matriz de perspectiva.
-  gl.uniformMatrix4fv(proj_matrix, false, pMatrix);
-
-  var view_matrix = gl.getUniformLocation(glProgram, "ViewMatrix");
+  gl.uniformMatrix4fv(glProgram.projectionMatrix, false, pMatrix);
 
   // Preparamos una matriz de vista.
-  gl.uniformMatrix4fv(view_matrix, false, viewMatrix);
+  gl.uniformMatrix4fv(glProgram.viewMatrix, false, viewMatrix);
 
   mat4.identity(viewMatrix);
   cameraHandler.modifyvMatrix();
 
   // Preparamos la iluminación
 
-  var lp = gl.getUniformLocation(glProgram, "Light.LightPosition");
-  var la = gl.getUniformLocation(glProgram, "Light.La");
-  var ld = gl.getUniformLocation(glProgram, "Light.Ld");
-  var ls = gl.getUniformLocation(glProgram, "Light.Ls");
-
   var light_position = [0, 0, 0, 0];
   var light = [1, 1, 1];
 
-  gl.uniform4fv(lp, light_position);
-  gl.uniform3fv(la, light);
-  gl.uniform3fv(ld, light);
-  gl.uniform3fv(ls, light);
-
-  var ka = gl.getUniformLocation(glProgram, "Material.Ka");
-  var kd = gl.getUniformLocation(glProgram, "Material.Kd");
-  var ks = gl.getUniformLocation(glProgram, "Material.Ks");
-  var g = gl.getUniformLocation(glProgram, "Material.Glossiness");
+  gl.uniform4fv(glProgram.lightPosition, light_position);
+  gl.uniform3fv(glProgram.la, light);
+  gl.uniform3fv(glProgram.ld, light);
+  gl.uniform3fv(glProgram.ls, light);
 
   var specular_color = [0, 0, 0];
   var glos = 1;
-  gl.uniform3fv(ks, specular_color);
-  gl.uniform1f(g, glos);
+  gl.uniform3fv(glProgram.ks, specular_color);
+  gl.uniform1f(glProgram.glossiness, glos);
 
   // Preparamos las matrices propias de cada objeto
 
-  var model_matrix = gl.getUniformLocation(glProgram, "ModelMatrix");
-  var normal_matrix = gl.getUniformLocation(glProgram, "NormalMatrix");
-
   objects.forEach(function(object) {
     color = [object.r, object.g, object.b];
-    gl.uniform3fv(ka, [0,0,0]);
-    gl.uniform3fv(kd, color);
+    gl.uniform3fv(glProgram.ka, [0,0,0]);
+    gl.uniform3fv(glProgram.kd, color);
     nMatrix = mat3.create();
     mat3.normalFromMat4(nMatrix, object.worldMatrix);
-    gl.uniformMatrix3fv(normal_matrix, false, nMatrix);
-    gl.uniformMatrix4fv(model_matrix, false, object.worldMatrix);
+    gl.uniformMatrix3fv(glProgram.normalMatrix, false, nMatrix);
+    gl.uniformMatrix4fv(glProgram.modelMatrix, false, object.worldMatrix);
     object.draw();
   });
 }
