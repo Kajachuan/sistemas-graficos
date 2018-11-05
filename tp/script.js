@@ -52,28 +52,28 @@ function setupWebGL() {
 }
 
 function initShaders() {
-  // Obtenemos los shaders ya compilados
   var fragmentShader = getShader(gl, "shader-fs");
   var vertexShader = getShader(gl, "shader-vs");
 
-  // Creamos un programa de shaders de WebGL.
   glProgram = gl.createProgram();
 
-  // Asociamos cada shader compilado al programa.
   gl.attachShader(glProgram, vertexShader);
   gl.attachShader(glProgram, fragmentShader);
 
-  // Linkeamos los shaders para generar el programa ejecutable.
   gl.linkProgram(glProgram);
 
-  // Chequeamos y reportamos si hubo algún error.
   if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
     alert("Unable to initialize the shader program: " + gl.getProgramInfoLog(glProgram));
     return null;
   }
 
-  // Le decimos a WebGL que de aquí en adelante use el programa generado.
   gl.useProgram(glProgram);
+
+  glProgram.vertexPosition = gl.getAttribLocation(glProgram, "VertexPosition");
+  gl.enableVertexAttribArray(glProgram.vertexPosition);
+
+  glProgram.vertexNormal = gl.getAttribLocation(glProgram, "VertexNormal");
+  gl.enableVertexAttribArray(glProgram.vertexNormal);
 }
 
 function getShader(gl, id) {
@@ -403,73 +403,7 @@ function animate(timestamp, duration){
 }
 
 function drawSceneStatic() {
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  var proj_matrix = gl.getUniformLocation(glProgram, "ProjectionMatrix");
-
-  if(cameraHandler.getvMode() == 1){
-    mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
-  } else
-  if(cameraHandler.getvMode() == 2){
-    mat4.ortho(pMatrix, -13.0, 13.0, -10.0, 10.0, 0.1, 100);
-    mat4.lookAt(viewMatrix, [0, 1.85, 1], [0, 1.85, 0], [0, 1, 0]);
-  } else
-  if(cameraHandler.getvMode() == 3){
-    mat4.ortho(pMatrix, -13.0, 13.0, -7.0, 7.0, 0.1, 100);
-    mat4.lookAt(viewMatrix, [0, 12, 0.000000001], [0, 0, 0], [0, 1, 0]);
-  }
-
-  // Preparamos una matriz de perspectiva.
-  gl.uniformMatrix4fv(proj_matrix, false, pMatrix);
-
-  var view_matrix = gl.getUniformLocation(glProgram, "ViewMatrix");
-
-  // Preparamos una matriz de vista.
-  gl.uniformMatrix4fv(view_matrix, false, viewMatrix);
-
-  mat4.identity(viewMatrix);
-  cameraHandler.modifyvMatrix();
-
-  // Preparamos la iluminación
-
-  var lp = gl.getUniformLocation(glProgram, "Light.LightPosition");
-  var la = gl.getUniformLocation(glProgram, "Light.La");
-  var ld = gl.getUniformLocation(glProgram, "Light.Ld");
-  var ls = gl.getUniformLocation(glProgram, "Light.Ls");
-
-  var light_position = [0, 0, 0, 0];
-  var light = [1, 1, 1];
-
-  gl.uniform4fv(lp, light_position);
-  gl.uniform3fv(la, light);
-  gl.uniform3fv(ld, light);
-  gl.uniform3fv(ls, light);
-
-  var ka = gl.getUniformLocation(glProgram, "Material.Ka");
-  var kd = gl.getUniformLocation(glProgram, "Material.Kd");
-  var ks = gl.getUniformLocation(glProgram, "Material.Ks");
-  var g = gl.getUniformLocation(glProgram, "Material.Glossiness");
-
-  var specular_color = [0, 0, 0];
-  var glos = 1;
-  gl.uniform3fv(ks, specular_color);
-  gl.uniform1f(g, glos);
-
-  // Preparamos las matrices propias de cada objeto
-
-  var model_matrix = gl.getUniformLocation(glProgram, "ModelMatrix");
-  var normal_matrix = gl.getUniformLocation(glProgram, "NormalMatrix");
-
-  objects.forEach(function(object) {
-    color = [object.r, object.g, object.b];
-    gl.uniform3fv(ka, [0,0,0]);
-    gl.uniform3fv(kd, color);
-    nMatrix = mat3.create();
-    mat3.normalFromMat4(nMatrix, object.worldMatrix);
-    gl.uniformMatrix3fv(normal_matrix, false, nMatrix);
-    gl.uniformMatrix4fv(model_matrix, false, object.worldMatrix);
-    object.draw();
-  });
-
+  drawScene();
   requestAnimationFrame(drawSceneStatic);
 }
 
@@ -589,15 +523,12 @@ Node.prototype.setupWebGLBuffers = function() {
 }
 
 Node.prototype.draw = function() {
-  var vertexPositionAttribute = gl.getAttribLocation(glProgram, "VertexPosition");
-  gl.enableVertexAttribArray(vertexPositionAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-  var vertexNormalAttribute= gl.getAttribLocation(glProgram, "VertexNormal");
-  gl.enableVertexAttribArray(vertexNormalAttribute);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+  gl.vertexAttribPointer(glProgram.vertexPosition, 3, gl.FLOAT, false, 0, 0);
+
   gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-  gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(glProgram.vertexNormal, 3, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
