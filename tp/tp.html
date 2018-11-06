@@ -18,6 +18,7 @@
     <script id="shader-vs" type="x-shader/x-vertex">
       attribute vec3 VertexPosition;
       attribute vec3 VertexNormal;
+      attribute vec2 VertexTexCoord;
 
       uniform mat4 ModelMatrix;
       uniform mat4 ViewMatrix;
@@ -41,8 +42,10 @@
       uniform MaterialInfo Material;
 
       varying vec3 LightIntensity;
+      varying vec2 TexCoord;
 
       void main(void) {
+        TexCoord = VertexTexCoord;
         vec3 transformedNormal = normalize(NormalMatrix * VertexNormal);
         vec4 eyeCoords = ViewMatrix * ModelMatrix * vec4(VertexPosition, 1.0);
         vec3 l = normalize(vec3(Light.LightPosition - eyeCoords));
@@ -64,10 +67,15 @@
     <script id="shader-fs" type="x-shader/x-fragment">
       precision mediump float;
 
+      uniform sampler2D Sampler;
+
       varying vec3 LightIntensity;
+      varying vec2 TexCoord;
 
       void main(void) {
-        gl_FragColor = vec4(LightIntensity, 1.0);
+        vec4 texColor = texture2D(Sampler, vec2(TexCoord.s, TexCoord.t));
+        gl_FragColor = vec4(texColor.rgb, texColor.a);
+        // gl_FragColor = vec4(LightIntensity, 1.0);
       }
     </script>
 

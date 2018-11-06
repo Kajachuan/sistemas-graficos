@@ -75,10 +75,14 @@ function initShaders() {
   glProgram.vertexNormal = gl.getAttribLocation(glProgram, "VertexNormal");
   gl.enableVertexAttribArray(glProgram.vertexNormal);
 
+  glProgram.vertexTexCoord = gl.getAttribLocation(glProgram, "VertexTexCoord");
+  gl.enableVertexAttribArray(glProgram.vertexTexCoord);
+
   glProgram.projectionMatrix = gl.getUniformLocation(glProgram, "ProjectionMatrix");
   glProgram.viewMatrix = gl.getUniformLocation(glProgram, "ViewMatrix");
   glProgram.modelMatrix = gl.getUniformLocation(glProgram, "ModelMatrix");
   glProgram.normalMatrix = gl.getUniformLocation(glProgram, "NormalMatrix");
+  glProgram.sampler = gl.getUniformLocation(glProgram, "Sampler");
   glProgram.lightPosition = gl.getUniformLocation(glProgram, "Light.LightPosition");
   glProgram.la = gl.getUniformLocation(glProgram, "Light.La");
   glProgram.ld = gl.getUniformLocation(glProgram, "Light.Ld");
@@ -150,241 +154,242 @@ function setupBuffers() {
 
   floor = new Box(0.686, 0.686, 0.686);
   floor.setupWebGLBuffers();
+  floor.initTexture("maps/crema.jpg");
   m1 = mat4.create();
   mat4.scale(m1, m1, vec3.fromValues(25, 0.1, 25));
   floor.localMatrix = m1;
   objects.push(floor);
   objects[0].updateWorldMatrix();
 
-  mSupportBoxes = mat4.create();
-  mat4.translate(mSupportBoxes, mSupportBoxes, vec3.fromValues(-12, 0.85, 0));
-  mat4.scale(mSupportBoxes, mSupportBoxes, vec3.fromValues(0.1, 0.75, 0.1));
-  var box = [];
-  var boxPadding = 2;
-  var suppBoxesQuant = 10;
-  for (i = 1; i < suppBoxesQuant; i++){
-    box[i] = new Box(0.176, 0.627, 0.169);
-    box[i].setupWebGLBuffers();
-    mBox = mat4.create();
-    mat4.translate(mBox, mBox, vec3.fromValues(boxPadding, 0, 0));
-    mat4.multiply(mBox,mBox,mSupportBoxes);
-    box[i].localMatrix = mBox;
-    box[i].setParent(floor);
-    objects.push(box[i]);
-    objects[i].updateWorldMatrix();
-    boxPadding += 2;
-  }
-
-  bigBox = new Box(0.282, 0.286, 0.749);
-  bigBox.setupWebGLBuffers();
-  mBb = mat4.create();
-  mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
-  mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
-  bigBox.localMatrix = mBb;
-  bigBox.setParent(floor);
-  objects.push(bigBox);
-  objects[10].updateWorldMatrix();
-
-  line = new Box(0.463, 0.463, 0.463);
-  line.setupWebGLBuffers();
-  m3 = mat4.create();
-  mat4.translate(m3, m3, vec3.fromValues(-2, 1.85, 0));
-  mat4.rotate(m3, m3, Math.PI/2, [0, 1, 0]);
-  mat4.scale(m3, m3, vec3.fromValues(1.5, 0.25, 10));
-  line.localMatrix = m3;
-  line.setParent(bigBox);
-  objects.push(line);
-  objects[11].updateWorldMatrix();
-
-  box1Station1 = new Box(0.6196, 0.235, 0.663);
-  box1Station1.setupWebGLBuffers();
-  mB1s1 = mat4.create();
-  mat4.translate(mB1s1, mB1s1, vec3.fromValues(2, 3.1, -3.7));
-  mat4.scale(mB1s1, mB1s1, vec3.fromValues(0.75, 3, 0.25));
-  box1Station1.localMatrix = mB1s1;
-  box1Station1.setParent(floor);
-  objects.push(box1Station1);
-  objects[12].updateWorldMatrix();
-
-  box2Station1 = new Box(0.5804, 0.325, 0.8196);
-  box2Station1.setupWebGLBuffers();
-  mB2s1 = mat4.create();
-  mat4.translate(mB2s1, mB2s1, vec3.fromValues(2, 1.3, -3));
-  mat4.scale(mB2s1, mB2s1, vec3.fromValues(0.5, 1.2, 0.5));
-  box2Station1.localMatrix = mB2s1;
-  box2Station1.setParent(box1Station1);
-  objects.push(box2Station1);
-  objects[13].updateWorldMatrix();
-
-  box3Station1 = new Box(0.882, 0.667, 0.416);
-  box3Station1.setupWebGLBuffers();
-  mB3s1 = mat4.create();
-  mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.1));
-  mat4.scale(mB3s1, mB3s1, vec3.fromValues(0.3, 0.125, 2.4));
-  box3Station1.localMatrix = mB3s1;
-  box3Station1.setParent(box1Station1);
-  objects.push(box3Station1);
-  objects[14].updateWorldMatrix();
-
-  box1Station2 = new Box(0.6196, 0.235, 0.663);
-  box1Station2.setupWebGLBuffers();
-  mB1s2 = mat4.create();
-  mat4.translate(mB1s2, mB1s2, vec3.fromValues(-5, 1.85, -3.7));
-  mat4.scale(mB1s2, mB1s2, vec3.fromValues(0.6, 1.75, 0.75));
-  box1Station2.localMatrix = mB1s2;
-  box1Station2.setParent(floor);
-  objects.push(box1Station2);
-  objects[15].updateWorldMatrix();
-
-  box2Station2 = new Box(0.882, 0.667, 0.416);
-  box2Station2.setupWebGLBuffers();
-  mB2s2 = mat4.create();
-  mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.5));
-  mat4.scale(mB2s2, mB2s2, vec3.fromValues(0.05, 0.25, 0.5));
-  box2Station2.localMatrix = mB2s2;
-  box2Station2.setParent(box1Station2);
-  objects.push(box2Station2);
-  objects[16].updateWorldMatrix();
-
-  box3Station2 = new Box(0.882, 0.667, 0.416);
-  box3Station2.setupWebGLBuffers();
-  mB2s2 = mat4.create();
-  mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.1));
-  mat4.scale(mB2s2, mB2s2, vec3.fromValues(0.1, 0.3, 0.1));
-  box3Station2.localMatrix = mB2s2;
-  box3Station2.setParent(box2Station2);
-  objects.push(box3Station2);
-  objects[17].updateWorldMatrix();
-
-  ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
-  ringCake.setupWebGLBuffers();
-  mRing = mat4.create();
-  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.18 + altura * (0.1 - 0.03 / ciclos), 0));
-  mat4.scale(mRing, mRing, vec3.fromValues(0.063 * radioTotal, 0.063 * radioTotal, 0.063 * radioTotal));
-  ringCake.localMatrix = mRing;
-  objects.push(ringCake);
-  objects[18].updateWorldMatrix();
-
-  baseCake = new Base(0.82, 0.753, 0.306, 0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud)
-  baseCake.setupWebGLBuffers();
-  mBase = mat4.create();
-  mat4.translate(mBase, mBase, vec3.fromValues(2, 2.12, 0));
-  baseCake.localMatrix = mBase;
-  objects.push(baseCake);
-  objects[19].updateWorldMatrix();
-
-  plateCake = new Disk(0.851, 0.941, 0.776)
-  plateCake.setupWebGLBuffers();
-  mPlate = mat4.create();
-  mat4.translate(mPlate, mPlate, vec3.fromValues(2, 2.12, 0));
-  mat4.scale(mPlate, mPlate, vec3.fromValues(0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1));
-  plateCake.localMatrix = mPlate;
-  objects.push(plateCake);
-  objects[20].updateWorldMatrix();
-
-  paramDec = [];
-  if (decorador == "Bola")
-    paramDec.push("Ball", 0.757, 0.227, 0.251);
-  else if (decorador == "Campana")
-    paramDec.push("Bell", 0.322, 0.322, 0.706);
-  else
-    paramDec.push("Pallet", 0.659, 0.816, 0.541);
-
-  if (cantidadDecoradores > 1) {
-    mDecorators = mat4.create();
-    mat4.translate(mDecorators, mDecorators, vec3.fromValues(radioTotal / 8, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
-    mat4.scale(mDecorators, mDecorators, vec3.fromValues(0.1, 0.1, 0.1));
-
-    var dec = [];
-    var angle = 2 * Math.PI / cantidadDecoradores;
-
-    for (i = 0; i < cantidadDecoradores; i++){
-      dec[i] = new window[paramDec[0]](paramDec[1], paramDec[2], paramDec[3]);
-      dec[i].setupWebGLBuffers();
-      mDec = mat4.create();
-      mat4.translate(mDec, mDec, vec3.fromValues(2,0,0));
-      mat4.rotateY(mDec, mDec, i * angle, vec3.fromValues(0, 0, 0));
-      mat4.multiply(mDec, mDec, mDecorators);
-      dec[i].localMatrix = mDec;
-      objects.push(dec[i]);
-      objects[21 + i].updateWorldMatrix();
-    }
-  }
-
-  else {
-    dec = new window[paramDec[0]](paramDec[1], paramDec[2], paramDec[3]);
-    dec.setupWebGLBuffers();
-    mDec = mat4.create();
-    mat4.translate(mDec, mDec, vec3.fromValues(2, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
-    mat4.scale(mDec, mDec, vec3.fromValues(0.1, 0.1, 0.1));
-    dec.localMatrix = mDec;
-    objects.push(dec);
-    objects[21].updateWorldMatrix();
-  }
-
-
-  paramCont = [];
-  if (contorno == "Tubo")
-    paramCont.push("Tube", 0.996, 0.502, 0.996, 0.1, 0.1, 0.1);
-  else
-    paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
-
-  mContours = mat4.create();
-  mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 2.35, 0));
-  mat4.scale(mContours, mContours, vec3.fromValues(paramCont[4], paramCont[5], paramCont[6]));
-
-  var cont = [];
-  var angle = 2 * Math.PI / cantidadContorno;
-
-  for (i = 0; i < cantidadContorno; i++){
-    cont[i] = new window[paramCont[0]](paramCont[1], paramCont[2], paramCont[3]);
-    cont[i].setupWebGLBuffers();
-    mCont = mat4.create();
-    mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
-    mat4.rotateY(mCont, mCont, i * angle, vec3.fromValues(0, 0, 0));
-    mat4.multiply(mCont, mCont, mContours);
-    cont[i].localMatrix = mCont;
-    objects.push(cont[i]);
-    objects[21 + cantidadDecoradores + i].updateWorldMatrix();
-  }
-
-  var offset = 20 + cantidadDecoradores + cantidadContorno;
-
-  hookTube = new Tube(0.635, 0.976, 0.905);
-  hookTube.setupWebGLBuffers();
-  mhTube = mat4.create();
-  mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.475, 0));
-  mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.45, 0.6));
-  hookTube.localMatrix = mhTube;
-  objects.push(hookTube);
-  objects[offset + 1].updateWorldMatrix();
-
-  box1Tube = new Box(0.325, 0.564, 0.976);
-  box1Tube.setupWebGLBuffers();
-  mb1Tube = mat4.create();
-  mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.55, 0));
-  mat4.scale(mb1Tube, mb1Tube, vec3.fromValues(0.25, 0.025, 0.15));
-  box1Tube.localMatrix = mb1Tube;
-  objects.push(box1Tube);
-  objects[offset + 2].updateWorldMatrix();
-
-  box2Tube = new Box(0.635, 0.976, 0.905);
-  box2Tube.setupWebGLBuffers();
-  mb2Tube = mat4.create();
-  mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.425, 0));
-  mat4.scale(mb2Tube, mb2Tube, vec3.fromValues(0.025, 0.1, 0.15));
-  box2Tube.localMatrix = mb2Tube;
-  objects.push(box2Tube);
-  objects[offset + 3].updateWorldMatrix();
-
-  box3Tube = new Box(0.635, 0.976, 0.905);
-  box3Tube.setupWebGLBuffers();
-  mb3Tube = mat4.create();
-  mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.425, 0));
-  mat4.scale(mb3Tube, mb3Tube, vec3.fromValues(0.025, 0.1, 0.15));
-  box3Tube.localMatrix = mb3Tube;
-  objects.push(box3Tube);
-  objects[offset + 4].updateWorldMatrix();
+  // mSupportBoxes = mat4.create();
+  // mat4.translate(mSupportBoxes, mSupportBoxes, vec3.fromValues(-12, 0.85, 0));
+  // mat4.scale(mSupportBoxes, mSupportBoxes, vec3.fromValues(0.1, 0.75, 0.1));
+  // var box = [];
+  // var boxPadding = 2;
+  // var suppBoxesQuant = 10;
+  // for (i = 1; i < suppBoxesQuant; i++){
+  //   box[i] = new Box(0.176, 0.627, 0.169);
+  //   box[i].setupWebGLBuffers();
+  //   mBox = mat4.create();
+  //   mat4.translate(mBox, mBox, vec3.fromValues(boxPadding, 0, 0));
+  //   mat4.multiply(mBox,mBox,mSupportBoxes);
+  //   box[i].localMatrix = mBox;
+  //   box[i].setParent(floor);
+  //   objects.push(box[i]);
+  //   objects[i].updateWorldMatrix();
+  //   boxPadding += 2;
+  // }
+  //
+  // bigBox = new Box(0.282, 0.286, 0.749);
+  // bigBox.setupWebGLBuffers();
+  // mBb = mat4.create();
+  // mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
+  // mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
+  // bigBox.localMatrix = mBb;
+  // bigBox.setParent(floor);
+  // objects.push(bigBox);
+  // objects[10].updateWorldMatrix();
+  //
+  // line = new Box(0.463, 0.463, 0.463);
+  // line.setupWebGLBuffers();
+  // m3 = mat4.create();
+  // mat4.translate(m3, m3, vec3.fromValues(-2, 1.85, 0));
+  // mat4.rotate(m3, m3, Math.PI/2, [0, 1, 0]);
+  // mat4.scale(m3, m3, vec3.fromValues(1.5, 0.25, 10));
+  // line.localMatrix = m3;
+  // line.setParent(bigBox);
+  // objects.push(line);
+  // objects[11].updateWorldMatrix();
+  //
+  // box1Station1 = new Box(0.6196, 0.235, 0.663);
+  // box1Station1.setupWebGLBuffers();
+  // mB1s1 = mat4.create();
+  // mat4.translate(mB1s1, mB1s1, vec3.fromValues(2, 3.1, -3.7));
+  // mat4.scale(mB1s1, mB1s1, vec3.fromValues(0.75, 3, 0.25));
+  // box1Station1.localMatrix = mB1s1;
+  // box1Station1.setParent(floor);
+  // objects.push(box1Station1);
+  // objects[12].updateWorldMatrix();
+  //
+  // box2Station1 = new Box(0.5804, 0.325, 0.8196);
+  // box2Station1.setupWebGLBuffers();
+  // mB2s1 = mat4.create();
+  // mat4.translate(mB2s1, mB2s1, vec3.fromValues(2, 1.3, -3));
+  // mat4.scale(mB2s1, mB2s1, vec3.fromValues(0.5, 1.2, 0.5));
+  // box2Station1.localMatrix = mB2s1;
+  // box2Station1.setParent(box1Station1);
+  // objects.push(box2Station1);
+  // objects[13].updateWorldMatrix();
+  //
+  // box3Station1 = new Box(0.882, 0.667, 0.416);
+  // box3Station1.setupWebGLBuffers();
+  // mB3s1 = mat4.create();
+  // mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.1));
+  // mat4.scale(mB3s1, mB3s1, vec3.fromValues(0.3, 0.125, 2.4));
+  // box3Station1.localMatrix = mB3s1;
+  // box3Station1.setParent(box1Station1);
+  // objects.push(box3Station1);
+  // objects[14].updateWorldMatrix();
+  //
+  // box1Station2 = new Box(0.6196, 0.235, 0.663);
+  // box1Station2.setupWebGLBuffers();
+  // mB1s2 = mat4.create();
+  // mat4.translate(mB1s2, mB1s2, vec3.fromValues(-5, 1.85, -3.7));
+  // mat4.scale(mB1s2, mB1s2, vec3.fromValues(0.6, 1.75, 0.75));
+  // box1Station2.localMatrix = mB1s2;
+  // box1Station2.setParent(floor);
+  // objects.push(box1Station2);
+  // objects[15].updateWorldMatrix();
+  //
+  // box2Station2 = new Box(0.882, 0.667, 0.416);
+  // box2Station2.setupWebGLBuffers();
+  // mB2s2 = mat4.create();
+  // mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.5));
+  // mat4.scale(mB2s2, mB2s2, vec3.fromValues(0.05, 0.25, 0.5));
+  // box2Station2.localMatrix = mB2s2;
+  // box2Station2.setParent(box1Station2);
+  // objects.push(box2Station2);
+  // objects[16].updateWorldMatrix();
+  //
+  // box3Station2 = new Box(0.882, 0.667, 0.416);
+  // box3Station2.setupWebGLBuffers();
+  // mB2s2 = mat4.create();
+  // mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.1));
+  // mat4.scale(mB2s2, mB2s2, vec3.fromValues(0.1, 0.3, 0.1));
+  // box3Station2.localMatrix = mB2s2;
+  // box3Station2.setParent(box2Station2);
+  // objects.push(box3Station2);
+  // objects[17].updateWorldMatrix();
+  //
+  // ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
+  // ringCake.setupWebGLBuffers();
+  // mRing = mat4.create();
+  // mat4.translate(mRing, mRing, vec3.fromValues(2, 2.18 + altura * (0.1 - 0.03 / ciclos), 0));
+  // mat4.scale(mRing, mRing, vec3.fromValues(0.063 * radioTotal, 0.063 * radioTotal, 0.063 * radioTotal));
+  // ringCake.localMatrix = mRing;
+  // objects.push(ringCake);
+  // objects[18].updateWorldMatrix();
+  //
+  // baseCake = new Base(0.82, 0.753, 0.306, 0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud)
+  // baseCake.setupWebGLBuffers();
+  // mBase = mat4.create();
+  // mat4.translate(mBase, mBase, vec3.fromValues(2, 2.12, 0));
+  // baseCake.localMatrix = mBase;
+  // objects.push(baseCake);
+  // objects[19].updateWorldMatrix();
+  //
+  // plateCake = new Disk(0.851, 0.941, 0.776)
+  // plateCake.setupWebGLBuffers();
+  // mPlate = mat4.create();
+  // mat4.translate(mPlate, mPlate, vec3.fromValues(2, 2.12, 0));
+  // mat4.scale(mPlate, mPlate, vec3.fromValues(0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1));
+  // plateCake.localMatrix = mPlate;
+  // objects.push(plateCake);
+  // objects[20].updateWorldMatrix();
+  //
+  // paramDec = [];
+  // if (decorador == "Bola")
+  //   paramDec.push("Ball", 0.757, 0.227, 0.251);
+  // else if (decorador == "Campana")
+  //   paramDec.push("Bell", 0.322, 0.322, 0.706);
+  // else
+  //   paramDec.push("Pallet", 0.659, 0.816, 0.541);
+  //
+  // if (cantidadDecoradores > 1) {
+  //   mDecorators = mat4.create();
+  //   mat4.translate(mDecorators, mDecorators, vec3.fromValues(radioTotal / 8, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
+  //   mat4.scale(mDecorators, mDecorators, vec3.fromValues(0.1, 0.1, 0.1));
+  //
+  //   var dec = [];
+  //   var angle = 2 * Math.PI / cantidadDecoradores;
+  //
+  //   for (i = 0; i < cantidadDecoradores; i++){
+  //     dec[i] = new window[paramDec[0]](paramDec[1], paramDec[2], paramDec[3]);
+  //     dec[i].setupWebGLBuffers();
+  //     mDec = mat4.create();
+  //     mat4.translate(mDec, mDec, vec3.fromValues(2,0,0));
+  //     mat4.rotateY(mDec, mDec, i * angle, vec3.fromValues(0, 0, 0));
+  //     mat4.multiply(mDec, mDec, mDecorators);
+  //     dec[i].localMatrix = mDec;
+  //     objects.push(dec[i]);
+  //     objects[21 + i].updateWorldMatrix();
+  //   }
+  // }
+  //
+  // else {
+  //   dec = new window[paramDec[0]](paramDec[1], paramDec[2], paramDec[3]);
+  //   dec.setupWebGLBuffers();
+  //   mDec = mat4.create();
+  //   mat4.translate(mDec, mDec, vec3.fromValues(2, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
+  //   mat4.scale(mDec, mDec, vec3.fromValues(0.1, 0.1, 0.1));
+  //   dec.localMatrix = mDec;
+  //   objects.push(dec);
+  //   objects[21].updateWorldMatrix();
+  // }
+  //
+  //
+  // paramCont = [];
+  // if (contorno == "Tubo")
+  //   paramCont.push("Tube", 0.996, 0.502, 0.996, 0.1, 0.1, 0.1);
+  // else
+  //   paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
+  //
+  // mContours = mat4.create();
+  // mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 2.35, 0));
+  // mat4.scale(mContours, mContours, vec3.fromValues(paramCont[4], paramCont[5], paramCont[6]));
+  //
+  // var cont = [];
+  // var angle = 2 * Math.PI / cantidadContorno;
+  //
+  // for (i = 0; i < cantidadContorno; i++){
+  //   cont[i] = new window[paramCont[0]](paramCont[1], paramCont[2], paramCont[3]);
+  //   cont[i].setupWebGLBuffers();
+  //   mCont = mat4.create();
+  //   mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
+  //   mat4.rotateY(mCont, mCont, i * angle, vec3.fromValues(0, 0, 0));
+  //   mat4.multiply(mCont, mCont, mContours);
+  //   cont[i].localMatrix = mCont;
+  //   objects.push(cont[i]);
+  //   objects[21 + cantidadDecoradores + i].updateWorldMatrix();
+  // }
+  //
+  // var offset = 20 + cantidadDecoradores + cantidadContorno;
+  //
+  // hookTube = new Tube(0.635, 0.976, 0.905);
+  // hookTube.setupWebGLBuffers();
+  // mhTube = mat4.create();
+  // mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.475, 0));
+  // mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.45, 0.6));
+  // hookTube.localMatrix = mhTube;
+  // objects.push(hookTube);
+  // objects[offset + 1].updateWorldMatrix();
+  //
+  // box1Tube = new Box(0.325, 0.564, 0.976);
+  // box1Tube.setupWebGLBuffers();
+  // mb1Tube = mat4.create();
+  // mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.55, 0));
+  // mat4.scale(mb1Tube, mb1Tube, vec3.fromValues(0.25, 0.025, 0.15));
+  // box1Tube.localMatrix = mb1Tube;
+  // objects.push(box1Tube);
+  // objects[offset + 2].updateWorldMatrix();
+  //
+  // box2Tube = new Box(0.635, 0.976, 0.905);
+  // box2Tube.setupWebGLBuffers();
+  // mb2Tube = mat4.create();
+  // mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.425, 0));
+  // mat4.scale(mb2Tube, mb2Tube, vec3.fromValues(0.025, 0.1, 0.15));
+  // box2Tube.localMatrix = mb2Tube;
+  // objects.push(box2Tube);
+  // objects[offset + 3].updateWorldMatrix();
+  //
+  // box3Tube = new Box(0.635, 0.976, 0.905);
+  // box3Tube.setupWebGLBuffers();
+  // mb3Tube = mat4.create();
+  // mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.425, 0));
+  // mat4.scale(mb3Tube, mb3Tube, vec3.fromValues(0.025, 0.1, 0.15));
+  // box3Tube.localMatrix = mb3Tube;
+  // objects.push(box3Tube);
+  // objects[offset + 4].updateWorldMatrix();
 }
 
 
@@ -514,6 +519,10 @@ Node.prototype.setupWebGLBuffers = function() {
   gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
 
+  this.webgl_texture_coord_buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
+
   this.webgl_index_buffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
@@ -527,18 +536,51 @@ Node.prototype.draw = function() {
   gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
   gl.vertexAttribPointer(glProgram.vertexNormal, 3, gl.FLOAT, false, 0, 0);
 
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+  gl.vertexAttribPointer(glProgram.vertexTexCoord, 2, gl.FLOAT, false, 0, 0);
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, this.texture);
+  gl.uniform1i(glProgram.sampler, 0);
+
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
   // Dibujamos.
   gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
 }
+
+Node.prototype.initTexture = function(path) {
+  this.texture = gl.createTexture();
+  this.texture.image = new Image();
+  var self = this
+  this.texture.image.onload = function() {
+    handleLoadedTexture(self.texture, self.texture.image);
+  }
+  this.texture.image.src = path;
+}
 ///////////////////////////////////////////////////////////////////////////////
+
+function handleLoadedTexture(texture, image) {
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+  gl.generateMipmap(gl.TEXTURE_2D);
+
+  gl.bindTexture(gl.TEXTURE_2D, null);
+}
+
+function isPowerOf2(n) {
+  return (n & (n - 1)) == 0;
+}
 
 // Clase Box
 function Box(r, g, b) {
   this.r = r;
   this.g = g;
   this.b = b;
+  this.texture = null;
 
   this.position_buffer = [1,1,1,  -1,1,1,  -1,-1,1,  1,-1,1,
                           1,1,1,  1,-1,1,  1,-1,-1,  1,1,-1,
@@ -553,6 +595,13 @@ function Box(r, g, b) {
                         -1,0,0,  -1,0,0,  -1,0,0,  -1,0,0,
                         0,-1,0,  0,-1,0,  0,-1,0,  0,-1,0,
                         0,0,-1,  0,0,-1,  0,0,-1,  0,0,-1];
+
+  this.texture_coord_buffer = [1,1,  0,1,  0,0,  1,0,
+                               1,1,  0,1,  0,0,  1,0,
+                               1,1,  0,1,  0,0,  1,0,
+                               1,1,  0,1,  0,0,  1,0,
+                               1,1,  0,1,  0,0,  1,0,
+                               1,1,  0,1,  0,0,  1,0];
 
   this.index_buffer = [0,1,2,  0,2,3,  3,0,4,
                        7,4,5,  7,5,6,  6,7,9,
