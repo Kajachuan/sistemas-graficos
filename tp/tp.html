@@ -68,6 +68,7 @@
     <script id="shader-fs" type="x-shader/x-fragment">
       precision mediump float;
 
+      uniform bool UseTexture;
       uniform sampler2D Sampler;
 
       varying vec2 TexCoord;
@@ -75,7 +76,11 @@
       varying vec3 specular;
 
       void main(void) {
-        vec4 texColor = texture2D(Sampler, vec2(TexCoord.s, TexCoord.t));
+        vec4 texColor = vec4(1.0);
+
+        if(UseTexture)
+          texColor = texture2D(Sampler, TexCoord);
+          
         gl_FragColor = vec4(ambAndDiff, 1.0) * texColor + vec4(specular, 1.0);
       }
     </script>
