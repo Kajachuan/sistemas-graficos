@@ -85,9 +85,7 @@ function initShaders() {
   glProgram.sampler = gl.getUniformLocation(glProgram, "Sampler");
   glProgram.useTexture = gl.getUniformLocation(glProgram, "UseTexture");
   glProgram.lightPosition = gl.getUniformLocation(glProgram, "Light.LightPosition");
-  glProgram.la = gl.getUniformLocation(glProgram, "Light.La");
-  glProgram.ld = gl.getUniformLocation(glProgram, "Light.Ld");
-  glProgram.ls = gl.getUniformLocation(glProgram, "Light.Ls");
+  glProgram.lightIntensity = gl.getUniformLocation(glProgram, "Light.Intensity");
   glProgram.ka = gl.getUniformLocation(glProgram, "Material.Ka");
   glProgram.kd = gl.getUniformLocation(glProgram, "Material.Kd");
   glProgram.ks = gl.getUniformLocation(glProgram, "Material.Ks");
@@ -466,9 +464,7 @@ function drawScene() {
   var light = [1, 1, 1];
 
   gl.uniform4fv(glProgram.lightPosition, light_position);
-  gl.uniform3fv(glProgram.la, light);
-  gl.uniform3fv(glProgram.ld, light);
-  gl.uniform3fv(glProgram.ls, light);
+  gl.uniform3fv(glProgram.lightIntensity, light);
 
   var specular_color = [0, 0, 0];
   var glos = 1;

@@ -1,3 +1,4 @@
+tipoTorta = "Crema";
 radioTotal = 5;
 altura = 5;
 ciclos = 3;
@@ -17,6 +18,9 @@ function beginAnimation(){
 function GUI (){
 
 		var gui = new dat.GUI();
+
+		var f0 = gui.addFolder('Torta');
+		f0.add(window, 'tipoTorta', ["Crema", "Chocolate"]).name("Sabor") // ??????
 
 		var f1 = gui.addFolder('Base');
 		//gui.add(object, property, [min], [max], [step])
@@ -40,6 +44,7 @@ function GUI (){
 		gui.add(window, "beginAnimation").name("Comenzar");
 		gui.add(window, "reset").name("Reiniciar");
 
+		f0.open();
 		f1.open();
 		f2.open();
 		f3.open();
