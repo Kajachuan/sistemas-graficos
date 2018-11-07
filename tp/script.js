@@ -155,7 +155,6 @@ function setupBuffers() {
 
   floor = new Box(0.686, 0.686, 0.686);
   floor.setupWebGLBuffers();
-  floor.initTexture("maps/crema.jpg");
   m1 = mat4.create();
   mat4.scale(m1, m1, vec3.fromValues(25, 0.1, 25));
   floor.localMatrix = m1;
@@ -181,8 +180,9 @@ function setupBuffers() {
     boxPadding += 2;
   }
 
-  bigBox = new Box(0.282, 0.286, 0.749);
+  bigBox = new Oven(0.282, 0.286, 0.749);
   bigBox.setupWebGLBuffers();
+  bigBox.initTexture("maps/horno.jpg");
   mBb = mat4.create();
   mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
   mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
@@ -462,7 +462,7 @@ function drawScene() {
 
   // Preparamos la iluminación
 
-  var light_position = [0, 0, 0, 0];
+  var light_position = [0, 20, 20, 0];
   var light = [1, 1, 1];
 
   gl.uniform4fv(glProgram.lightPosition, light_position);
@@ -484,7 +484,7 @@ function drawScene() {
       gl.uniform1i(glProgram.useTexture, 0);
     gl.uniform3fv(glProgram.ka, [0,0,0]);
     gl.uniform3fv(glProgram.kd, [object.r, object.g, object.b]);
-    
+
     nMatrix = mat3.create();
     mat3.normalFromMat4(nMatrix, object.worldMatrix);
     gl.uniformMatrix3fv(glProgram.normalMatrix, false, nMatrix);
@@ -573,14 +573,15 @@ Node.prototype.initTexture = function(path) {
   }
   this.texture.image.src = path;
 }
+
+///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// Clase Box
-function Box(r, g, b) {
+// Clase Abstract Box (Ver si después le cambiamos el nombre)
+function AbstractBox(r, g, b) {
   this.r = r;
   this.g = g;
   this.b = b;
-  this.texture = null;
 
   this.position_buffer = [1,1,1,  -1,1,1,  -1,-1,1,  1,-1,1,
                           1,1,1,  1,-1,1,  1,-1,-1,  1,1,-1,
@@ -596,13 +597,6 @@ function Box(r, g, b) {
                         0,-1,0,  0,-1,0,  0,-1,0,  0,-1,0,
                         0,0,-1,  0,0,-1,  0,0,-1,  0,0,-1];
 
-  this.texture_coord_buffer = [1,1,  0,1,  0,0,  1,0,
-                               1,1,  0,1,  0,0,  1,0,
-                               1,1,  0,1,  0,0,  1,0,
-                               1,1,  0,1,  0,0,  1,0,
-                               1,1,  0,1,  0,0,  1,0,
-                               1,1,  0,1,  0,0,  1,0];
-
   this.index_buffer = [0,1,2,  0,2,3,  3,0,4,
                        7,4,5,  7,5,6,  6,7,9,
                        11,8,9,  11,9,10,  10,11,12,
@@ -613,7 +607,21 @@ function Box(r, g, b) {
   Node.call(this);
 }
 
-Box.prototype = Object.create(Node.prototype);
+AbstractBox.prototype = Object.create(Node.prototype);
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Clase Box
+function Box(r, g, b) {
+  this.texture = null;
+
+  this.texture_coord_buffer = [0,0];
+
+  AbstractBox.call(this, r, g, b);
+}
+
+Box.prototype = Object.create(AbstractBox.prototype);
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -1138,3 +1146,21 @@ function Bell(r, g, b) {
 }
 
 Bell.prototype = Object.create(Node.prototype);
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Clase Oven
+function Oven(r, g, b) {
+  this.texture = null;
+
+  this.texture_coord_buffer = [0.697,1,  0.394,1,  0.394,0.49,  0.697,0.49,
+                               0.697,1,  0.697,0.49,  1,0.49,  1,1,
+                               0.394,0.49,  0,0.49,  0,0,  0.394,0,
+                               0.394,1,  0,1,  0,0.49,  0.394,0.49,
+                               1,0.49,  0.697,0.49,  0.697,0,  1,0,
+                               0.697,0,  0.697,0.49,  0.394,0.49,  0.394,0];
+  AbstractBox.call(this, r, g, b);
+}
+
+Oven.prototype = Object.create(AbstractBox.prototype);
