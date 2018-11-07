@@ -84,8 +84,12 @@ function initShaders() {
   glProgram.normalMatrix = gl.getUniformLocation(glProgram, "NormalMatrix");
   glProgram.sampler = gl.getUniformLocation(glProgram, "Sampler");
   glProgram.useTexture = gl.getUniformLocation(glProgram, "UseTexture");
-  glProgram.lightPosition = gl.getUniformLocation(glProgram, "Light.LightPosition");
-  glProgram.lightIntensity = gl.getUniformLocation(glProgram, "Light.Intensity");
+  glProgram.light1Position = gl.getUniformLocation(glProgram, "Lights[0].LightPosition");
+  glProgram.light1Intensity = gl.getUniformLocation(glProgram, "Lights[0].Intensity");
+  glProgram.light2Position = gl.getUniformLocation(glProgram, "Lights[1].LightPosition");
+  glProgram.light2Intensity = gl.getUniformLocation(glProgram, "Lights[1].Intensity");
+  glProgram.light3Position = gl.getUniformLocation(glProgram, "Lights[2].LightPosition");
+  glProgram.light3Intensity = gl.getUniformLocation(glProgram, "Lights[2].Intensity");
   glProgram.ka = gl.getUniformLocation(glProgram, "Material.Ka");
   glProgram.kd = gl.getUniformLocation(glProgram, "Material.Kd");
   glProgram.ks = gl.getUniformLocation(glProgram, "Material.Ks");
@@ -460,11 +464,17 @@ function drawScene() {
 
   // Preparamos la iluminación
 
-  var light_position = [0, 20, 20, 0];
+  var light1_position = [0, 20, 20, 0];
+  var light2_position = [0, 20, -20, 0];
+  var light3_position = [20, 20, 0, 0];
   var light = [1, 1, 1];
 
-  gl.uniform4fv(glProgram.lightPosition, light_position);
-  gl.uniform3fv(glProgram.lightIntensity, light);
+  gl.uniform4fv(glProgram.light1Position, light1_position);
+  gl.uniform4fv(glProgram.light2Position, light2_position);
+  gl.uniform4fv(glProgram.light3Position, light3_position);
+  gl.uniform3fv(glProgram.light1Intensity, light);
+  gl.uniform3fv(glProgram.light2Intensity, light);
+  gl.uniform3fv(glProgram.light3Intensity, light);
 
   var specular_color = [0, 0, 0];
   var glos = 1;
