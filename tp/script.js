@@ -273,8 +273,9 @@ function setupBuffers() {
   objects.push(ringCake);
   objects[18].updateWorldMatrix();
 
-  baseCake = new Base(0.82, 0.753, 0.306, 0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud)
+  baseCake = new Base(0.82, 0.753, 0.306, 0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud);
   baseCake.setupWebGLBuffers();
+  baseCake.initTexture("maps/chocolate.jpg");
   mBase = mat4.create();
   mat4.translate(mBase, mBase, vec3.fromValues(2, 2.12, 0));
   baseCake.localMatrix = mBase;
@@ -848,10 +849,11 @@ function Base(r, g, b, rad, cycles, h, amp) {
   this.r = r;
   this.g = g;
   this.b = b;
-  this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
   this.normal_buffer = [];
+  this.texture_coord_buffer = [];
+
   d = h / (4 * cycles - 1);
   cp = [0,0,  0,0,  rad - 0.5,0,  rad,d,  rad,2 * d];
   for(i = 1; i < cycles; i++) {
@@ -863,8 +865,15 @@ function Base(r, g, b, rad, cycles, h, amp) {
   cp.push(rad - 0.5,ly + d,  0,ly + d,  0,ly + d);
 
   nPoints = 0;
+  max_uv = 2 * rad + 2;
+  c_tex = max_uv / 2;
+  uv = c_tex;
+
   for(var i = 0; i < cp.length - 4; i += 2) {
-    for(var u = 0; u <= 1; u += 0.1) {
+    if((i - 6) % 8 == 0 && i != cp.length - 10) uv = max_uv;
+    else if(i == cp.length - 10) uv = c_tex + rad;
+    step = i < 6 ? rad / 32 : i > cp.length - 12 ? -rad / 32 : -1 / 43;
+    for(var u = 0; u < 1; u += 0.1) {
       b0 = 0.5 * Math.pow(1 - u, 2);
       b1 = -Math.pow(u, 2) + u + 0.5;
       b2 = 0.5 * Math.pow(u, 2);
@@ -872,6 +881,9 @@ function Base(r, g, b, rad, cycles, h, amp) {
       y = b0 * cp[i + 1] + b1 * cp[i + 3] + b2 * cp[i + 5];
       this.position_buffer.push(x, y, 0);
       nPoints++;
+
+      this.texture_coord_buffer.push(uv, c_tex);
+      uv += step;
 
       db0 = u - 1;
       db1 = 1 - 2 * u;
@@ -886,6 +898,7 @@ function Base(r, g, b, rad, cycles, h, amp) {
   angle = 2 * Math.PI / levels;
   rot = vec3.create();
   nrot = vec3.create();
+  texrot = vec3.create();
   origin = vec3.fromValues(0, 0, 0);
 
   for(var i = 0; i < levels; i++) {
@@ -903,6 +916,13 @@ function Base(r, g, b, rad, cycles, h, amp) {
       n = vec3.fromValues(nx, ny, nz);
       vec3.rotateY(nrot, n, origin, angle * (i + 1));
       this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
+    }
+
+    for(var k = 0; k < nPoints * 2; k += 2) {
+      u = this.texture_coord_buffer[k];
+      v = this.texture_coord_buffer[k + 1];
+      vec3.rotateZ(texrot, [u, v, 0], [c_tex, c_tex, 0], angle * (i + 1));
+      this.texture_coord_buffer.push(texrot[0], texrot[1]);
     }
   }
 
