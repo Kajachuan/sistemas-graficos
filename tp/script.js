@@ -268,7 +268,7 @@ function setupBuffers() {
   ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
   ringCake.setupWebGLBuffers();
   mRing = mat4.create();
-  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.18 + altura * (0.1 - 0.03 / ciclos), 0));
+  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.21 + altura * (0.1 - 0.03 / ciclos), 0));
   mat4.scale(mRing, mRing, vec3.fromValues(0.063 * radioTotal, 0.063 * radioTotal, 0.063 * radioTotal));
   ringCake.localMatrix = mRing;
   objects.push(ringCake);
@@ -276,9 +276,9 @@ function setupBuffers() {
 
   baseCake = new Base(0.82, 0.753, 0.306, 0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud);
   baseCake.setupWebGLBuffers();
-  baseCake.initTexture("maps/chocolate.jpg");
+  baseCake.initTexture("maps/crema.jpg");
   mBase = mat4.create();
-  mat4.translate(mBase, mBase, vec3.fromValues(2, 2.12, 0));
+  mat4.translate(mBase, mBase, vec3.fromValues(2, 2.15, 0));
   baseCake.localMatrix = mBase;
   objects.push(baseCake);
   objects[19].updateWorldMatrix();
@@ -286,7 +286,7 @@ function setupBuffers() {
   plateCake = new Disk(0.851, 0.941, 0.776)
   plateCake.setupWebGLBuffers();
   mPlate = mat4.create();
-  mat4.translate(mPlate, mPlate, vec3.fromValues(2, 2.12, 0));
+  mat4.translate(mPlate, mPlate, vec3.fromValues(2, 2.15, 0));
   mat4.scale(mPlate, mPlate, vec3.fromValues(0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1));
   plateCake.localMatrix = mPlate;
   objects.push(plateCake);
@@ -302,7 +302,7 @@ function setupBuffers() {
 
   if (cantidadDecoradores > 1) {
     mDecorators = mat4.create();
-    mat4.translate(mDecorators, mDecorators, vec3.fromValues(radioTotal / 8, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
+    mat4.translate(mDecorators, mDecorators, vec3.fromValues(radioTotal / 8, 2.15 + altura * (0.1 - 0.008 / ciclos), 0));
     mat4.scale(mDecorators, mDecorators, vec3.fromValues(0.1, 0.1, 0.1));
 
     var dec = [];
@@ -325,7 +325,7 @@ function setupBuffers() {
     dec = new window[paramDec[0]](paramDec[1], paramDec[2], paramDec[3]);
     dec.setupWebGLBuffers();
     mDec = mat4.create();
-    mat4.translate(mDec, mDec, vec3.fromValues(2, 2.12 + altura * (0.1 - 0.008 / ciclos), 0));
+    mat4.translate(mDec, mDec, vec3.fromValues(2, 2.15 + altura * (0.1 - 0.008 / ciclos), 0));
     mat4.scale(mDec, mDec, vec3.fromValues(0.1, 0.1, 0.1));
     dec.localMatrix = mDec;
     objects.push(dec);
@@ -340,7 +340,7 @@ function setupBuffers() {
     paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
 
   mContours = mat4.create();
-  mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 2.35, 0));
+  mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 2.38, 0));
   mat4.scale(mContours, mContours, vec3.fromValues(paramCont[4], paramCont[5], paramCont[6]));
 
   var cont = [];
