@@ -478,20 +478,18 @@ function drawScene() {
   gl.uniform3fv(glProgram.light2Intensity, light);
   gl.uniform3fv(glProgram.light3Intensity, light);
 
-  var specular_color = [0, 0, 0];
-  var glos = 1;
-  gl.uniform3fv(glProgram.ks, specular_color);
-  gl.uniform1f(glProgram.glossiness, glos);
-
-  // Preparamos las matrices propias de cada objeto
+  // Dibujamos cada objeto
 
   objects.forEach(function(object) {
     if(object.texture)
       gl.uniform1i(glProgram.useTexture, 1);
     else
       gl.uniform1i(glProgram.useTexture, 0);
-    gl.uniform3fv(glProgram.ka, [0,0,0]);
-    gl.uniform3fv(glProgram.kd, [object.r, object.g, object.b]);
+
+    gl.uniform3fv(glProgram.ka, object.ka);
+    gl.uniform3fv(glProgram.kd, object.kd);
+    gl.uniform3fv(glProgram.ks, object.ks);
+    gl.uniform1f(glProgram.glossiness, object.gloss);
 
     nMatrix = mat3.create();
     mat3.normalFromMat4(nMatrix, object.worldMatrix);
@@ -587,10 +585,7 @@ Node.prototype.initTexture = function(path) {
 
 // Clase Abstract Box (Ver si después le cambiamos el nombre)
 function AbstractBox(r, g, b) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
-
+  
   this.position_buffer = [1,1,1,  -1,1,1,  -1,-1,1,  1,-1,1,
                           1,1,1,  1,-1,1,  1,-1,-1,  1,1,-1,
                           1,1,1,  1,1,-1,  -1,1,-1,  -1,1,1,
@@ -622,6 +617,10 @@ AbstractBox.prototype = Object.create(Node.prototype);
 
 // Clase Box
 function Box(r, g, b) {
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture = null;
 
   this.texture_coord_buffer = [0,0];
@@ -636,9 +635,10 @@ Box.prototype = Object.create(AbstractBox.prototype);
 
 // Clase Ball
 function Ball(r, g, b) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture_coord_buffer = [0,0];
 
   nPoints = 20;
@@ -689,9 +689,10 @@ Ball.prototype = Object.create(Node.prototype);
 
 // Clase Tube
 function Tube(r, g, b) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
@@ -778,9 +779,10 @@ Tube.prototype = Object.create(Node.prototype);
 
 // Clase Disk
 function Disk(r, g, b) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
@@ -847,9 +849,10 @@ Disk.prototype = Object.create(Node.prototype);
 
 // Clase Base
 function Base(r, g, b, rad, cycles, h, amp) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
 
   this.position_buffer = [];
   this.normal_buffer = [];
@@ -947,9 +950,10 @@ Base.prototype = Object.create(Node.prototype);
 
 // Clase Ring
 function Ring(r, g, b, turns) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture_coord_buffer = [0,0];
 
   angle = Math.PI / 6;
@@ -1038,9 +1042,10 @@ Ring.prototype = Object.create(Node.prototype);
 
 // Clase Pallet
 function Pallet(r, g, b) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
@@ -1105,9 +1110,10 @@ Pallet.prototype = Object.create(Node.prototype);
 
 // Clase Bell
 function Bell(r, g, b) {
-  this.r = r;
-  this.g = g;
-  this.b = b;
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
@@ -1179,6 +1185,10 @@ Bell.prototype = Object.create(Node.prototype);
 
 // Clase Oven
 function Oven(r, g, b) {
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture = null;
 
   this.texture_coord_buffer = [0.697,1,  0.394,1,  0.394,0.49,  0.697,0.49,
@@ -1196,6 +1206,10 @@ Oven.prototype = Object.create(AbstractBox.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 
 function Band(r, b, g) {
+  this.ka = [0,0,0];
+  this.kd = [r,g,b];
+  this.ks = [0,0,0];
+  this.gloss = 1;
   this.texture = null;
 
   this.texture_coord_buffer = [0,1,  0.0375,1,  0.0375,0,  0,0,
