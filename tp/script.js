@@ -193,8 +193,9 @@ function setupBuffers() {
   objects.push(bigBox);
   objects[10].updateWorldMatrix();
 
-  line = new Box(0.463, 0.463, 0.463);
+  line = new Band(0.463, 0.463, 0.463);
   line.setupWebGLBuffers();
+  line.initTexture("maps/cinta.jpg");
   m3 = mat4.create();
   mat4.translate(m3, m3, vec3.fromValues(-2, 1.85, 0));
   mat4.rotate(m3, m3, Math.PI/2, [0, 1, 0]);
@@ -465,9 +466,9 @@ function drawScene() {
 
   // Preparamos la iluminación
 
-  var light1_position = [0, 20, 20, 0];
-  var light2_position = [0, 20, -20, 0];
-  var light3_position = [20, 20, 0, 0];
+  var light1_position = [0, 20, -40, 0];
+  var light2_position = [0, 20, 40, 0];
+  var light3_position = [80, 20, 0, 0];
   var light = [1, 1, 1];
 
   gl.uniform4fv(glProgram.light1Position, light1_position);
@@ -1190,3 +1191,21 @@ function Oven(r, g, b) {
 }
 
 Oven.prototype = Object.create(AbstractBox.prototype);
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+function Band(r, b, g) {
+  this.texture = null;
+
+  this.texture_coord_buffer = [0,1,  0.0375,1,  0.0375,0,  0,0,
+                               0,0.012,  0,0,  2,0,  2,0.012,
+                               0,0,  2,0,  2,1,  0,1,
+                               2,0.012,  0,0.012,  0,0,  2,0,
+                               0,1,  2,1,  2,0,  0,0,
+                               0,1,  0.0375,1,  0.0375,0,  0,0];
+
+  AbstractBox.call(this, r, g, b);
+}
+
+Band.prototype = Object.create(AbstractBox.prototype);
