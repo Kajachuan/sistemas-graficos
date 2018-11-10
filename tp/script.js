@@ -349,6 +349,7 @@ function setupBuffers() {
   for (i = 0; i < cantidadContorno; i++){
     cont[i] = new window[paramCont[0]](paramCont[1], paramCont[2], paramCont[3]);
     cont[i].setupWebGLBuffers();
+    if(paramCont[0] == "Tube") cont[i].initTexture("maps/caramelo.jpg");
     mCont = mat4.create();
     mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
     mat4.rotateY(mCont, mCont, i * angle, vec3.fromValues(0, 0, 0));
@@ -585,7 +586,7 @@ Node.prototype.initTexture = function(path) {
 
 // Clase Abstract Box (Ver si después le cambiamos el nombre)
 function AbstractBox(r, g, b) {
-  
+
   this.position_buffer = [1,1,1,  -1,1,1,  -1,-1,1,  1,-1,1,
                           1,1,1,  1,-1,1,  1,-1,-1,  1,1,-1,
                           1,1,1,  1,1,-1,  -1,1,-1,  -1,1,1,
@@ -693,46 +694,60 @@ function Tube(r, g, b) {
   this.kd = [r,g,b];
   this.ks = [0,0,0];
   this.gloss = 1;
-  this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
   this.normal_buffer = [];
+  this.texture_coord_buffer = [];
 
   this.position_buffer.push(0, 1.85, 0);
   this.normal_buffer.push(0, 1, 0);
+  this.texture_coord_buffer.push(0, 1);
 
   this.position_buffer.push(0.12, 1.85, 0);
   this.normal_buffer.push(0, 1, 0);
+  this.texture_coord_buffer.push(0, 0.975);
   this.position_buffer.push(0.12, 1.85, 0);
   this.normal_buffer.push(-1, 0, 0);
+  this.texture_coord_buffer.push(0, 0.975);
 
   this.position_buffer.push(0.12, 2, 0);
   this.normal_buffer.push(-1, 0, 0);
+  this.texture_coord_buffer.push(0, 0.95);
   this.position_buffer.push(0.12, 2, 0);
   this.normal_buffer.push(0, 1, 0);
+  this.texture_coord_buffer.push(0, 0.95);
 
   this.position_buffer.push(0.2, 2, 0);
   this.normal_buffer.push(0, 1, 0);
+  this.texture_coord_buffer.push(0, 0.925);
   this.position_buffer.push(0.2, 2, 0);
   this.normal_buffer.push(1, 0, 0);
+  this.texture_coord_buffer.push(0, 0.925);
 
   this.position_buffer.push(0.2, -2, 0);
   this.normal_buffer.push(1, 0, 0);
+  this.texture_coord_buffer.push(0, 0.075);
   this.position_buffer.push(0.2, -2, 0);
   this.normal_buffer.push(0, -1, 0);
+  this.texture_coord_buffer.push(0, 0.075);
 
   this.position_buffer.push(0.12, -2, 0);
   this.normal_buffer.push(0, -1, 0);
+  this.texture_coord_buffer.push(0, 0.05);
   this.position_buffer.push(0.12, -2, 0);
   this.normal_buffer.push(-1, 0, 0);
+  this.texture_coord_buffer.push(0, 0.05);
 
   this.position_buffer.push(0.12, -1.85, 0);
   this.normal_buffer.push(-1, 0, 0);
+  this.texture_coord_buffer.push(0, 0.025);
   this.position_buffer.push(0.12, -1.85, 0);
   this.normal_buffer.push(0, -1, 0);
+  this.texture_coord_buffer.push(0, 0.025);
 
   this.position_buffer.push(0, -1.85, 0);
   this.normal_buffer.push(0, -1, 0);
+  this.texture_coord_buffer.push(0, 0);
 
   nPoints = 14;
   levels = 50;
@@ -756,6 +771,12 @@ function Tube(r, g, b) {
       n = vec3.fromValues(nx, ny, nz);
       vec3.rotateY(nrot, n, origin, angle * (i + 1));
       this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
+    }
+
+    for(var k = 0; k < nPoints * 2; k += 2) {
+      u = this.texture_coord_buffer[k];
+      v = this.texture_coord_buffer[k + 1];
+      this.texture_coord_buffer.push(u + (i + 1) / levels, v);
     }
   }
 
