@@ -90,6 +90,18 @@ function initShaders() {
   glProgram.light2Intensity = gl.getUniformLocation(glProgram, "Lights[1].Intensity");
   glProgram.light3Position = gl.getUniformLocation(glProgram, "Lights[2].LightPosition");
   glProgram.light3Intensity = gl.getUniformLocation(glProgram, "Lights[2].Intensity");
+  glProgram.light4Position = gl.getUniformLocation(glProgram, "Lights[3].LightPosition");
+  glProgram.light4Intensity = gl.getUniformLocation(glProgram, "Lights[3].Intensity");
+  glProgram.light5Position = gl.getUniformLocation(glProgram, "Lights[4].LightPosition");
+  glProgram.light5Intensity = gl.getUniformLocation(glProgram, "Lights[4].Intensity");
+  glProgram.light6Position = gl.getUniformLocation(glProgram, "Lights[5].LightPosition");
+  glProgram.light6Intensity = gl.getUniformLocation(glProgram, "Lights[5].Intensity");
+  glProgram.light7Position = gl.getUniformLocation(glProgram, "Lights[6].LightPosition");
+  glProgram.light7Intensity = gl.getUniformLocation(glProgram, "Lights[6].Intensity");
+  glProgram.light8Position = gl.getUniformLocation(glProgram, "Lights[7].LightPosition");
+  glProgram.light8Intensity = gl.getUniformLocation(glProgram, "Lights[7].Intensity");
+  glProgram.light9Position = gl.getUniformLocation(glProgram, "Lights[8].LightPosition");
+  glProgram.light9Intensity = gl.getUniformLocation(glProgram, "Lights[8].Intensity");
   glProgram.ka = gl.getUniformLocation(glProgram, "Material.Ka");
   glProgram.kd = gl.getUniformLocation(glProgram, "Material.Kd");
   glProgram.ks = gl.getUniformLocation(glProgram, "Material.Ks");
@@ -467,17 +479,35 @@ function drawScene() {
 
   // Preparamos la iluminación
 
-  var light1_position = [0, 20, -40, 0];
-  var light2_position = [0, 20, 40, 0];
-  var light3_position = [80, 20, 0, 0];
-  var light = [1, 1, 1];
+  var light1_position = [0, 20, 0, 0];
+  var light2_position = [50, 20, 0, 0];
+  var light3_position = [-50, 20, 0, 0];
+  var light4_position = [0, 20, 20, 0];
+  var light5_position = [50, 20, 20, 0];
+  var light6_position = [-50, 20, 20, 0];
+  var light7_position = [0, 20, -20, 0];
+  var light8_position = [50, 20, -20, 0];
+  var light9_position = [-50, 20, -20, 0];
+  var light = [0.3, 0.3, 0.3];
 
   gl.uniform4fv(glProgram.light1Position, light1_position);
   gl.uniform4fv(glProgram.light2Position, light2_position);
   gl.uniform4fv(glProgram.light3Position, light3_position);
+  gl.uniform4fv(glProgram.light4Position, light4_position);
+  gl.uniform4fv(glProgram.light5Position, light5_position);
+  gl.uniform4fv(glProgram.light6Position, light6_position);
+  gl.uniform4fv(glProgram.light7Position, light7_position);
+  gl.uniform4fv(glProgram.light8Position, light8_position);
+  gl.uniform4fv(glProgram.light9Position, light9_position);
   gl.uniform3fv(glProgram.light1Intensity, light);
   gl.uniform3fv(glProgram.light2Intensity, light);
   gl.uniform3fv(glProgram.light3Intensity, light);
+  gl.uniform3fv(glProgram.light4Intensity, light);
+  gl.uniform3fv(glProgram.light5Intensity, light);
+  gl.uniform3fv(glProgram.light6Intensity, light);
+  gl.uniform3fv(glProgram.light7Intensity, light);
+  gl.uniform3fv(glProgram.light8Intensity, light);
+  gl.uniform3fv(glProgram.light9Intensity, light);
 
   // Dibujamos cada objeto
 
@@ -1226,7 +1256,7 @@ Oven.prototype = Object.create(AbstractBox.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-function Band(r, b, g) {
+function Band(r, g, b) {
   this.ka = [0,0,0];
   this.kd = [r,g,b];
   this.ks = [0,0,0];
