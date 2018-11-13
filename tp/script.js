@@ -1264,12 +1264,12 @@ function Band(r, g, b) {
   this.gloss = 1;
   this.texture = null;
 
-  this.texture_coord_buffer = [0,1,  0.0375,1,  0.0375,0,  0,0,
+  this.texture_coord_buffer = [0,1,  0.055,1,  0.055,0,  0,0,
                                0,0.012,  0,0,  2,0,  2,0.012,
                                0,0,  2,0,  2,1,  0,1,
                                2,0.012,  0,0.012,  0,0,  2,0,
                                0,1,  2,1,  2,0,  0,0,
-                               0,1,  0.0375,1,  0.0375,0,  0,0];
+                               0,1,  0.055,1,  0.055,0,  0,0];
 
   AbstractBox.call(this, r, g, b);
 }
