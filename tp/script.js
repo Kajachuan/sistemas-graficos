@@ -440,6 +440,7 @@ function animate(timestamp, duration){
    progress = Math.min(progress, 1);
    mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-0.01,0,0));
    objects[19].updateWorldMatrix();
+   objects[11].move();
    if (runtime < duration){ // if duration not met yet
         requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
             drawScene();
@@ -1274,3 +1275,16 @@ function Band(r, g, b) {
 }
 
 Band.prototype = Object.create(AbstractBox.prototype);
+
+Band.prototype.move = function() {
+  this.texture_coord_buffer[16] -= 0.001;
+  this.texture_coord_buffer[18] -= 0.001;
+  this.texture_coord_buffer[20] -= 0.001;
+  this.texture_coord_buffer[22] -= 0.001;
+
+  this.texture_coord_buffer[40] += 0.001;
+  this.texture_coord_buffer[42] += 0.001;
+  this.texture_coord_buffer[44] += 0.001;
+  this.texture_coord_buffer[46] += 0.001;
+  this.setupWebGLBuffers();
+}
