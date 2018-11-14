@@ -5,6 +5,7 @@ fragmentShader = null,
 vertexShader = null;
 objects = [];
 var cameraHandler;
+var refMapPath = "maps/refmapGreyRoom1.jpg"
 
 var viewMatrix = mat4.create();
 var pMatrix = mat4.create();
@@ -82,8 +83,10 @@ function initShaders() {
   glProgram.viewMatrix = gl.getUniformLocation(glProgram, "ViewMatrix");
   glProgram.modelMatrix = gl.getUniformLocation(glProgram, "ModelMatrix");
   glProgram.normalMatrix = gl.getUniformLocation(glProgram, "NormalMatrix");
-  glProgram.sampler = gl.getUniformLocation(glProgram, "Sampler");
-  glProgram.useTexture = gl.getUniformLocation(glProgram, "UseTexture");
+  glProgram.diffuseMap = gl.getUniformLocation(glProgram, "DiffuseMap");
+  glProgram.reflectMap = gl.getUniformLocation(glProgram, "ReflectMap");
+  glProgram.useDiffuseMap = gl.getUniformLocation(glProgram, "UseDiffuseMap");
+  glProgram.useReflectMap = gl.getUniformLocation(glProgram, "UseReflectMap");
   glProgram.light1Position = gl.getUniformLocation(glProgram, "Lights[0].LightPosition");
   glProgram.light1Intensity = gl.getUniformLocation(glProgram, "Lights[0].Intensity");
   glProgram.light2Position = gl.getUniformLocation(glProgram, "Lights[1].LightPosition");
@@ -197,6 +200,7 @@ function setupBuffers() {
   bigBox = new Oven(0.282, 0.286, 0.749);
   bigBox.setupWebGLBuffers();
   bigBox.initTexture("maps/horno.jpg");
+  bigBox.initReflectMap();
   mBb = mat4.create();
   mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
   mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
@@ -208,6 +212,7 @@ function setupBuffers() {
   line = new Band(0.463, 0.463, 0.463);
   line.setupWebGLBuffers();
   line.initTexture("maps/cinta.jpg");
+  line.initReflectMap();
   m3 = mat4.create();
   mat4.translate(m3, m3, vec3.fromValues(-2, 1.85, 0));
   mat4.rotate(m3, m3, Math.PI/2, [0, 1, 0]);
@@ -513,10 +518,11 @@ function drawScene() {
   // Dibujamos cada objeto
 
   objects.forEach(function(object) {
-    if(object.texture)
-      gl.uniform1i(glProgram.useTexture, 1);
-    else
-      gl.uniform1i(glProgram.useTexture, 0);
+    var useDiffuseMap = object.texture ? 1 : 0;
+    gl.uniform1i(glProgram.useDiffuseMap, useDiffuseMap);
+
+    var useReflectMap = object.reflectMap ? 1 : 0;
+    gl.uniform1i(glProgram.useReflectMap, useReflectMap);
 
     gl.uniform3fv(glProgram.ka, object.ka);
     gl.uniform3fv(glProgram.kd, object.kd);
@@ -594,11 +600,14 @@ Node.prototype.draw = function() {
 
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, this.texture);
-  gl.uniform1i(glProgram.sampler, 0);
+  gl.uniform1i(glProgram.diffuseMap, 0);
+
+  gl.activeTexture(gl.TEXTURE1);
+  gl.bindTexture(gl.TEXTURE_2D, this.reflectMap);
+  gl.uniform1i(glProgram.reflectMap, 1);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
-  // Dibujamos.
   gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
 }
 
@@ -610,6 +619,16 @@ Node.prototype.initTexture = function(path) {
     handleLoadedTexture(self.texture, self.texture.image);
   }
   this.texture.image.src = path;
+}
+
+Node.prototype.initReflectMap = function() {
+  this.reflectMap = gl.createTexture();
+  this.reflectMap.image = new Image();
+  var self = this
+  this.reflectMap.image.onload = function() {
+    handleLoadedTexture(self.reflectMap, self.reflectMap.image);
+  }
+  this.reflectMap.image.src = refMapPath;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
