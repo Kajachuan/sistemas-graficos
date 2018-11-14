@@ -674,7 +674,12 @@ function Box(r, g, b) {
   this.gloss = 1;
   this.texture = null;
 
-  this.texture_coord_buffer = [0,0];
+  this.texture_coord_buffer = [0,0,0,0,0,0,0,0,
+                               0,0,0,0,0,0,0,0,
+                               0,0,0,0,0,0,0,0,
+                               0,0,0,0,0,0,0,0,
+                               0,0,0,0,0,0,0,0,
+                               0,0,0,0,0,0,0,0];
 
   AbstractBox.call(this, r, g, b);
 }
@@ -690,16 +695,18 @@ function Ball(r, g, b) {
   this.kd = [r,g,b];
   this.ks = [0,0,0];
   this.gloss = 1;
-  this.texture_coord_buffer = [0,0];
 
   nPoints = 20;
   angle = Math.PI / (nPoints - 1);
-  this.position_buffer = []
+  this.position_buffer = [];
+  this.texture_coord_buffer = [];
 
   for(var i = 0; i < nPoints; i++) {
     this.position_buffer.push(Math.cos(i * angle));
     this.position_buffer.push(Math.sin(i * angle));
     this.position_buffer.push(0);
+
+    this.texture_coord_buffer.push(0,0);
   }
 
   levels = 50;
@@ -715,6 +722,8 @@ function Ball(r, g, b) {
       a = vec3.fromValues(x, y, z);
       vec3.rotateX(rot, a, origin, angle * (i + 1));
       this.position_buffer.push(rot[0], rot[1], rot[2]);
+
+      this.texture_coord_buffer.push(0,0);
     }
   }
 
@@ -854,26 +863,32 @@ function Disk(r, g, b) {
   this.kd = [r,g,b];
   this.ks = [0,0,0];
   this.gloss = 1;
-  this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
   this.normal_buffer = [];
+  this.texture_coord_buffer = [];
 
   this.position_buffer.push(0, 0.025, 0);
   this.normal_buffer.push(0,1,0);
+  this.texture_coord_buffer.push(0,0);
 
   this.position_buffer.push(1, 0.025, 0);
   this.normal_buffer.push(0,1,0);
+  this.texture_coord_buffer.push(0,0);
   this.position_buffer.push(1, 0.025, 0);
   this.normal_buffer.push(1,0,0)
+  this.texture_coord_buffer.push(0,0);
 
   this.position_buffer.push(1, -0.025, 0);
   this.normal_buffer.push(1,0,0);
+  this.texture_coord_buffer.push(0,0);
   this.position_buffer.push(1, -0.025, 0);
   this.normal_buffer.push(0,-1,0);
+  this.texture_coord_buffer.push(0,0);
 
   this.position_buffer.push(0, -0.025, 0);
   this.normal_buffer.push(0,-1,0);
+  this.texture_coord_buffer.push(0,0);
 
   nPoints = 6;
   levels = 50;
@@ -897,6 +912,8 @@ function Disk(r, g, b) {
       n = vec3.fromValues(nx, ny, nz);
       vec3.rotateY(nrot, n, origin, angle * (i + 1));
       this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
+
+      this.texture_coord_buffer.push(0,0);
     }
   }
 
@@ -1025,12 +1042,12 @@ function Ring(r, g, b, turns) {
   this.kd = [r,g,b];
   this.ks = [0,0,0];
   this.gloss = 1;
-  this.texture_coord_buffer = [0,0];
 
   angle = Math.PI / 6;
   nPoints = 26;
   this.position_buffer = [];
   this.normal_buffer = [];
+  this.texture_coord_buffer = [];
   origin = vec3.fromValues(0,0,0);
 
   for(var i = 0; i < nPoints / 2; i++) {
@@ -1038,6 +1055,9 @@ function Ring(r, g, b, turns) {
     y = Math.sin(i * angle);
     this.position_buffer.push(3 + 0.2 * x, 0.2 * y, 0);
     this.position_buffer.push(3 + 0.2 * x, 0.2 * y, 0);
+
+    this.texture_coord_buffer.push(0,0);
+    this.texture_coord_buffer.push(0,0);
 
     x1 = Math.cos((i - 1) * angle) - x;
     y1 = Math.sin((i - 1) * angle) - y;
@@ -1056,6 +1076,9 @@ function Ring(r, g, b, turns) {
     y = Math.sin(i * angle);
     this.position_buffer.push(3 + 0.1 * x, 0.1 * y, 0);
     this.position_buffer.push(3 + 0.1 * x, 0.1 * y, 0);
+
+    this.texture_coord_buffer.push(0,0);
+    this.texture_coord_buffer.push(0,0);
 
     x1 = Math.cos((i - 1) * angle) - x;
     y1 = Math.sin((i - 1) * angle) - y;
@@ -1090,6 +1113,8 @@ function Ring(r, g, b, turns) {
       vec3.rotateZ(nrot, nrot, origin, torsion * (i + 1));
       vec3.rotateY(nrot, nrot, origin, ang * (i + 1));
       this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
+
+      this.texture_coord_buffer.push(0,0);
     }
   }
 
@@ -1117,10 +1142,10 @@ function Pallet(r, g, b) {
   this.kd = [r,g,b];
   this.ks = [0,0,0];
   this.gloss = 1;
-  this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
   this.normal_buffer = [];
+  this.texture_coord_buffer = [];
 
   nPoints = 2;
   for(var u = 0; u <= 1; u += 0.001) {
@@ -1131,6 +1156,7 @@ function Pallet(r, g, b) {
     y = 2 * b1;
     this.position_buffer.push(x, y, 0);
     this.normal_buffer.push(0, 0, 1);
+    this.texture_coord_buffer.push(0,0);
 
     db0 = -2 * (1 - u);
     db1 = 2 - 4 * u;
@@ -1139,12 +1165,15 @@ function Pallet(r, g, b) {
     ty = 2 * db1;
     this.position_buffer.push(x, y, 0);
     this.normal_buffer.push(-ty, tx, 0);
+    this.texture_coord_buffer.push(0,0);
     nPoints += 2;
   }
   this.position_buffer.push(-2.5, 0, 0);
   this.normal_buffer.push(0, -1, 0);
+  this.texture_coord_buffer.push(0,0);
   this.position_buffer.push(1.5, 0, 0);
   this.normal_buffer.push(0, -1, 0);
+  this.texture_coord_buffer.push(0,0);
 
   for(var i = 0; i < nPoints * 3; i+=3) {
     x = this.position_buffer[i];
@@ -1156,6 +1185,8 @@ function Pallet(r, g, b) {
     ny = this.normal_buffer[i + 1];
     nz = this.normal_buffer[i + 2];
     this.normal_buffer.push(nx, ny, -nz);
+
+    this.texture_coord_buffer.push(0,0);
   }
 
   this.index_buffer = [];
@@ -1185,10 +1216,10 @@ function Bell(r, g, b) {
   this.kd = [r,g,b];
   this.ks = [0,0,0];
   this.gloss = 1;
-  this.texture_coord_buffer = [0,0];
 
   this.position_buffer = [];
   this.normal_buffer = [];
+  this.texture_coord_buffer = [];
   cp = [0,0,  0.5,0,  0.9,0,  1,0,  1,0.05,  1,0.1,  0.9,0.1,
         0.7,0.1,  0.6,0.6,  0.5,1.1,  0.3,1.2,  0.1,1.3,  0,1.5];
 
@@ -1209,6 +1240,8 @@ function Bell(r, g, b) {
       ty = db0 * cp[i + 1] + db1 * cp[i + 3] + db2 * cp[i + 5];
       this.normal_buffer.push(ty, -tx, 0);
       nPoints++;
+
+      this.texture_coord_buffer.push(0,0);
     }
   }
 
@@ -1233,6 +1266,8 @@ function Bell(r, g, b) {
       n = vec3.fromValues(nx, ny, nz);
       vec3.rotateY(nrot, n, origin, angle * (i + 1));
       this.normal_buffer.push(nrot[0], nrot[1], nrot[2]);
+
+      this.texture_coord_buffer.push(0,0);
     }
   }
 
@@ -1276,6 +1311,7 @@ Oven.prototype = Object.create(AbstractBox.prototype);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+// Clase Band
 function Band(r, g, b) {
   this.ka = [0,0,0];
   this.kd = [r,g,b];
