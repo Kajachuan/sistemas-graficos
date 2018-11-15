@@ -82,7 +82,7 @@
         vec3 diffColor = UseDiffuseMap ? texColor.rgb : Material.Kd;
         vec3 v = normalize(-EyeCoords.xyz);
         vec3 specularColor = UseReflectMap ? reflectColor.rgb : Material.Ks;
-        float glossiness = UseSpecularMap ? (1.0 - glossColor.r) * 255.0 : Material.Glossiness;
+        float glossiness = UseSpecularMap ? (1.0 - glossColor.r) * 85.0 : Material.Glossiness;
 
         for(int i = 0; i < 9; i++) {
           vec3 l = normalize(vec3(Lights[i].LightPosition - EyeCoords));
