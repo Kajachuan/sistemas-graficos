@@ -551,6 +551,11 @@ function Node() {
 }
 
 Node.prototype.setParent = function(parent) {
+  if(this.parent) {
+    var index = this.parent.children.indexOf(this);
+    this.parent.children.splice(index, 1);
+  }
+  
   parent.children.push(this);
   this.parent = parent;
 }
