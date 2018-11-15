@@ -47,8 +47,10 @@
 
       uniform bool UseDiffuseMap;
       uniform bool UseReflectMap;
+      uniform bool UseSpecularMap;
       uniform sampler2D DiffuseMap;
       uniform sampler2D ReflectMap;
+      uniform sampler2D SpecularMap;
 
       struct LightInfo {
         vec4 LightPosition;
@@ -72,6 +74,7 @@
       void main(void) {
         vec4 texColor = texture2D(DiffuseMap, TexCoord);
         vec4 reflectColor = texture2D(ReflectMap, ReflectDir);
+        vec4 glossColor = texture2D(SpecularMap, TexCoord);
 
         vec3 ambient = vec3(0.0);
         vec3 diffuse = vec3(0.0);
@@ -79,6 +82,7 @@
         vec3 diffColor = UseDiffuseMap ? texColor.rgb : Material.Kd;
         vec3 v = normalize(-EyeCoords.xyz);
         vec3 specularColor = UseReflectMap ? reflectColor.rgb : Material.Ks;
+        float glossiness = UseSpecularMap ? (1.0 - glossColor.r) * 255.0 : Material.Glossiness;
 
         for(int i = 0; i < 9; i++) {
           vec3 l = normalize(vec3(Lights[i].LightPosition - EyeCoords));
@@ -88,7 +92,7 @@
           diffuse += Lights[i].Intensity * diffColor * lambertian;
 
           if(lambertian > 0.0)
-            specular += Lights[i].Intensity * specularColor * pow(max(dot(r, v), 0.0), Material.Glossiness);
+            specular += Lights[i].Intensity * specularColor * pow(max(dot(r, v), 0.0), glossiness);
         }
 
         gl_FragColor = vec4(ambient + diffuse + specular, 1.0);

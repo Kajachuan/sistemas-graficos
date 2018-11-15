@@ -85,8 +85,10 @@ function initShaders() {
   glProgram.normalMatrix = gl.getUniformLocation(glProgram, "NormalMatrix");
   glProgram.diffuseMap = gl.getUniformLocation(glProgram, "DiffuseMap");
   glProgram.reflectMap = gl.getUniformLocation(glProgram, "ReflectMap");
+  glProgram.specularMap = gl.getUniformLocation(glProgram, "SpecularMap");
   glProgram.useDiffuseMap = gl.getUniformLocation(glProgram, "UseDiffuseMap");
   glProgram.useReflectMap = gl.getUniformLocation(glProgram, "UseReflectMap");
+  glProgram.useSpecularMap = gl.getUniformLocation(glProgram, "UseSpecularMap");
   glProgram.light1Position = gl.getUniformLocation(glProgram, "Lights[0].LightPosition");
   glProgram.light1Intensity = gl.getUniformLocation(glProgram, "Lights[0].Intensity");
   glProgram.light2Position = gl.getUniformLocation(glProgram, "Lights[1].LightPosition");
@@ -202,6 +204,7 @@ function setupBuffers() {
   bigBox.setupWebGLBuffers();
   bigBox.initTexture("maps/horno.jpg");
   bigBox.initReflectMap();
+  bigBox.initSpecularMap("maps/horno-especular.jpg");
   mBb = mat4.create();
   mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
   mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
@@ -526,6 +529,9 @@ function drawScene() {
     var useReflectMap = object.reflectMap ? 1 : 0;
     gl.uniform1i(glProgram.useReflectMap, useReflectMap);
 
+    var useSpecularMap = object.specularMap ? 1 : 0;
+    gl.uniform1i(glProgram.useSpecularMap, useSpecularMap);
+
     gl.uniform3fv(glProgram.ka, object.ka);
     gl.uniform3fv(glProgram.kd, object.kd);
     gl.uniform3fv(glProgram.ks, object.ks);
@@ -613,6 +619,10 @@ Node.prototype.draw = function() {
   gl.bindTexture(gl.TEXTURE_2D, this.reflectMap);
   gl.uniform1i(glProgram.reflectMap, 1);
 
+  gl.activeTexture(gl.TEXTURE2);
+  gl.bindTexture(gl.TEXTURE_2D, this.specularMap);
+  gl.uniform1i(glProgram.specularMap, 2);
+
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
   gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
@@ -636,6 +646,16 @@ Node.prototype.initReflectMap = function() {
     handleLoadedTexture(self.reflectMap, self.reflectMap.image);
   }
   this.reflectMap.image.src = refMapPath;
+}
+
+Node.prototype.initSpecularMap = function(path) {
+  this.specularMap = gl.createTexture();
+  this.specularMap.image = new Image();
+  var self = this
+  this.specularMap.image.onload = function() {
+    handleLoadedTexture(self.specularMap, self.specularMap.image);
+  }
+  this.specularMap.image.src = path;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
