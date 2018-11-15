@@ -185,8 +185,9 @@ function setupBuffers() {
   var boxPadding = 2;
   var suppBoxesQuant = 10;
   for (i = 1; i < suppBoxesQuant; i++){
-    box[i] = new Box(0.176, 0.627, 0.169);
+    box[i] = new Box(0.3, 0.3, 0.3);
     box[i].setupWebGLBuffers();
+    box[i].initReflectMap();
     mBox = mat4.create();
     mat4.translate(mBox, mBox, vec3.fromValues(boxPadding, 0, 0));
     mat4.multiply(mBox,mBox,mSupportBoxes);
@@ -378,8 +379,9 @@ function setupBuffers() {
 
   var offset = 20 + cantidadDecoradores + cantidadContorno;
 
-  hookTube = new Tube(0.635, 0.976, 0.905);
+  hookTube = new Tube(0.3, 0.3, 0.3);
   hookTube.setupWebGLBuffers();
+  hookTube.initReflectMap();
   mhTube = mat4.create();
   mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.475, 0));
   mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.45, 0.6));
@@ -555,7 +557,7 @@ Node.prototype.setParent = function(parent) {
     var index = this.parent.children.indexOf(this);
     this.parent.children.splice(index, 1);
   }
-  
+
   parent.children.push(this);
   this.parent = parent;
 }

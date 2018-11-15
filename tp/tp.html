@@ -76,23 +76,22 @@
         vec3 ambient = vec3(0.0);
         vec3 diffuse = vec3(0.0);
         vec3 specular = vec3(0.0);
+        vec3 diffColor = UseDiffuseMap ? texColor.rgb : Material.Kd;
+        vec3 v = normalize(-EyeCoords.xyz);
+        vec3 specularColor = UseReflectMap ? reflectColor.rgb : Material.Ks;
 
         for(int i = 0; i < 9; i++) {
           vec3 l = normalize(vec3(Lights[i].LightPosition - EyeCoords));
-          vec3 v = normalize(-EyeCoords.xyz);
           vec3 r = reflect(-l, Normal);
           ambient += Lights[i].Intensity * Material.Ka;
           float lambertian = max(dot(l, Normal), 0.0);
-          vec3 diffColor = UseDiffuseMap ? texColor.rgb : Material.Kd;
           diffuse += Lights[i].Intensity * diffColor * lambertian;
 
           if(lambertian > 0.0)
-            specular += Lights[i].Intensity * Material.Ks * pow(max(dot(r, v), 0.0), Material.Glossiness);
+            specular += Lights[i].Intensity * specularColor * pow(max(dot(r, v), 0.0), Material.Glossiness);
         }
 
-        vec4 color = vec4(ambient + diffuse + specular, 1.0);
-        // Ver si tengo que cambiar el 0.3 después
-        gl_FragColor = UseReflectMap ? mix(color, reflectColor, 0.3) : color;
+        gl_FragColor = vec4(ambient + diffuse + specular, 1.0);
       }
     </script>
 
