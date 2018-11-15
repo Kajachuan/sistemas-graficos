@@ -1,62 +1,42 @@
 function Tube(r, g, b) {
-  this.ka = [0,0,0];
-  this.kd = [r,g,b];
-  this.ks = [0,0,0];
-  this.gloss = 1;
-
   this.position_buffer = [];
   this.normal_buffer = [];
-  this.texture_coord_buffer = [];
 
   this.position_buffer.push(0, 1.85, 0);
   this.normal_buffer.push(0, 1, 0);
-  this.texture_coord_buffer.push(0, 1);
 
   this.position_buffer.push(0.12, 1.85, 0);
   this.normal_buffer.push(0, 1, 0);
-  this.texture_coord_buffer.push(0, 0.975);
   this.position_buffer.push(0.12, 1.85, 0);
   this.normal_buffer.push(-1, 0, 0);
-  this.texture_coord_buffer.push(0, 0.975);
 
   this.position_buffer.push(0.12, 2, 0);
   this.normal_buffer.push(-1, 0, 0);
-  this.texture_coord_buffer.push(0, 0.95);
   this.position_buffer.push(0.12, 2, 0);
   this.normal_buffer.push(0, 1, 0);
-  this.texture_coord_buffer.push(0, 0.95);
 
   this.position_buffer.push(0.2, 2, 0);
   this.normal_buffer.push(0, 1, 0);
-  this.texture_coord_buffer.push(0, 0.925);
   this.position_buffer.push(0.2, 2, 0);
   this.normal_buffer.push(1, 0, 0);
-  this.texture_coord_buffer.push(0, 0.925);
 
   this.position_buffer.push(0.2, -2, 0);
   this.normal_buffer.push(1, 0, 0);
-  this.texture_coord_buffer.push(0, 0.075);
   this.position_buffer.push(0.2, -2, 0);
   this.normal_buffer.push(0, -1, 0);
-  this.texture_coord_buffer.push(0, 0.075);
 
   this.position_buffer.push(0.12, -2, 0);
   this.normal_buffer.push(0, -1, 0);
-  this.texture_coord_buffer.push(0, 0.05);
   this.position_buffer.push(0.12, -2, 0);
   this.normal_buffer.push(-1, 0, 0);
-  this.texture_coord_buffer.push(0, 0.05);
 
   this.position_buffer.push(0.12, -1.85, 0);
   this.normal_buffer.push(-1, 0, 0);
-  this.texture_coord_buffer.push(0, 0.025);
   this.position_buffer.push(0.12, -1.85, 0);
   this.normal_buffer.push(0, -1, 0);
-  this.texture_coord_buffer.push(0, 0.025);
 
   this.position_buffer.push(0, -1.85, 0);
   this.normal_buffer.push(0, -1, 0);
-  this.texture_coord_buffer.push(0, 0);
 
   var nPoints = 14;
   var levels = 50;

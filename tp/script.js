@@ -296,7 +296,7 @@ function setupBuffers() {
 
   baseCake = new Base(0.82, 0.753, 0.306, 0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud);
   baseCake.setupWebGLBuffers();
-  baseCake.initTexture("maps/crema.jpg");
+  baseCake.initTexture("maps/chocolate.jpg");
   mBase = mat4.create();
   mat4.translate(mBase, mBase, vec3.fromValues(2, 2.15, 0));
   baseCake.localMatrix = mBase;
@@ -355,7 +355,7 @@ function setupBuffers() {
 
   paramCont = [];
   if (contorno == "Tubo")
-    paramCont.push("Tube", 0.996, 0.502, 0.996, 0.1, 0.1, 0.1);
+    paramCont.push("Candy", 0.996, 0.502, 0.996, 0.1, 0.1, 0.1);
   else
     paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
 
@@ -369,7 +369,7 @@ function setupBuffers() {
   for (i = 0; i < cantidadContorno; i++){
     cont[i] = new window[paramCont[0]](paramCont[1], paramCont[2], paramCont[3]);
     cont[i].setupWebGLBuffers();
-    if(paramCont[0] == "Tube") cont[i].initTexture("maps/caramelo.jpg");
+    if(paramCont[0] == "Candy") cont[i].initTexture("maps/caramelo.jpg");
     mCont = mat4.create();
     mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
     mat4.rotateY(mCont, mCont, i * angle, vec3.fromValues(0, 0, 0));
@@ -381,7 +381,7 @@ function setupBuffers() {
 
   var offset = 20 + cantidadDecoradores + cantidadContorno;
 
-  hookTube = new Tube(0.3, 0.3, 0.3);
+  hookTube = new ArmTube(0.3, 0.3, 0.3);
   hookTube.setupWebGLBuffers();
   hookTube.initReflectMap();
   mhTube = mat4.create();
