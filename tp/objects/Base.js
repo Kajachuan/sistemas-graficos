@@ -20,15 +20,15 @@ function Base(r, g, b, rad, cycles, h, amp) {
   cp.push(rad - 0.5,ly + d,  0,ly + d,  0,ly + d);
 
   var nPoints = 0;
-  var max_uv = 2 * rad + 2;
+  var max_uv = 4 * rad + 2;
   var c_tex = max_uv / 2;
   var uv = c_tex;
 
   for(var i = 0; i < cp.length - 4; i += 2) {
     if((i - 6) % 8 == 0 && i != cp.length - 10) uv = max_uv;
-    else if(i == cp.length - 10) uv = c_tex + rad;
-    step = i < 6 ? rad / 32 : i > cp.length - 12 ? -rad / 32 : -1 / 43;
-    for(var u = 0; u < 1; u += 0.1) {
+    else if(i == cp.length - 10) uv = c_tex + 2 * rad;
+    step = i < 6 ? rad / 15 : i > cp.length - 12 ? -rad / 15 : -1 / 40;
+    for(var u = 0; u < 0.9; u += 0.1) {
       var b0 = 0.5 * Math.pow(1 - u, 2);
       var b1 = -Math.pow(u, 2) + u + 0.5;
       var b2 = 0.5 * Math.pow(u, 2);
@@ -48,6 +48,11 @@ function Base(r, g, b, rad, cycles, h, amp) {
       this.normal_buffer.push(ty, -tx, 0);
     }
   }
+
+  this.position_buffer.push(0,h,0);
+  this.normal_buffer.push(0,1,0);
+  this.texture_coord_buffer.push(c_tex, c_tex);
+  nPoints++;
 
   var levels = 50;
   var angle = 2 * Math.PI / levels;
