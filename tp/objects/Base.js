@@ -1,8 +1,5 @@
-function Base(r, g, b, rad, cycles, h, amp) {
-  this.ka = [0,0,0];
-  this.kd = [r,g,b];
-  this.ks = [0,0,0];
-  this.gloss = 1;
+function Base(rad, cycles, h, amp) {
+  this.kd = [0,0,0];
 
   this.position_buffer = [];
   this.normal_buffer = [];

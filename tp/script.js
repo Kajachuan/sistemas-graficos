@@ -289,9 +289,9 @@ function setupBuffers() {
   objects.push(ringCake);
   objects[18].updateWorldMatrix();
 
-  baseCake = new Base(0.82, 0.753, 0.306, 0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud);
+  type = tipoTorta == "Crema" ? "CreamBase" : "ChocolateBase";
+  baseCake = new window[type](0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud);
   baseCake.setupWebGLBuffers();
-  baseCake.initTexture("maps/chocolate.jpg");
   mBase = mat4.create();
   mat4.translate(mBase, mBase, vec3.fromValues(2, 2.15, 0));
   baseCake.localMatrix = mBase;

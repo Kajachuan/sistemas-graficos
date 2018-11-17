@@ -1,4 +1,4 @@
-tipoTorta = "Crema";
+tipoTorta = "Chocolate";
 radioTotal = 5;
 altura = 5;
 ciclos = 3;
