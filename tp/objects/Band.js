@@ -1,9 +1,8 @@
-function Band(r, g, b) {
+function Band() {
   this.ka = [0,0,0];
-  this.kd = [r,g,b];
+  this.kd = [0,0,0];
   this.ks = [0,0,0];
   this.gloss = 1;
-  this.texture = null;
 
   this.texture_coord_buffer = [0,1,       0.055,1,   0.055,0,   0,0,
                                0,0.012,       0,0,       2,0,   2,0.012,
@@ -12,7 +11,9 @@ function Band(r, g, b) {
                                0,1,           2,1,       2,0,   0,0,
                                0,1,       0.055,1,   0.055,0,   0,0];
 
-  AbstractBox.call(this, r, g, b);
+  this.initTexture("maps/cinta.jpg");
+  this.initReflectMap();
+  AbstractBox.call(this);
 }
 
 Band.prototype = Object.create(AbstractBox.prototype);

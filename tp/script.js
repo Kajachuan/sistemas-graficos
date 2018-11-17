@@ -199,11 +199,8 @@ function setupBuffers() {
     boxPadding += 2;
   }
 
-  bigBox = new Oven(0.282, 0.286, 0.749);
+  bigBox = new Oven();
   bigBox.setupWebGLBuffers();
-  bigBox.initTexture("maps/horno.jpg");
-  bigBox.initReflectMap();
-  bigBox.initSpecularMap("maps/horno-especular.jpg");
   mBb = mat4.create();
   mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
   mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
@@ -212,10 +209,8 @@ function setupBuffers() {
   objects.push(bigBox);
   objects[10].updateWorldMatrix();
 
-  line = new Band(0.463, 0.463, 0.463);
+  line = new Band();
   line.setupWebGLBuffers();
-  line.initTexture("maps/cinta.jpg");
-  line.initReflectMap();
   m3 = mat4.create();
   mat4.translate(m3, m3, vec3.fromValues(-2, 1.85, 0));
   mat4.rotate(m3, m3, Math.PI/2, [0, 1, 0]);
@@ -369,7 +364,6 @@ function setupBuffers() {
   for (i = 0; i < cantidadContorno; i++){
     cont[i] = new window[paramCont[0]](paramCont[1], paramCont[2], paramCont[3]);
     cont[i].setupWebGLBuffers();
-    if(paramCont[0] == "Candy") cont[i].initTexture("maps/caramelo.jpg");
     mCont = mat4.create();
     mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
     mat4.rotateY(mCont, mCont, i * angle, vec3.fromValues(0, 0, 0));
@@ -381,9 +375,8 @@ function setupBuffers() {
 
   var offset = 20 + cantidadDecoradores + cantidadContorno;
 
-  hookTube = new ArmTube(0.3, 0.3, 0.3);
+  hookTube = new ArmTube();
   hookTube.setupWebGLBuffers();
-  hookTube.initReflectMap();
   mhTube = mat4.create();
   mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.475, 0));
   mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.45, 0.6));
