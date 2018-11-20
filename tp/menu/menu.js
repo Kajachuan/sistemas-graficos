@@ -9,10 +9,18 @@ cantidadDecoradores = 9;
 contorno = "Tubo";
 cantidadContorno = 30;
 var starttime;
+var distanceBetweenStations = 128.3;
+var horizontalVelocity = 0.025;
+var ringSpeedFactor = 3.175;
+var plateSpeedFactor = 0.91;
+var bandSpeedFactor = 0.1;
 
-function beginAnimation(){
+function startAnimation(){
 		starttime = new Date().getTime();
-    animate(starttime,5000);
+		var timeBetweenStations = (distanceBetweenStations / horizontalVelocity);
+		objects = [];
+		setupBuffers();
+    animate(starttime,timeBetweenStations);
 }
 
 function GUI (){
@@ -41,7 +49,7 @@ function GUI (){
 		f4.add(window, 'contorno', ["Tubo", "Barra"]).name("Tipo");
 		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
 
-		gui.add(window, "beginAnimation").name("Comenzar");
+		gui.add(window, "startAnimation").name("Comenzar");
 		gui.add(window, "reset").name("Reiniciar");
 
 		f0.open();

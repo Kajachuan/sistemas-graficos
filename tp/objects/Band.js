@@ -19,14 +19,14 @@ function Band() {
 Band.prototype = Object.create(AbstractBox.prototype);
 
 Band.prototype.move = function() {
-  this.texture_coord_buffer[16] -= 0.001;
-  this.texture_coord_buffer[18] -= 0.001;
-  this.texture_coord_buffer[20] -= 0.001;
-  this.texture_coord_buffer[22] -= 0.001;
+  this.texture_coord_buffer[16] -= horizontalVelocity * bandSpeedFactor;
+  this.texture_coord_buffer[18] -= horizontalVelocity * bandSpeedFactor;
+  this.texture_coord_buffer[20] -= horizontalVelocity * bandSpeedFactor;
+  this.texture_coord_buffer[22] -= horizontalVelocity * bandSpeedFactor;
 
-  this.texture_coord_buffer[40] += 0.001;
-  this.texture_coord_buffer[42] += 0.001;
-  this.texture_coord_buffer[44] += 0.001;
-  this.texture_coord_buffer[46] += 0.001;
+  this.texture_coord_buffer[40] += horizontalVelocity * bandSpeedFactor;
+  this.texture_coord_buffer[42] += horizontalVelocity * bandSpeedFactor;
+  this.texture_coord_buffer[44] += horizontalVelocity * bandSpeedFactor;
+  this.texture_coord_buffer[46] += horizontalVelocity * bandSpeedFactor;
   this.setupWebGLBuffers();
 }

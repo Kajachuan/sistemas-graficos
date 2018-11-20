@@ -4,6 +4,7 @@ glProgram = null,
 fragmentShader = null,
 vertexShader = null,
 objects = [],
+animationObjects = [];
 cameraHandler = null,
 refMapPath = "maps/refmapGreyRoom1.jpg",
 viewMatrix = mat4.create(),
@@ -283,7 +284,7 @@ function setupBuffers() {
   ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
   ringCake.setupWebGLBuffers();
   mRing = mat4.create();
-  mat4.translate(mRing, mRing, vec3.fromValues(2, 2.21 + altura * (0.1 - 0.03 / ciclos), 0));
+  mat4.translate(mRing, mRing, vec3.fromValues(9.5, 2.21 + altura * (0.1 - 0.03 / ciclos), 0));
   mat4.scale(mRing, mRing, vec3.fromValues(0.063 * radioTotal, 0.063 * radioTotal, 0.063 * radioTotal));
   ringCake.localMatrix = mRing;
   objects.push(ringCake);
@@ -293,7 +294,7 @@ function setupBuffers() {
   baseCake = new window[type](0.2 * radioTotal, ciclos, 0.1 * altura, 0.1 * amplitud);
   baseCake.setupWebGLBuffers();
   mBase = mat4.create();
-  mat4.translate(mBase, mBase, vec3.fromValues(2, 2.15, 0));
+  mat4.translate(mBase, mBase, vec3.fromValues(9.5, 2.15, 0));
   baseCake.localMatrix = mBase;
   objects.push(baseCake);
   objects[19].updateWorldMatrix();
@@ -301,7 +302,7 @@ function setupBuffers() {
   plateCake = new Disk(0.851, 0.941, 0.776)
   plateCake.setupWebGLBuffers();
   mPlate = mat4.create();
-  mat4.translate(mPlate, mPlate, vec3.fromValues(2, 2.15, 0));
+  mat4.translate(mPlate, mPlate, vec3.fromValues(9.5, 2.15, 0));
   mat4.scale(mPlate, mPlate, vec3.fromValues(0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1, 0.2 * radioTotal + 0.1));
   plateCake.localMatrix = mPlate;
   objects.push(plateCake);
@@ -317,7 +318,7 @@ function setupBuffers() {
 
   if (cantidadDecoradores > 1) {
     mDecorators = mat4.create();
-    mat4.translate(mDecorators, mDecorators, vec3.fromValues(radioTotal / 8, 2.15 + altura * (0.1 - 0.008 / ciclos), 0));
+    mat4.translate(mDecorators, mDecorators, vec3.fromValues(radioTotal / 8, 5 + 2.15 + altura * (0.1 - 0.008 / ciclos), 0));
     mat4.scale(mDecorators, mDecorators, vec3.fromValues(0.1, 0.1, 0.1));
 
     var dec = [];
@@ -355,7 +356,7 @@ function setupBuffers() {
     paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
 
   mContours = mat4.create();
-  mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 2.38, 0));
+  mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 5 + 2.38, 0));
   mat4.scale(mContours, mContours, vec3.fromValues(paramCont[4], paramCont[5], paramCont[6]));
 
   var cont = [];
@@ -434,21 +435,38 @@ lo que uno quiere hacer.
 
 La idea sería cada tanto segundos hacer una cosa, cada tantos segundos hacer otra y asi hasta que se terminé la animación.
 */
+function moveToStation1(){
+  mat4.translate(objects[18].localMatrix,objects[18].localMatrix,vec3.fromValues(-horizontalVelocity*ringSpeedFactor,0,0));
+  mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-horizontalVelocity,0,0));
+  mat4.translate(objects[20].localMatrix,objects[20].localMatrix,vec3.fromValues(-horizontalVelocity*plateSpeedFactor,0,0));
+  objects[18].updateWorldMatrix();
+  objects[19].updateWorldMatrix();
+  objects[20].updateWorldMatrix();
+  objects[11].move();
+}
+
 function animate(timestamp, duration){
    //if browser doesn't support requestAnimationFrame, generate our own timestamp using Date:
    var timestamp = new Date().getTime();
    var runtime = timestamp - starttime;
    var progress = runtime / duration;
    progress = Math.min(progress, 1);
-   mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-0.01,0,0));
-   objects[19].updateWorldMatrix();
-   objects[11].move();
    if (runtime < duration){ // if duration not met yet
         requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
+            moveToStation1();
             drawScene();
             animate(timestamp, duration);
         })
-    }
+    } /*else
+    if (runtime < (duration+duration)){
+      mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-horizontalVelocity,0,0));
+      objects[19].updateWorldMatrix();
+      objects[11].move();
+      requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
+          drawScene();
+          animate(timestamp, duration);
+      })
+    }*/
 }
 
 function drawSceneStatic() {
