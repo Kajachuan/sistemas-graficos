@@ -312,7 +312,7 @@ function setupBuffers() {
   if (decorador == "Bola")
     paramDec.push("Ball", 0.757, 0.227, 0.251);
   else if (decorador == "Campana")
-    paramDec.push("Bell", 0.322, 0.322, 0.706);
+    paramDec.push("ChocolateBell", 0.322, 0.322, 0.706);
   else
     paramDec.push("Pallet", 0.659, 0.816, 0.541);
 
@@ -509,7 +509,7 @@ function drawScene() {
   var light7_position = [0, 20, -20, 0];
   var light8_position = [50, 20, -20, 0];
   var light9_position = [-50, 20, -20, 0];
-  var light = [0.3, 0.3, 0.3];
+  var light = [0.25, 0.25, 0.25];
 
   gl.uniform4fv(glProgram.light1Position, light1_position);
   gl.uniform4fv(glProgram.light2Position, light2_position);
