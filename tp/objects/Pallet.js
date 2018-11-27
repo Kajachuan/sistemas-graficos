@@ -1,9 +1,4 @@
 function Pallet(r, g, b) {
-  this.ka = [0,0,0];
-  this.kd = [r,g,b];
-  this.ks = [0,0,0];
-  this.gloss = 1;
-
   this.position_buffer = [];
   this.normal_buffer = [];
   this.texture_coord_buffer = [];

@@ -323,8 +323,13 @@ function setupBuffers() {
       paramDec.push("WhiteChocolateBell");
     paramDec.push(0.322, 0.322, 0.706);
   }
-  else
-    paramDec.push("Pallet", 0.659, 0.816, 0.541);
+  else {
+    if(tipoTorta == "Crema")
+      paramDec.push("DarkChocolatePallet");
+    else
+      paramDec.push("WhiteChocolatePallet");
+    paramDec.push(0.659, 0.816, 0.541);
+  }
 
   if (cantidadDecoradores > 1) {
     mDecorators = mat4.create();
