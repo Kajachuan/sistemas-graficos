@@ -192,7 +192,7 @@ function setupBuffers() {
   var boxPadding = 2;
   var suppBoxesQuant = 10;
   for (i = 1; i < suppBoxesQuant; i++){
-    box[i] = new Box(0.3, 0.3, 0.3);
+    box[i] = new MetallicBox();
     box[i].setupWebGLBuffers();
     box[i].initReflectMap();
     mBox = mat4.create();
@@ -398,7 +398,7 @@ function setupBuffers() {
   objects.push(hookTube);
   objects[offset + 1].updateWorldMatrix();
 
-  box1Tube = new Box(0.325, 0.564, 0.976);
+  box1Tube = new MetallicBox();
   box1Tube.setupWebGLBuffers();
   mb1Tube = mat4.create();
   mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.55, 0));
@@ -407,7 +407,7 @@ function setupBuffers() {
   objects.push(box1Tube);
   objects[offset + 2].updateWorldMatrix();
 
-  box2Tube = new Box(0.635, 0.976, 0.905);
+  box2Tube = new MetallicBox();
   box2Tube.setupWebGLBuffers();
   mb2Tube = mat4.create();
   mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.425, 0));
@@ -416,7 +416,7 @@ function setupBuffers() {
   objects.push(box2Tube);
   objects[offset + 3].updateWorldMatrix();
 
-  box3Tube = new Box(0.635, 0.976, 0.905);
+  box3Tube = new MetallicBox();
   box3Tube.setupWebGLBuffers();
   mb3Tube = mat4.create();
   mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.425, 0));
