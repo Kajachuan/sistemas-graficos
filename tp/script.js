@@ -177,7 +177,7 @@ function setupBuffers() {
   // Paleta = 0.659, 0.816, 0.541
   // Campana = 0.322, 0.322, 0.706
 
-  floor = new Box(0.686, 0.686, 0.686);
+  floor = new Floor();
   floor.setupWebGLBuffers();
   m1 = mat4.create();
   mat4.scale(m1, m1, vec3.fromValues(25, 0.1, 25));
