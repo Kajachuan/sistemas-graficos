@@ -9,23 +9,35 @@ cantidadDecoradores = 9;
 contorno = "Tubo";
 cantidadContorno = 30;
 var starttime;
-var distanceBetweenStations = 128.3;
 var horizontalVelocity = 0.025;
 var ringSpeedFactor = 3.175;
 var plateSpeedFactor = 0.91;
 var bandSpeedFactor = 0.1;
+var timeToStation1 = 5075;
 
 function startAnimation(){
+		dat.GUI.toggleHide();
+		gui.removeFolder("Iniciar animación");
 		starttime = new Date().getTime();
-		var timeBetweenStations = (distanceBetweenStations / horizontalVelocity);
 		objects = [];
 		setupBuffers();
-    animate(starttime,timeBetweenStations);
+    animate(starttime,timeToStation1);
+}
+
+dat.GUI.prototype.removeFolder = function(name) {
+  var folder = this.__folders[name];
+  if (!folder) {
+    return;
+  }
+  folder.close();
+  this.__ul.removeChild(folder.domElement.parentNode);
+  delete this.__folders[name];
+  this.onResize();
 }
 
 function GUI (){
 
-		var gui = new dat.GUI();
+		gui = new dat.GUI();
 
 		var f0 = gui.addFolder('Torta');
 		f0.add(window, 'tipoTorta', ["Crema", "Chocolate"]).name("Sabor") // ??????
@@ -49,12 +61,13 @@ function GUI (){
 		f4.add(window, 'contorno', ["Tubo", "Barra"]).name("Tipo");
 		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
 
-		gui.add(window, "startAnimation").name("Comenzar");
-		gui.add(window, "reset").name("Reiniciar");
+		var f5 = gui.addFolder('Iniciar animación');
+		f5.add(window, "startAnimation").name("Comenzar");
 
 		f0.open();
 		f1.open();
 		f2.open();
 		f3.open();
 		f4.open();
+		f5.open();
   };

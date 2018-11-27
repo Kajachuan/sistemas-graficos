@@ -41,6 +41,11 @@ function reset() {
   objects = [];
   setupBuffers();
   requestAnimationFrame(drawSceneStatic);
+
+  gui.removeFolder("Resetear escena");
+  var f7 = gui.addFolder('Iniciar animación');
+  f7.add(window, "startAnimation").name("Comenzar");
+  f7.open();
 }
 
 function setupWebGL() {
@@ -457,6 +462,11 @@ function animate(timestamp, duration){
             drawScene();
             animate(timestamp, duration);
         })
+    } else{
+      var f6 = gui.addFolder('Resetear escena');
+      f6.add(window, "reset").name("Resetear");
+      f6.open();
+      dat.GUI.toggleHide();
     } /*else
     if (runtime < (duration+duration)){
       mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-horizontalVelocity,0,0));
