@@ -4,7 +4,7 @@ altura = 5;
 ciclos = 3;
 amplitud = 2;
 vueltas = 4;
-decorador = "Bola";
+decorador = "Ciruelas";
 cantidadDecoradores = 9;
 contorno = "Caramelos";
 cantidadContorno = 30;
@@ -54,7 +54,7 @@ function GUI (){
 		f2.add(window, 'vueltas', 1, 10, 1).name("Torsión");
 
 		var f3 = gui.addFolder('Decoradores');
-		f3.add(window, 'decorador', ["Bola", "Campana", "Paleta"]).name("Tipo");
+		f3.add(window, 'decorador', ["Ciruelas", "Campanas", "Paletas"]).name("Tipo");
 		f3.add(window, 'cantidadDecoradores', 1, 10, 1).name("Cantidad");
 
 		var f4 = gui.addFolder('Contorno');

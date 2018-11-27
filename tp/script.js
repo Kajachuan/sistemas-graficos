@@ -314,21 +314,19 @@ function setupBuffers() {
   objects[20].updateWorldMatrix();
 
   paramDec = [];
-  if (decorador == "Bola")
-    paramDec.push("Ball", 0.757, 0.227, 0.251);
-  else if (decorador == "Campana") {
+  if (decorador == "Ciruelas")
+    paramDec.push("Plum");
+  else if (decorador == "Campanas") {
     if(tipoTorta == "Crema")
       paramDec.push("DarkChocolateBell");
     else
       paramDec.push("WhiteChocolateBell");
-    paramDec.push(0.322, 0.322, 0.706);
   }
   else {
     if(tipoTorta == "Crema")
       paramDec.push("DarkChocolatePallet");
     else
       paramDec.push("WhiteChocolatePallet");
-    paramDec.push(0.659, 0.816, 0.541);
   }
 
   if (cantidadDecoradores > 1) {
@@ -340,7 +338,7 @@ function setupBuffers() {
     var angle = 2 * Math.PI / cantidadDecoradores;
 
     for (i = 0; i < cantidadDecoradores; i++){
-      dec[i] = new window[paramDec[0]](paramDec[1], paramDec[2], paramDec[3]);
+      dec[i] = new window[paramDec[0]]();
       dec[i].setupWebGLBuffers();
       mDec = mat4.create();
       mat4.translate(mDec, mDec, vec3.fromValues(2,0,0));
@@ -353,7 +351,7 @@ function setupBuffers() {
   }
 
   else {
-    dec = new window[paramDec[0]](paramDec[1], paramDec[2], paramDec[3]);
+    dec = new window[paramDec[0]]();
     dec.setupWebGLBuffers();
     mDec = mat4.create();
     mat4.translate(mDec, mDec, vec3.fromValues(2, 2.15 + altura * (0.1 - 0.008 / ciclos), 0));

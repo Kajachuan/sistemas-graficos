@@ -1,9 +1,4 @@
 function Ball(r, g, b) {
-  this.ka = [0,0,0];
-  this.kd = [r,g,b];
-  this.ks = [0,0,0];
-  this.gloss = 1;
-
   var nPoints = 20;
   var angle = Math.PI / (nPoints - 1);
   this.position_buffer = [];
