@@ -316,8 +316,13 @@ function setupBuffers() {
   paramDec = [];
   if (decorador == "Bola")
     paramDec.push("Ball", 0.757, 0.227, 0.251);
-  else if (decorador == "Campana")
-    paramDec.push("ChocolateBell", 0.322, 0.322, 0.706);
+  else if (decorador == "Campana") {
+    if(tipoTorta == "Crema")
+      paramDec.push("DarkChocolateBell");
+    else
+      paramDec.push("WhiteChocolateBell");
+    paramDec.push(0.322, 0.322, 0.706);
+  }
   else
     paramDec.push("Pallet", 0.659, 0.816, 0.541);
 
