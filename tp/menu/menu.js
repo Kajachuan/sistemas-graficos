@@ -1,4 +1,4 @@
-tipoTorta = "Chocolate";
+tipoTorta = "Crema";
 radioTotal = 5;
 altura = 5;
 ciclos = 3;
@@ -6,7 +6,7 @@ amplitud = 2;
 vueltas = 4;
 decorador = "Bola";
 cantidadDecoradores = 9;
-contorno = "Tubo";
+contorno = "Caramelos";
 cantidadContorno = 30;
 var starttime;
 var horizontalVelocity = 0.025;
@@ -58,7 +58,7 @@ function GUI (){
 		f3.add(window, 'cantidadDecoradores', 1, 10, 1).name("Cantidad");
 
 		var f4 = gui.addFolder('Contorno');
-		f4.add(window, 'contorno', ["Tubo", "Barra"]).name("Tipo");
+		f4.add(window, 'contorno', ["Caramelos", "Oblea"]).name("Tipo");
 		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
 
 		var f5 = gui.addFolder('Iniciar animación');
