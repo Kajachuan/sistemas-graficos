@@ -351,19 +351,19 @@ function setupBuffers() {
 
   paramCont = [];
   if (contorno == "Tubo")
-    paramCont.push("Candy", 0.996, 0.502, 0.996, 0.1, 0.1, 0.1);
+    paramCont.push("Candy", 0.1, 0.1, 0.1);
   else
-    paramCont.push("Box", 0.996, 0.502, 0.996, 0.02, 0.2, 0.05);
+    paramCont.push("Wafer", 0.02, 0.2, 0.05);
 
   mContours = mat4.create();
   mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 5 + 2.38, 0));
-  mat4.scale(mContours, mContours, vec3.fromValues(paramCont[4], paramCont[5], paramCont[6]));
+  mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2], paramCont[3]));
 
   var cont = [];
   var angle = 2 * Math.PI / cantidadContorno;
 
   for (i = 0; i < cantidadContorno; i++){
-    cont[i] = new window[paramCont[0]](paramCont[1], paramCont[2], paramCont[3]);
+    cont[i] = new window[paramCont[0]]();
     cont[i].setupWebGLBuffers();
     mCont = mat4.create();
     mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
