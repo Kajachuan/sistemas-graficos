@@ -39,7 +39,7 @@ function initWebGL() {
 
 function reset() {
   objects = [];
-  setupBuffers();
+  setupBuffersStatic();
   requestAnimationFrame(drawSceneStatic);
 
   gui.removeFolder("Resetear escena");
@@ -331,18 +331,15 @@ function setupBuffers() {
 
   if (cantidadDecoradores > 1) {
     mDecorators = mat4.create();
-    mat4.translate(mDecorators, mDecorators, vec3.fromValues(radioTotal / 8, 5 + 2.15 + altura * (0.1 - 0.008 / ciclos), 0));
+    mat4.translate(mDecorators, mDecorators, vec3.fromValues(2, 2.15 + altura * (0.1 - 0.008 / ciclos), -3));
     mat4.scale(mDecorators, mDecorators, vec3.fromValues(0.1, 0.1, 0.1));
 
     var dec = [];
-    var angle = 2 * Math.PI / cantidadDecoradores;
 
     for (i = 0; i < cantidadDecoradores; i++){
       dec[i] = new window[paramDec[0]]();
       dec[i].setupWebGLBuffers();
       mDec = mat4.create();
-      mat4.translate(mDec, mDec, vec3.fromValues(2,0,0));
-      mat4.rotateY(mDec, mDec, i * angle, vec3.fromValues(0, 0, 0));
       mat4.multiply(mDec, mDec, mDecorators);
       dec[i].localMatrix = mDec;
       objects.push(dec[i]);
@@ -369,25 +366,22 @@ function setupBuffers() {
     paramCont.push("Wafer", 0.02, 0.2, 0.05);
 
   mContours = mat4.create();
-  mat4.translate(mContours, mContours, vec3.fromValues(0.204 * radioTotal, 5 + 2.38, 0));
+  mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.9, -1.96));
   mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2], paramCont[3]));
 
   var cont = [];
-  var angle = 2 * Math.PI / cantidadContorno;
 
   for (i = 0; i < cantidadContorno; i++){
     cont[i] = new window[paramCont[0]]();
     cont[i].setupWebGLBuffers();
     mCont = mat4.create();
-    mat4.translate(mCont, mCont, vec3.fromValues(2,0,0));
-    mat4.rotateY(mCont, mCont, i * angle, vec3.fromValues(0, 0, 0));
     mat4.multiply(mCont, mCont, mContours);
     cont[i].localMatrix = mCont;
     objects.push(cont[i]);
     objects[21 + cantidadDecoradores + i].updateWorldMatrix();
   }
 
-  var offset = 20 + cantidadDecoradores + cantidadContorno;
+  offset = 20 + cantidadDecoradores + cantidadContorno;
 
   hookTube = new ArmTube();
   hookTube.setupWebGLBuffers();
@@ -437,18 +431,24 @@ function handleLoadedTexture(texture, image) {
   gl.bindTexture(gl.TEXTURE_2D, null);
 }
 
-/*
-Logica de animación:
-Desde menú se invoca esta función cuando se da comenzar, antes de eso la escena se puede mover con un "drawSceneStatic"
-que en teoria solo dibuja la escena "predeterminada" sin la torta.
+function animationLoop(render) {
+    var running, lastFrame = +new Date;
+    function loop(now) {
+        // stop the loop if render returned false
+        if (running !== false) {
+            requestAnimationFrame(loop);
+            var deltaT = now - lastFrame;
+            // do not render frame when deltaT is too high
+            if (deltaT < 160) {
+                running = render( deltaT );
+            }
+            lastFrame = now;
+        }
+    }
+    loop(lastFrame);
+}
 
-Cuando se clickea comenzar empieza un lapso que se lo ponemos nosotros y un desplazamiento que también se lo ponemos nosotros.
-Esta función verifica que desde el tiempo de comienzo y el tiempo que se quiere hacer el desplazamiento corra tanto segundos
-lo que uno quiere hacer.
-
-La idea sería cada tanto segundos hacer una cosa, cada tantos segundos hacer otra y asi hasta que se terminé la animación.
-*/
-function moveToStation1(){
+function station1(){
   mat4.translate(objects[18].localMatrix,objects[18].localMatrix,vec3.fromValues(-horizontalVelocity*ringSpeedFactor,0,0));
   mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-horizontalVelocity,0,0));
   mat4.translate(objects[20].localMatrix,objects[20].localMatrix,vec3.fromValues(-horizontalVelocity*plateSpeedFactor,0,0));
@@ -456,35 +456,174 @@ function moveToStation1(){
   objects[19].updateWorldMatrix();
   objects[20].updateWorldMatrix();
   objects[11].move();
+  distance += 1;
+  if (distance > 299) {
+    distance = 0;
+    //for(contador  = 0; contador < cantidadDecoradores; contador++){
+    //contador = 0;
+    //while(contador < cantidadDecoradores){
+    animationLoop(station1HookMoveToDecorator);
+      //contador++;
+    //}
+
+    //}
+    return false;
+  }
 }
 
-function animate(timestamp, duration){
-   //if browser doesn't support requestAnimationFrame, generate our own timestamp using Date:
-   var timestamp = new Date().getTime();
-   var runtime = timestamp - starttime;
-   var progress = runtime / duration;
-   progress = Math.min(progress, 1);
-   if (runtime < duration){ // if duration not met yet
-        requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
-            moveToStation1();
-            drawScene();
-            animate(timestamp, duration);
-        })
-    } else{
-      var f6 = gui.addFolder('Resetear escena');
-      f6.add(window, "reset").name("Resetear");
-      f6.open();
-      dat.GUI.toggleHide();
-    } /*else
-    if (runtime < (duration+duration)){
-      mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-horizontalVelocity,0,0));
-      objects[19].updateWorldMatrix();
-      objects[11].move();
-      requestAnimationFrame(function(timestamp){ // call requestAnimationFrame again with parameters
-          drawScene();
-          animate(timestamp, duration);
-      })
-    }*/
+function station1HookMoveToDecorator(){
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(0,0,-verticalVelocity));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(0,0,-verticalVelocity*armTubeBoxesSpeedFactor));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(0,0,-verticalVelocity*armTubeBoxesSpeedFactor));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(0,0,-verticalVelocity*armTubeBoxesSpeedFactor));
+  objects[offset + 1].updateWorldMatrix();
+  objects[offset + 2].updateWorldMatrix();
+  objects[offset + 3].updateWorldMatrix();
+  objects[offset + 4].updateWorldMatrix();
+  distance += 1;
+  if (distance > 99) {
+    distance = 0;
+    animationLoop(station1HookGrabDecorator);
+    return false;
+  }
+}
+
+function station1HookGrabDecorator(){
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(0,-verticalVelocity / 2.65,0));
+  mat4.scale(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix, vec3.fromValues(1, 1.01, 1));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(0,-verticalVelocity*4*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(0,-verticalVelocity*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(0,-verticalVelocity*armTubeBoxesSpeedFactor,0));
+  objects[offset + 1].updateWorldMatrix();
+  objects[offset + 2].updateWorldMatrix();
+  objects[offset + 3].updateWorldMatrix();
+  objects[offset + 4].updateWorldMatrix();
+  distance += 1;
+  if (distance > 38) {
+    distance = 0;
+    animationLoop(station1HookGrabDecorator2);
+    return false;
+  }
+}
+
+function station1HookGrabDecorator2(){
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(0,verticalVelocity / 2.8,0));
+  mat4.scale(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix, vec3.fromValues(1, 0.991, 1));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(0,verticalVelocity*4*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(0,verticalVelocity*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(0,verticalVelocity*armTubeBoxesSpeedFactor,0));
+  objects[offset + 1].updateWorldMatrix();
+  objects[offset + 2].updateWorldMatrix();
+  objects[offset + 3].updateWorldMatrix();
+  objects[offset + 4].updateWorldMatrix();
+  distance += 1;
+  if (distance > 38) {
+    distance = 0;
+    animationLoop(station1HookMoveFromDecorator);
+    return false;
+  }
+}
+
+function station1HookMoveFromDecorator(){
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(0,0,verticalVelocity));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(0,0,verticalVelocity*armTubeBoxesSpeedFactor));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(0,0,verticalVelocity*armTubeBoxesSpeedFactor));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(0,0,verticalVelocity*armTubeBoxesSpeedFactor));
+  objects[offset + 1].updateWorldMatrix();
+  objects[offset + 2].updateWorldMatrix();
+  objects[offset + 3].updateWorldMatrix();
+  objects[offset + 4].updateWorldMatrix();
+  distance += 1;
+  if (distance > 99) {
+    distance = 0;
+    animationLoop(station1HookDeployDecorator);
+    return false;
+  }
+}
+
+
+function station1HookDeployDecorator(){
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(0,-verticalVelocity / 3.2,0));
+  mat4.scale(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix, vec3.fromValues(1, 1.01, 1));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(0,-verticalVelocity*4*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(0,-verticalVelocity*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(0,-verticalVelocity*armTubeBoxesSpeedFactor,0));
+  objects[offset + 1].updateWorldMatrix();
+  objects[offset + 2].updateWorldMatrix();
+  objects[offset + 3].updateWorldMatrix();
+  objects[offset + 4].updateWorldMatrix();
+  distance += 1;
+  if (distance > 38) {
+    distance = 0;
+    animationLoop(station1HookDeployDecorator2);
+    return false;
+  }
+}
+
+function station1HookDeployDecorator2(){
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(0,verticalVelocity / 2.8,0));
+  mat4.scale(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix, vec3.fromValues(1, 0.991, 1));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(0,verticalVelocity*4*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(0,verticalVelocity*armTubeBoxesSpeedFactor,0));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(0,verticalVelocity*armTubeBoxesSpeedFactor,0));
+  objects[offset + 1].updateWorldMatrix();
+  objects[offset + 2].updateWorldMatrix();
+  objects[offset + 3].updateWorldMatrix();
+  objects[offset + 4].updateWorldMatrix();
+  distance += 1;
+  if (distance > 38) {
+    distance = 0;
+    animationLoop(station2);
+    return false;
+  }
+}
+
+function station1Decorators(){
+  var angle = 2 * Math.PI / cantidadContorno;
+  mat4.translate(objects[21 + cantidadDecoradores].localMatrix, objects[21 + cantidadDecoradores].localMatrix, vec3.fromValues(2,0,0));
+  mat4.rotateY(objects[21 + cantidadDecoradores].localMatrix, objects[21 + cantidadDecoradores].localMatrix, 1 * angle, vec3.fromValues(0, 0, 0));
+  objects[21].updateWorldMatrix();
+  distance += 1;
+  if (distance > 299) {
+    distance = 0;
+    animationLoop(station2);
+    return false;
+  }
+}
+
+function station2(){
+  mat4.translate(objects[18].localMatrix,objects[18].localMatrix,vec3.fromValues(-horizontalVelocity*ringSpeedFactor,0,0));
+  mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-horizontalVelocity,0,0));
+  mat4.translate(objects[20].localMatrix,objects[20].localMatrix,vec3.fromValues(-horizontalVelocity*plateSpeedFactor,0,0));
+  objects[18].updateWorldMatrix();
+  objects[19].updateWorldMatrix();
+  objects[20].updateWorldMatrix();
+  objects[11].move();
+  distance += 1;
+  if (distance > 277) {
+    distance = 0;
+    animationLoop(bandFinal);
+    return false;
+  }
+}
+
+function bandFinal(){
+  mat4.translate(objects[18].localMatrix,objects[18].localMatrix,vec3.fromValues(-horizontalVelocity*ringSpeedFactor,0,0));
+  mat4.translate(objects[19].localMatrix,objects[19].localMatrix,vec3.fromValues(-horizontalVelocity,0,0));
+  mat4.translate(objects[20].localMatrix,objects[20].localMatrix,vec3.fromValues(-horizontalVelocity*plateSpeedFactor,0,0));
+  objects[18].updateWorldMatrix();
+  objects[19].updateWorldMatrix();
+  objects[20].updateWorldMatrix();
+  objects[11].move();
+  distance += 1;
+  if (distance > 220) {
+    var f6 = gui.addFolder('Resetear escena');
+    f6.add(window, "reset").name("Resetear");
+    f6.open();
+    dat.GUI.toggleHide();
+    distance = 0;
+    return false;
+  }
 }
 
 function drawSceneStatic() {
@@ -571,4 +710,166 @@ function drawScene() {
     gl.uniformMatrix4fv(glProgram.modelMatrix, false, object.worldMatrix);
     object.draw();
   });
+}
+
+function setupBuffersStatic() {
+
+  // Amarillo = 0.82, 0.753, 0.306
+  // Rojo = 0.757, 0.227, 0.251
+  // Gris del piso = 0.686, 0.686, 0.686
+  // Azul = 0.282, 0.286, 0.749
+  // Gris de la cinta = 0.463, 0.463, 0.463
+  // Rosa = 0.6196, 0.235, 0.663
+  // Violeta = 0.5804, 0.325, 0.8196
+  // Verde = 0.176, 0.627, 0.169
+  // Marron = 0.882, 0.667, 0.416
+  // Plato = 0.851, 0.941, 0.776
+  // Celeste anillo = 0.871, 1.0, 0.984
+  // Paleta = 0.659, 0.816, 0.541
+  // Campana = 0.322, 0.322, 0.706
+
+  floor = new Floor();
+  floor.setupWebGLBuffers();
+  m1 = mat4.create();
+  mat4.scale(m1, m1, vec3.fromValues(25, 0.1, 25));
+  floor.localMatrix = m1;
+  objects.push(floor);
+  objects[0].updateWorldMatrix();
+
+  mSupportBoxes = mat4.create();
+  mat4.translate(mSupportBoxes, mSupportBoxes, vec3.fromValues(-12, 0.85, 0));
+  mat4.scale(mSupportBoxes, mSupportBoxes, vec3.fromValues(0.1, 0.75, 0.1));
+  var box = [];
+  var boxPadding = 2;
+  var suppBoxesQuant = 10;
+  for (i = 1; i < suppBoxesQuant; i++){
+    box[i] = new MetallicBox();
+    box[i].setupWebGLBuffers();
+    box[i].initReflectMap();
+    mBox = mat4.create();
+    mat4.translate(mBox, mBox, vec3.fromValues(boxPadding, 0, 0));
+    mat4.multiply(mBox,mBox,mSupportBoxes);
+    box[i].localMatrix = mBox;
+    box[i].setParent(floor);
+    objects.push(box[i]);
+    objects[i].updateWorldMatrix();
+    boxPadding += 2;
+  }
+
+  bigBox = new Oven();
+  bigBox.setupWebGLBuffers();
+  mBb = mat4.create();
+  mat4.translate(mBb, mBb, vec3.fromValues(10, 3.1, 0));
+  mat4.scale(mBb, mBb, vec3.fromValues(2, 3, 2));
+  bigBox.localMatrix = mBb;
+  bigBox.setParent(floor);
+  objects.push(bigBox);
+  objects[10].updateWorldMatrix();
+
+  line = new Band();
+  line.setupWebGLBuffers();
+  m3 = mat4.create();
+  mat4.translate(m3, m3, vec3.fromValues(-2, 1.85, 0));
+  mat4.rotate(m3, m3, Math.PI/2, [0, 1, 0]);
+  mat4.scale(m3, m3, vec3.fromValues(1.5, 0.25, 10));
+  line.localMatrix = m3;
+  line.setParent(bigBox);
+  objects.push(line);
+  objects[11].updateWorldMatrix();
+
+  box1Station1 = new Box(0.6196, 0.235, 0.663);
+  box1Station1.setupWebGLBuffers();
+  mB1s1 = mat4.create();
+  mat4.translate(mB1s1, mB1s1, vec3.fromValues(2, 3.1, -3.7));
+  mat4.scale(mB1s1, mB1s1, vec3.fromValues(0.75, 3, 0.25));
+  box1Station1.localMatrix = mB1s1;
+  box1Station1.setParent(floor);
+  objects.push(box1Station1);
+  objects[12].updateWorldMatrix();
+
+  box2Station1 = new Box(0.5804, 0.325, 0.8196);
+  box2Station1.setupWebGLBuffers();
+  mB2s1 = mat4.create();
+  mat4.translate(mB2s1, mB2s1, vec3.fromValues(2, 1.3, -3));
+  mat4.scale(mB2s1, mB2s1, vec3.fromValues(0.5, 1.2, 0.5));
+  box2Station1.localMatrix = mB2s1;
+  box2Station1.setParent(box1Station1);
+  objects.push(box2Station1);
+  objects[13].updateWorldMatrix();
+
+  box3Station1 = new Box(0.882, 0.667, 0.416);
+  box3Station1.setupWebGLBuffers();
+  mB3s1 = mat4.create();
+  mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.1));
+  mat4.scale(mB3s1, mB3s1, vec3.fromValues(0.3, 0.125, 2.4));
+  box3Station1.localMatrix = mB3s1;
+  box3Station1.setParent(box1Station1);
+  objects.push(box3Station1);
+  objects[14].updateWorldMatrix();
+
+  box1Station2 = new Box(0.6196, 0.235, 0.663);
+  box1Station2.setupWebGLBuffers();
+  mB1s2 = mat4.create();
+  mat4.translate(mB1s2, mB1s2, vec3.fromValues(-5, 1.85, -3.7));
+  mat4.scale(mB1s2, mB1s2, vec3.fromValues(0.6, 1.75, 0.75));
+  box1Station2.localMatrix = mB1s2;
+  box1Station2.setParent(floor);
+  objects.push(box1Station2);
+  objects[15].updateWorldMatrix();
+
+  box2Station2 = new Box(0.882, 0.667, 0.416);
+  box2Station2.setupWebGLBuffers();
+  mB2s2 = mat4.create();
+  mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.5));
+  mat4.scale(mB2s2, mB2s2, vec3.fromValues(0.05, 0.25, 0.5));
+  box2Station2.localMatrix = mB2s2;
+  box2Station2.setParent(box1Station2);
+  objects.push(box2Station2);
+  objects[16].updateWorldMatrix();
+
+  box3Station2 = new Box(0.882, 0.667, 0.416);
+  box3Station2.setupWebGLBuffers();
+  mB2s2 = mat4.create();
+  mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.85, -2.1));
+  mat4.scale(mB2s2, mB2s2, vec3.fromValues(0.1, 0.3, 0.1));
+  box3Station2.localMatrix = mB2s2;
+  box3Station2.setParent(box2Station2);
+  objects.push(box3Station2);
+  objects[17].updateWorldMatrix();
+
+  hookTube = new ArmTube();
+  hookTube.setupWebGLBuffers();
+  mhTube = mat4.create();
+  mat4.translate(mhTube, mhTube, vec3.fromValues(2, 4.475, 0));
+  mat4.scale(mhTube, mhTube, vec3.fromValues(0.6, 0.45, 0.6));
+  hookTube.localMatrix = mhTube;
+  objects.push(hookTube);
+  objects[18].updateWorldMatrix();
+
+  box1Tube = new MetallicBox();
+  box1Tube.setupWebGLBuffers();
+  mb1Tube = mat4.create();
+  mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.55, 0));
+  mat4.scale(mb1Tube, mb1Tube, vec3.fromValues(0.25, 0.025, 0.15));
+  box1Tube.localMatrix = mb1Tube;
+  objects.push(box1Tube);
+  objects[19].updateWorldMatrix();
+
+  box2Tube = new MetallicBox();
+  box2Tube.setupWebGLBuffers();
+  mb2Tube = mat4.create();
+  mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.425, 0));
+  mat4.scale(mb2Tube, mb2Tube, vec3.fromValues(0.025, 0.1, 0.15));
+  box2Tube.localMatrix = mb2Tube;
+  objects.push(box2Tube);
+  objects[20].updateWorldMatrix();
+
+  box3Tube = new MetallicBox();
+  box3Tube.setupWebGLBuffers();
+  mb3Tube = mat4.create();
+  mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.425, 0));
+  mat4.scale(mb3Tube, mb3Tube, vec3.fromValues(0.025, 0.1, 0.15));
+  box3Tube.localMatrix = mb3Tube;
+  objects.push(box3Tube);
+  objects[21].updateWorldMatrix();
 }

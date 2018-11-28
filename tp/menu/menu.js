@@ -8,20 +8,20 @@ decorador = "Ciruelas";
 cantidadDecoradores = 9;
 contorno = "Caramelos";
 cantidadContorno = 30;
-var starttime;
 var horizontalVelocity = 0.025;
+var verticalVelocity = 0.05;
 var ringSpeedFactor = 3.175;
 var plateSpeedFactor = 0.91;
 var bandSpeedFactor = 0.1;
-var timeToStation1 = 5075;
+var armTubeBoxesSpeedFactor = 4;
+distance= 0;
 
 function startAnimation(){
 		dat.GUI.toggleHide();
 		gui.removeFolder("Iniciar animación");
-		starttime = new Date().getTime();
 		objects = [];
 		setupBuffers();
-    animate(starttime,timeToStation1);
+		animationLoop(station1);
 }
 
 dat.GUI.prototype.removeFolder = function(name) {
@@ -44,7 +44,7 @@ function GUI (){
 
 		var f1 = gui.addFolder('Base');
 		//gui.add(object, property, [min], [max], [step])
-		f1.add(window, 'radioTotal', 1, 10, 1).name("Radio");
+		f1.add(window, 'radioTotal', 3, 7, 1).name("Radio");
 
 		f1.add(window, 'altura', 1, 10, 1).name("Altura");
 		f1.add(window, 'ciclos', 1, 10, 1).name("Ciclos");
@@ -61,13 +61,9 @@ function GUI (){
 		f4.add(window, 'contorno', ["Caramelos", "Oblea"]).name("Tipo");
 		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
 
-		var f5 = gui.addFolder('Iniciar animación');
-		f5.add(window, "startAnimation").name("Comenzar");
-
 		f0.open();
 		f1.open();
 		f2.open();
 		f3.open();
 		f4.open();
-		f5.open();
   };
