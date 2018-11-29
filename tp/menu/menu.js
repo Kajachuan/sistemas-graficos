@@ -8,20 +8,21 @@ decorador = "Ciruelas";
 cantidadDecoradores = 10;
 contorno = "Caramelos";
 cantidadContorno = 30;
-var horizontalVelocity = 0.025;
-var verticalVelocity = 0.05;
-var ringSpeedFactor = 3.175;
-var plateSpeedFactor = 0.91;
-var bandSpeedFactor = 0.1;
-var armTubeBoxesSpeedFactor = 4;
-distance= 0;
 
 function startAnimation(){
 		dat.GUI.toggleHide();
 		gui.removeFolder("Iniciar animación");
 		objects = [];
 		setupBuffers();
-		animationLoop(station1);
+		switch(radioTotal){
+			case 3:
+			case 4:
+			case 5:
+				animationLoop(station1R5);
+			case 6:
+			case 7:
+		}
+
 }
 
 dat.GUI.prototype.removeFolder = function(name) {
@@ -55,7 +56,7 @@ function GUI (){
 
 		var f3 = gui.addFolder('Decoradores');
 		f3.add(window, 'decorador', ["Ciruelas", "Campanas", "Paletas"]).name("Tipo");
-		f3.add(window, 'cantidadDecoradores', 1, 10, 1).name("Cantidad");
+		f3.add(window, 'cantidadDecoradores', 2, 10, 1).name("Cantidad");
 
 		var f4 = gui.addFolder('Contorno');
 		f4.add(window, 'contorno', ["Caramelos", "Oblea"]).name("Tipo");
