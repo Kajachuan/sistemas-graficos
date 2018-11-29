@@ -309,7 +309,8 @@ function setupBuffers() {
   objects.push(box3Station2);
   objects[17].updateWorldMatrix();
 
-  ringCake = new Ring(0.871, 1.0, 0.984, vueltas);
+  ringType = tipoTorta == "Crema" ? "CreamRing" : "DulceDeLecheRing";
+  ringCake = new window[ringType](vueltas);
   ringCake.setupWebGLBuffers();
   mRing = mat4.create();
   mat4.translate(mRing, mRing, vec3.fromValues(9.5, 2.21 + altura * (0.1 - 0.03 / ciclos), 0));

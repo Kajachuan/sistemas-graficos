@@ -1,9 +1,4 @@
-function Ring(r, g, b, turns) {
-  this.ka = [0,0,0];
-  this.kd = [r,g,b];
-  this.ks = [0,0,0];
-  this.gloss = 1;
-
+function Ring(turns) {
   var angle = Math.PI / 6;
   var nPoints = 26;
   this.position_buffer = [];
