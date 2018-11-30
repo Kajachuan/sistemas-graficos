@@ -480,7 +480,7 @@ function station2R7(){
 function station2DeployContornoR7(){
   mat4.scale(objects[16].localMatrix,objects[16].localMatrix, vec3.fromValues(1, 1, 1.02));
   mat4.translate(objects[17].localMatrix,objects[17].localMatrix,vec3.fromValues(0,0,horizontalVelocity*6.5));
-  mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(0,0,horizontalVelocity*6.5));
+  mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(0,0,horizontalVelocity*6.75));
   objects[16].updateWorldMatrix();
   objects[17].updateWorldMatrix();
   objects[21 + cantidadDecoradores + c].updateWorldMatrix();

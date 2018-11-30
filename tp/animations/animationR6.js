@@ -19,7 +19,7 @@ function station1R6(){
   if (distance > 299) {
     distance = 0;
     contador = 0;
-    animationLoop(station2R6);
+    animationLoop(station1HookMoveToDecoratorR6);
     return false;
   }
 }
@@ -480,7 +480,7 @@ function station2R6(){
 function station2DeployContornoR6(){
   mat4.scale(objects[16].localMatrix,objects[16].localMatrix, vec3.fromValues(1, 1, 1.024));
   mat4.translate(objects[17].localMatrix,objects[17].localMatrix,vec3.fromValues(0,0,horizontalVelocity*9));
-  mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(0,0,horizontalVelocity*9));
+  mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(0,0,horizontalVelocity*9.25));
   objects[16].updateWorldMatrix();
   objects[17].updateWorldMatrix();
   objects[21 + cantidadDecoradores + c].updateWorldMatrix();
