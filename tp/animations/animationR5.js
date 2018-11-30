@@ -19,7 +19,7 @@ function station1R5(){
   if (distance > 299) {
     distance = 0;
     contador = 0;
-    animationLoop(station2R5);
+    animationLoop(station1HookMoveToDecoratorR5);
     return false;
   }
 }
@@ -472,6 +472,9 @@ function station2R5(){
   if (distance > 277) {
     distance = 0;
     c = 0;
+    vueltasReales = 360/cantidadContorno;
+    vueltasAproximadas = Math.round(360/cantidadContorno);
+    vueltasFaltantes = Math.abs(Math.floor(360/cantidadContorno) - (360/cantidadContorno));
     animationLoop(station2DeployContornoR5);
     return false;
   }
@@ -513,16 +516,19 @@ function station2DeployContorno2R5(){
 function station2RotateCakeAndContornosR5(){
   if(c < cantidadContorno){
     var degreesToMove = degToRad(1);
-
     for (var j = 0; j < c ; j++){
       if (contorno == "Caramelos"){
         mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0.01));
+        mat4.rotate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)),vec3.fromValues(0,1,0));
         mat4.rotate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
       } else {
         mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0));
         mat4.rotate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
       }
     }
+    mat4.rotate(objects[18].localMatrix,objects[18].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)),vec3.fromValues(0,1,0));
+    mat4.rotate(objects[19].localMatrix,objects[19].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)),vec3.fromValues(0,1,0));
+    mat4.rotate(objects[20].localMatrix,objects[20].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)),vec3.fromValues(0,1,0));
     mat4.rotate(objects[18].localMatrix,objects[18].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
     mat4.rotate(objects[19].localMatrix,objects[19].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
     mat4.rotate(objects[20].localMatrix,objects[20].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
@@ -538,21 +544,9 @@ function station2RotateCakeAndContornosR5(){
       c += 1;
       animationLoop(station2DeployContornoR5);
     } else {
-      var vueltasReales = 360/cantidadContorno;
-      var vueltasAproximadas = Math.round(360/cantidadContorno);
-      var vueltasFaltantes = Math.abs(Math.floor(360/cantidadContorno) - (360/cantidadContorno));
       for (var j = 0; j < cantidadContorno; j++){
         mat4.rotate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(-((360/cantidadContorno)*(j))),vec3.fromValues(0,1,0));
         objects[21 + cantidadDecoradores + j].updateWorldMatrix();
-      }
-
-      if(vueltasAproximadas != vueltasReales){
-        mat4.rotate(objects[18].localMatrix,objects[18].localMatrix,degToRad(vueltasFaltantes*cantidadContorno),vec3.fromValues(0,1,0));
-        mat4.rotate(objects[19].localMatrix,objects[19].localMatrix,degToRad(vueltasFaltantes*cantidadContorno),vec3.fromValues(0,1,0));
-        mat4.rotate(objects[20].localMatrix,objects[20].localMatrix,degToRad(vueltasFaltantes*cantidadContorno),vec3.fromValues(0,1,0));
-        objects[18].updateWorldMatrix();
-        objects[19].updateWorldMatrix();
-        objects[20].updateWorldMatrix();
       }
       animationLoop(bandFinalR5);
     }
