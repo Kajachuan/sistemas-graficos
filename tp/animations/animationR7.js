@@ -1,4 +1,3 @@
-f
 var horizontalVelocity = 0.025;
 var verticalVelocity = 0.05;
 var ringSpeedFactor = 3.175;

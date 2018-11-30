@@ -480,7 +480,12 @@ function station2R5(){
 function station2DeployContornoR5(){
   mat4.scale(objects[16].localMatrix,objects[16].localMatrix, vec3.fromValues(1, 1, 1.028));
   mat4.translate(objects[17].localMatrix,objects[17].localMatrix,vec3.fromValues(0,0,horizontalVelocity*11));
-  mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(0,0,horizontalVelocity*11.25));
+  if (contorno == "Caramelos"){
+    mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(0,0,horizontalVelocity*11.25));
+  } else {
+    mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(0,0,horizontalVelocity*21.25));
+  }
+
   objects[16].updateWorldMatrix();
   objects[17].updateWorldMatrix();
   objects[21 + cantidadDecoradores + c].updateWorldMatrix();
@@ -510,8 +515,13 @@ function station2RotateCakeAndContornosR5(){
     var degreesToMove = degToRad(1);
 
     for (var j = 0; j < c ; j++){
-      mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0.01));
-      mat4.rotate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
+      if (contorno == "Caramelos"){
+        mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0.01));
+        mat4.rotate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
+      } else {
+        mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0));
+        mat4.rotate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
+      }
     }
     mat4.rotate(objects[18].localMatrix,objects[18].localMatrix,degreesToMove,vec3.fromValues(0,1,0));
     mat4.rotate(objects[19].localMatrix,objects[19].localMatrix,degreesToMove,vec3.fromValues(0,1,0));

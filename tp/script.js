@@ -389,9 +389,48 @@ function setupBuffers() {
   else
     paramCont.push("Wafer", 0.02, 0.2, 0.05);
 
-  mContours = mat4.create();
-  mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.42, -1.96));
-  mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2], paramCont[3]));
+  if (contorno == "Caramelos"){
+    mContours = mat4.create();
+    if(altura == 3){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.32, -1.96));
+    } else if (altura == 4){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.37, -1.96));
+    } else if (altura == 5){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.42, -1.96));
+    } else if (altura == 6){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.47, -1.96));
+    } else if (altura == 7){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.52, -1.96));
+    } else if (altura == 8){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.57, -1.96));
+    } else if (altura == 9){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.62, -1.96));
+    } else if (altura == 10){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.67, -1.96));
+    }
+    mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2] * (altura/5), paramCont[3]));
+  } else {
+    mContours = mat4.create();
+    if(altura == 3){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.32, -1.96));
+    } else if (altura == 4){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.37, -1.96));
+    } else if (altura == 5){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.42, -1.96));
+    } else if (altura == 6){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.47, -1.96));
+    } else if (altura == 7){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.52, -1.96));
+    } else if (altura == 8){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.57, -1.96));
+    } else if (altura == 9){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.62, -1.96));
+    } else if (altura == 10){
+      mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.67, -1.96));
+    }
+    mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2] * (altura/5), paramCont[3]));
+  }
+
 
   var cont = [];
 
