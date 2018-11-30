@@ -532,6 +532,14 @@ function station2RotateCakeAndContornosR4(){
         mat4.rotate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(-((360/cantidadContorno)*(j))),vec3.fromValues(0,1,0));
         objects[21 + cantidadDecoradores + j].updateWorldMatrix();
       }
+      if(vueltasAproximadas != vueltasReales){
+        mat4.rotate(objects[18].localMatrix,objects[18].localMatrix,degToRad(vueltasFaltantes*cantidadContorno),vec3.fromValues(0,1,0));
+        mat4.rotate(objects[19].localMatrix,objects[19].localMatrix,degToRad(vueltasFaltantes*cantidadContorno),vec3.fromValues(0,1,0));
+        mat4.rotate(objects[20].localMatrix,objects[20].localMatrix,degToRad(vueltasFaltantes*cantidadContorno),vec3.fromValues(0,1,0));
+        objects[18].updateWorldMatrix();
+        objects[19].updateWorldMatrix();
+        objects[20].updateWorldMatrix();
+      }
       animationLoop(bandFinalR4);
     }
     return false;

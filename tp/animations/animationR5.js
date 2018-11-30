@@ -19,7 +19,7 @@ function station1R5(){
   if (distance > 299) {
     distance = 0;
     contador = 0;
-    animationLoop(station1HookMoveToDecoratorR5);
+    animationLoop(station2R5);
     return false;
   }
 }
