@@ -60,7 +60,7 @@ function GUI (){
 
 		var f4 = gui.addFolder('Contorno');
 		f4.add(window, 'contorno', ["Caramelos", "Oblea"]).name("Tipo");
-		f4.add(window, 'cantidadContorno', 2, 45, 1).name("Cantidad");
+		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
 
 		f0.open();
 		f1.open();
