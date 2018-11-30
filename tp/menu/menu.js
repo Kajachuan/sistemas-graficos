@@ -14,13 +14,16 @@ function startAnimation(){
 		gui.removeFolder("Iniciar animación");
 		objects = [];
 		setupBuffers();
-		switch(radioTotal){
-			case 3:
-			case 4:
-			case 5:
-				animationLoop(station1R5);
-			case 6:
-			case 7:
+		if(radioTotal == 3){
+
+		} else if (radioTotal == 4){
+
+		} else if (radioTotal == 5){
+			animationLoop(station1R5);
+		} else if (radioTotal == 6){
+			animationLoop(station1R6);
+		} else if (radioTotal == 7){
+			animationLoop(station1R7);
 		}
 
 }
@@ -47,7 +50,7 @@ function GUI (){
 		//gui.add(object, property, [min], [max], [step])
 		f1.add(window, 'radioTotal', 3, 7, 1).name("Radio");
 
-		f1.add(window, 'altura', 1, 10, 1).name("Altura");
+		f1.add(window, 'altura', 3, 10, 1).name("Altura");
 		f1.add(window, 'ciclos', 1, 10, 1).name("Ciclos");
 		f1.add(window, 'amplitud', 1, 10, 1).name("Amplitud");
 
