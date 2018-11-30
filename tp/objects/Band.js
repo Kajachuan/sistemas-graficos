@@ -13,10 +13,10 @@ function Band() {
 
   this.initTexture("maps/cinta.jpg");
   this.initReflectMap();
-  AbstractBox.call(this);
+  Box.call(this);
 }
 
-Band.prototype = Object.create(AbstractBox.prototype);
+Band.prototype = Object.create(Box.prototype);
 
 Band.prototype.move = function() {
   this.texture_coord_buffer[16] -= horizontalVelocity * bandSpeedFactor;

@@ -185,21 +185,6 @@ function getShader(gl, id) {
 }
 
 function setupBuffers() {
-
-  // Amarillo = 0.82, 0.753, 0.306
-  // Rojo = 0.757, 0.227, 0.251
-  // Gris del piso = 0.686, 0.686, 0.686
-  // Azul = 0.282, 0.286, 0.749
-  // Gris de la cinta = 0.463, 0.463, 0.463
-  // Rosa = 0.6196, 0.235, 0.663
-  // Violeta = 0.5804, 0.325, 0.8196
-  // Verde = 0.176, 0.627, 0.169
-  // Marron = 0.882, 0.667, 0.416
-  // Plato = 0.851, 0.941, 0.776
-  // Celeste anillo = 0.871, 1.0, 0.984
-  // Paleta = 0.659, 0.816, 0.541
-  // Campana = 0.322, 0.322, 0.706
-
   floor = new Floor();
   floor.setupWebGLBuffers();
   m1 = mat4.create();
@@ -215,7 +200,7 @@ function setupBuffers() {
   var boxPadding = 2;
   var suppBoxesQuant = 10;
   for (i = 1; i < suppBoxesQuant; i++){
-    box[i] = new MetallicBox();
+    box[i] = new MetallicBox(0.3, 0.3, 0.3);
     box[i].setupWebGLBuffers();
     box[i].initReflectMap();
     mBox = mat4.create();
@@ -249,7 +234,7 @@ function setupBuffers() {
   objects.push(line);
   objects[11].updateWorldMatrix();
 
-  box1Station1 = new Box(0.6196, 0.235, 0.663);
+  box1Station1 = new MetallicBox(0.651, 0.584, 0);
   box1Station1.setupWebGLBuffers();
   mB1s1 = mat4.create();
   mat4.translate(mB1s1, mB1s1, vec3.fromValues(2, 3.1, -3.7));
@@ -259,7 +244,7 @@ function setupBuffers() {
   objects.push(box1Station1);
   objects[12].updateWorldMatrix();
 
-  box2Station1 = new Box(0.5804, 0.325, 0.8196);
+  box2Station1 = new MetallicBox(0.651, 0.584, 0);
   box2Station1.setupWebGLBuffers();
   mB2s1 = mat4.create();
   mat4.translate(mB2s1, mB2s1, vec3.fromValues(2, 1.3, -3));
@@ -269,7 +254,7 @@ function setupBuffers() {
   objects.push(box2Station1);
   objects[13].updateWorldMatrix();
 
-  box3Station1 = new Box(0.882, 0.667, 0.416);
+  box3Station1 = new MetallicBox(0.2392, 0.2392, 0.2392);
   box3Station1.setupWebGLBuffers();
   mB3s1 = mat4.create();
   mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.1));
@@ -279,7 +264,7 @@ function setupBuffers() {
   objects.push(box3Station1);
   objects[14].updateWorldMatrix();
 
-  box1Station2 = new Box(0.6196, 0.235, 0.663);
+  box1Station2 = new MetallicBox(0.651, 0.584, 0);
   box1Station2.setupWebGLBuffers();
   mB1s2 = mat4.create();
   mat4.translate(mB1s2, mB1s2, vec3.fromValues(-5, 1.85, -3.7));
@@ -289,7 +274,7 @@ function setupBuffers() {
   objects.push(box1Station2);
   objects[15].updateWorldMatrix();
 
-  box2Station2 = new Box(0.882, 0.667, 0.416);
+  box2Station2 = new MetallicBox(0.2392, 0.2392, 0.2392);
   box2Station2.setupWebGLBuffers();
   mB2s2 = mat4.create();
   mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.4, -2.5));
@@ -299,7 +284,7 @@ function setupBuffers() {
   objects.push(box2Station2);
   objects[16].updateWorldMatrix();
 
-  box3Station2 = new Box(0.882, 0.667, 0.416);
+  box3Station2 = new MetallicBox(0.2392, 0.2392, 0.2392);
   box3Station2.setupWebGLBuffers();
   mB2s2 = mat4.create();
   mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.4, -2.1));
@@ -455,7 +440,7 @@ function setupBuffers() {
   objects.push(hookTube);
   objects[offset + 1].updateWorldMatrix();
 
-  box1Tube = new MetallicBox();
+  box1Tube = new MetallicBox(0.3, 0.3, 0.3);
   box1Tube.setupWebGLBuffers();
   mb1Tube = mat4.create();
   mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.55, 0));
@@ -464,7 +449,7 @@ function setupBuffers() {
   objects.push(box1Tube);
   objects[offset + 2].updateWorldMatrix();
 
-  box2Tube = new MetallicBox();
+  box2Tube = new MetallicBox(0.3, 0.3, 0.3);
   box2Tube.setupWebGLBuffers();
   mb2Tube = mat4.create();
   mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.425, 0));
@@ -473,7 +458,7 @@ function setupBuffers() {
   objects.push(box2Tube);
   objects[offset + 3].updateWorldMatrix();
 
-  box3Tube = new MetallicBox();
+  box3Tube = new MetallicBox(0.3, 0.3, 0.3);
   box3Tube.setupWebGLBuffers();
   mb3Tube = mat4.create();
   mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.425, 0));
@@ -581,21 +566,6 @@ function drawScene() {
 }
 
 function setupBuffersStatic() {
-
-  // Amarillo = 0.82, 0.753, 0.306
-  // Rojo = 0.757, 0.227, 0.251
-  // Gris del piso = 0.686, 0.686, 0.686
-  // Azul = 0.282, 0.286, 0.749
-  // Gris de la cinta = 0.463, 0.463, 0.463
-  // Rosa = 0.6196, 0.235, 0.663
-  // Violeta = 0.5804, 0.325, 0.8196
-  // Verde = 0.176, 0.627, 0.169
-  // Marron = 0.882, 0.667, 0.416
-  // Plato = 0.851, 0.941, 0.776
-  // Celeste anillo = 0.871, 1.0, 0.984
-  // Paleta = 0.659, 0.816, 0.541
-  // Campana = 0.322, 0.322, 0.706
-
   floor = new Floor();
   floor.setupWebGLBuffers();
   m1 = mat4.create();
@@ -611,7 +581,7 @@ function setupBuffersStatic() {
   var boxPadding = 2;
   var suppBoxesQuant = 10;
   for (i = 1; i < suppBoxesQuant; i++){
-    box[i] = new MetallicBox();
+    box[i] = new MetallicBox(0.3, 0.3, 0.3);
     box[i].setupWebGLBuffers();
     box[i].initReflectMap();
     mBox = mat4.create();
@@ -645,7 +615,7 @@ function setupBuffersStatic() {
   objects.push(line);
   objects[11].updateWorldMatrix();
 
-  box1Station1 = new Box(0.6196, 0.235, 0.663);
+  box1Station1 = new MetallicBox(0.651, 0.584, 0);
   box1Station1.setupWebGLBuffers();
   mB1s1 = mat4.create();
   mat4.translate(mB1s1, mB1s1, vec3.fromValues(2, 3.1, -3.7));
@@ -655,7 +625,7 @@ function setupBuffersStatic() {
   objects.push(box1Station1);
   objects[12].updateWorldMatrix();
 
-  box2Station1 = new Box(0.5804, 0.325, 0.8196);
+  box2Station1 = new MetallicBox(0.651, 0.584, 0);
   box2Station1.setupWebGLBuffers();
   mB2s1 = mat4.create();
   mat4.translate(mB2s1, mB2s1, vec3.fromValues(2, 1.3, -3));
@@ -665,7 +635,7 @@ function setupBuffersStatic() {
   objects.push(box2Station1);
   objects[13].updateWorldMatrix();
 
-  box3Station1 = new Box(0.882, 0.667, 0.416);
+  box3Station1 = new MetallicBox(0.2392, 0.2392, 0.2392);
   box3Station1.setupWebGLBuffers();
   mB3s1 = mat4.create();
   mat4.translate(mB3s1, mB3s1, vec3.fromValues(2, 5.5, -1.1));
@@ -675,7 +645,7 @@ function setupBuffersStatic() {
   objects.push(box3Station1);
   objects[14].updateWorldMatrix();
 
-  box1Station2 = new Box(0.6196, 0.235, 0.663);
+  box1Station2 = new MetallicBox(0.651, 0.584, 0);
   box1Station2.setupWebGLBuffers();
   mB1s2 = mat4.create();
   mat4.translate(mB1s2, mB1s2, vec3.fromValues(-5, 1.85, -3.7));
@@ -685,7 +655,7 @@ function setupBuffersStatic() {
   objects.push(box1Station2);
   objects[15].updateWorldMatrix();
 
-  box2Station2 = new Box(0.882, 0.667, 0.416);
+  box2Station2 = new MetallicBox(0.2392, 0.2392, 0.2392);
   box2Station2.setupWebGLBuffers();
   mB2s2 = mat4.create();
   mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.4, -2.5));
@@ -695,7 +665,7 @@ function setupBuffersStatic() {
   objects.push(box2Station2);
   objects[16].updateWorldMatrix();
 
-  box3Station2 = new Box(0.882, 0.667, 0.416);
+  box3Station2 = new MetallicBox(0.2392, 0.2392, 0.2392);
   box3Station2.setupWebGLBuffers();
   mB2s2 = mat4.create();
   mat4.translate(mB2s2, mB2s2, vec3.fromValues(-5, 2.4, -2.1));
@@ -714,7 +684,7 @@ function setupBuffersStatic() {
   objects.push(hookTube);
   objects[18].updateWorldMatrix();
 
-  box1Tube = new MetallicBox();
+  box1Tube = new MetallicBox(0.3, 0.3, 0.3);
   box1Tube.setupWebGLBuffers();
   mb1Tube = mat4.create();
   mat4.translate(mb1Tube, mb1Tube, vec3.fromValues(2, 3.55, 0));
@@ -723,7 +693,7 @@ function setupBuffersStatic() {
   objects.push(box1Tube);
   objects[19].updateWorldMatrix();
 
-  box2Tube = new MetallicBox();
+  box2Tube = new MetallicBox(0.3, 0.3, 0.3);
   box2Tube.setupWebGLBuffers();
   mb2Tube = mat4.create();
   mat4.translate(mb2Tube, mb2Tube, vec3.fromValues(1.875, 3.425, 0));
@@ -732,7 +702,7 @@ function setupBuffersStatic() {
   objects.push(box2Tube);
   objects[20].updateWorldMatrix();
 
-  box3Tube = new MetallicBox();
+  box3Tube = new MetallicBox(0.3, 0.3, 0.3);
   box3Tube.setupWebGLBuffers();
   mb3Tube = mat4.create();
   mat4.translate(mb3Tube, mb3Tube, vec3.fromValues(2.125, 3.425, 0));

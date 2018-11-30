@@ -13,7 +13,7 @@ function Oven() {
   this.initTexture("maps/horno.jpg");
   this.initReflectMap();
   this.initSpecularMap("maps/horno-especular.jpg");
-  AbstractBox.call(this);
+  Box.call(this);
 }
 
-Oven.prototype = Object.create(AbstractBox.prototype);
+Oven.prototype = Object.create(Box.prototype);

@@ -12,7 +12,7 @@ function Wafer() {
                                0.813,1,   0.813,0,          1,0,          1,1];
 
   this.initTexture("maps/oblea.jpg");
-  AbstractBox.call(this);
+  Box.call(this);
 }
 
-Wafer.prototype = Object.create(AbstractBox.prototype);
+Wafer.prototype = Object.create(Box.prototype);

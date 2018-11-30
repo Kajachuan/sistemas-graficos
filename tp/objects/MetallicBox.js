@@ -1,6 +1,6 @@
-function MetallicBox() {
+function MetallicBox(r, g, b) {
   this.ka = [0,0,0];
-  this.kd = [0.3,0.3,0.3];
+  this.kd = [r, g, b];
   this.ks = [0,0,0];
   this.gloss = 2;
 
@@ -12,7 +12,7 @@ function MetallicBox() {
                                0,0, 0,0, 0,0, 0,0];
 
   this.initReflectMap();
-  AbstractBox.call(this);
+  Box.call(this);
 }
 
-MetallicBox.prototype = Object.create(AbstractBox.prototype);
+MetallicBox.prototype = Object.create(Box.prototype);

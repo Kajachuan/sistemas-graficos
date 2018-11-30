@@ -12,7 +12,7 @@ function Floor() {
                                1,1,   0,1,   0,0,   1,0];
 
   this.initTexture("maps/piso.jpg");
-  AbstractBox.call(this);
+  Box.call(this);
 }
 
-Floor.prototype = Object.create(AbstractBox.prototype);
+Floor.prototype = Object.create(Box.prototype);
