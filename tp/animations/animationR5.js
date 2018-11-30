@@ -522,12 +522,16 @@ function station2RotateCakeAndContornosR5(){
     objects[21 + cantidadDecoradores + c].updateWorldMatrix();
   }
   distance += 1;
-  if (distance > ((360/cantidadContorno) - 1)) {
+  if (distance > ((360/cantidadContorno -1))) {
     distance = 0;
-    if (c < (cantidadContorno - 1)){
+    if (c < (cantidadContorno-1)){
       c += 1;
       animationLoop(station2DeployContornoR5);
     } else {
+      for (var j = 0; j < cantidadContorno; j++){
+        mat4.rotate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(-((360/cantidadContorno)*(j))),vec3.fromValues(0,1,0));
+        objects[21 + cantidadDecoradores + j].updateWorldMatrix();
+      }
       animationLoop(bandFinalR5);
     }
     return false;
@@ -546,11 +550,11 @@ function bandFinalR5(){
     mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
     objects[21 + counter].updateWorldMatrix();
   }
-/*
+
   for (var counter = 0; counter < cantidadContorno; counter++){
     mat4.translate(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
     objects[21 + cantidadDecoradores + counter].updateWorldMatrix();
-  }*/
+  }
   distance += 1;
   if (distance > 220) {
     var f6 = gui.addFolder('Resetear escena');

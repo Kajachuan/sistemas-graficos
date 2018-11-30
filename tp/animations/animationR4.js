@@ -528,6 +528,10 @@ function station2RotateCakeAndContornosR4(){
       c += 1;
       animationLoop(station2DeployContornoR4);
     } else {
+      for (var j = 0; j < cantidadContorno; j++){
+        mat4.rotate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(-((360/cantidadContorno)*(j))),vec3.fromValues(0,1,0));
+        objects[21 + cantidadDecoradores + j].updateWorldMatrix();
+      }
       animationLoop(bandFinalR4);
     }
     return false;
