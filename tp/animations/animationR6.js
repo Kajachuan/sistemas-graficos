@@ -550,11 +550,10 @@ function bandFinalR6(){
     mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
     objects[21 + counter].updateWorldMatrix();
   }
-/*
   for (var counter = 0; counter < cantidadContorno; counter++){
     mat4.translate(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
     objects[21 + cantidadDecoradores + counter].updateWorldMatrix();
-  }*/
+  }
   distance += 1;
   if (distance > 220) {
     var f6 = gui.addFolder('Resetear escena');
