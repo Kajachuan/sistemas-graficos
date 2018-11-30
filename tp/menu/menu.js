@@ -1,22 +1,20 @@
 tipoTorta = "Crema";
-radioTotal = 4;
+radioTotal = 5;
 altura = 5;
 ciclos = 3;
 amplitud = 2;
 vueltas = 4;
 decorador = "Ciruelas";
-cantidadDecoradores = 10;
+cantidadDecoradores = 5;
 contorno = "Caramelos";
-cantidadContorno = 10;
+cantidadContorno = 30;
 
 function startAnimation(){
 		dat.GUI.toggleHide();
 		gui.removeFolder("Iniciar animación");
 		objects = [];
 		setupBuffers();
-		if(radioTotal == 3){
-
-		} else if (radioTotal == 4){
+ 		if (radioTotal == 4){
 			animationLoop(station1R4);
 		} else if (radioTotal == 5){
 			animationLoop(station1R5);
@@ -48,7 +46,7 @@ function GUI (){
 
 		var f1 = gui.addFolder('Base');
 		//gui.add(object, property, [min], [max], [step])
-		f1.add(window, 'radioTotal', 3, 7, 1).name("Radio");
+		f1.add(window, 'radioTotal', 4, 7, 1).name("Radio");
 
 		f1.add(window, 'altura', 3, 10, 1).name("Altura");
 		f1.add(window, 'ciclos', 1, 10, 1).name("Ciclos");
