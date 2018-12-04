@@ -519,13 +519,14 @@ function station2RotateCakeAndContornosR5(){
     var degreesToMove = degToRad(1);
     for (var j = 0; j < c ; j++){
       if (contorno == "Caramelos"){
-        mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0.01));
-        mat4.rotateY(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
-        mat4.rotateY(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove);
+        mat4.translate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(-0.19,0,0.01));
+        mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
+        mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degreesToMove);
       } else {
         mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0));
         mat4.rotateY(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove);
       }
+      objects[21 + cantidadDecoradores + j].updateWorldMatrix();
     }
     mat4.rotateY(objects[18].localMatrix,objects[18].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
     mat4.rotateY(objects[19].localMatrix,objects[19].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
@@ -536,7 +537,6 @@ function station2RotateCakeAndContornosR5(){
     objects[18].updateWorldMatrix();
     objects[19].updateWorldMatrix();
     objects[20].updateWorldMatrix();
-    objects[21 + cantidadDecoradores + c].updateWorldMatrix();
   }
   distance += 1;
   if (distance > ((360/cantidadContorno)-1)) {
