@@ -59,7 +59,7 @@ function GUI (){
 		f3.add(window, 'cantidadDecoradores', 2, 10, 1).name("Cantidad");
 
 		var f4 = gui.addFolder('Contorno');
-		f4.add(window, 'contorno', ["Caramelos", "Oblea"]).name("Tipo");
+		f4.add(window, 'contorno', ["Caramelos", "Obleas"]).name("Tipo");
 		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
 
 		f0.open();

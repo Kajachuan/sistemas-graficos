@@ -379,17 +379,17 @@ function setupBuffers() {
 
   if (contorno == "Caramelos")
     mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2] * (altura/5), paramCont[3]));
-  else
+  else {
+    mat4.rotateY(mContours, mContours, Math.PI/2);
     mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2] * (altura/5), paramCont[3]));
+  }
 
   var cont = [];
 
   for (i = 0; i < cantidadContorno; i++){
     cont[i] = new window[paramCont[0]]();
     cont[i].setupWebGLBuffers();
-    mCont = mat4.create();
-    mat4.multiply(mCont, mCont, mContours);
-    cont[i].localMatrix = mCont;
+    cont[i].localMatrix = mContours;
     objects.push(cont[i]);
     objects[21 + cantidadDecoradores + i].updateWorldMatrix();
   }
