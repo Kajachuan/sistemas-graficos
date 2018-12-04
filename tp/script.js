@@ -389,7 +389,9 @@ function setupBuffers() {
   for (i = 0; i < cantidadContorno; i++){
     cont[i] = new window[paramCont[0]]();
     cont[i].setupWebGLBuffers();
-    cont[i].localMatrix = mContours;
+    mCont = mat4.create();
+    mat4.multiply(mCont, mCont, mContours);
+    cont[i].localMatrix = mCont;
     objects.push(cont[i]);
     objects[21 + cantidadDecoradores + i].updateWorldMatrix();
   }
