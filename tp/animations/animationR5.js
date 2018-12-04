@@ -546,7 +546,7 @@ function station2RotateCakeAndContornosR5(){
       animationLoop(station2DeployContornoR5);
     } else {
       for (var j = 0; j < cantidadContorno; j++){
-        mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(-((360/cantidadContorno)*(j))));
+        mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(j * 360/cantidadContorno));
         objects[21 + cantidadDecoradores + j].updateWorldMatrix();
       }
       animationLoop(bandFinalR5);
