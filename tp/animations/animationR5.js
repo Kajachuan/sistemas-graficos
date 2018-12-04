@@ -517,7 +517,7 @@ function station2DeployContorno2R5(){
 function station2RotateCakeAndContornosR5(){
   if(c < cantidadContorno){
     var degreesToMove = degToRad(1);
-    for (var j = 0; j < c ; j++){
+    for (var j = 0; j < c + 1 ; j++){
       if (contorno == "Caramelos"){
         mat4.translate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(-0.19,0,0.01));
         mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
