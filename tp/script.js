@@ -372,7 +372,8 @@ function setupBuffers() {
   if (contorno == "Caramelos")
     paramCont.push("Candy", 0.1, 0.1, 0.1);
   else
-    paramCont.push("Wafer", 0.02, 0.2, 0.05);
+    // paramCont.push("Wafer", 0.02, 0.2, 0.05)
+    paramCont.push("Wafer", 0.02, 0.2, 0.02)
 
   mContours = mat4.create();
   mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.17 + 0.05 * altura, -1.96));
