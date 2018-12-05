@@ -376,13 +376,10 @@ function setupBuffers() {
 
   mContours = mat4.create();
   mat4.translate(mContours, mContours, vec3.fromValues(-5, 2.17 + 0.05 * altura, -1.96));
-
-  if (contorno == "Caramelos")
-    mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2] * (altura/5), paramCont[3]));
-  else {
+  if (contorno == "Obleas") {
     mat4.rotateY(mContours, mContours, Math.PI/2);
-    mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2] * (altura/5), paramCont[3]));
   }
+  mat4.scale(mContours, mContours, vec3.fromValues(paramCont[1], paramCont[2] * (altura/5), paramCont[3]));
 
   var cont = [];
 

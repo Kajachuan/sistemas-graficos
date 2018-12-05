@@ -523,8 +523,9 @@ function station2RotateCakeAndContornosR5(){
         mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
         mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degreesToMove);
       } else {
-        mat4.translate(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,vec3.fromValues(-0.19,0,0));
-        mat4.rotateY(objects[21 + cantidadDecoradores + c].localMatrix,objects[21 + cantidadDecoradores + c].localMatrix,degreesToMove);
+        mat4.translate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(0,0,-0.3));
+        mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
+        mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degreesToMove);
       }
       objects[21 + cantidadDecoradores + j].updateWorldMatrix();
     }
