@@ -599,6 +599,15 @@ function bandFinalR5(){
 
   distance += 1;
   if (distance > 220) {
+    if (contorno == "Obleas") {
+      for (var counter = 0; counter < cantidadContorno; counter++){
+        mat4.scale(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(1,1,0.4));
+        mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(-counter * 360/cantidadContorno + 90));
+        mat4.scale(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(1,1,2.5));
+        objects[21 + cantidadDecoradores + counter].updateWorldMatrix();
+      }
+    }
+
     var f6 = gui.addFolder('Resetear escena');
     f6.add(window, "reset").name("Resetear");
     f6.open();
