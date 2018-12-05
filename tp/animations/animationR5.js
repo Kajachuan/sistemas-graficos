@@ -523,11 +523,11 @@ function station2RotateCakeAndContornosR5(){
         mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
         mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degreesToMove);
       } else {
-        // mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,0.4))
+        mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,0.4));
         mat4.translate(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(-0.09,0,-0.93));
         mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(vueltasFaltantes/((360/cantidadContorno)-1)));
         mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degreesToMove);
-        // mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,2.5))
+        mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,2.5));
       }
       objects[21 + cantidadDecoradores + j].updateWorldMatrix();
     }
@@ -557,7 +557,9 @@ function station2RotateCakeAndContornosR5(){
 
       else {
         for (var j = 0; j < cantidadContorno; j++) {
+          mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,0.4));
           mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(j * 360/cantidadContorno - 90));
+          mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,2.5));
           objects[21 + cantidadDecoradores + j].updateWorldMatrix();
         }
       }
