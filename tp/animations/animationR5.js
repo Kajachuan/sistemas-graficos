@@ -99,67 +99,14 @@ function station1HookMoveFromDecoratorR5(){
 }
 
 function station1HookMoveToDecoratorCorrespondingPositionR5(){
-  if (contador === 0) {
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/2.1,0,verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(verticalVelocity*2.4,0,verticalVelocity*armTubeBoxesSpeedFactor*1.5));
-  } else if(contador === 1){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/1.15,0,verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity*2.1,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*21,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*21,0,verticalVelocity*2.4));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(verticalVelocity*5.2,0,verticalVelocity*2.4*1.5));
-  } else if(contador === 2){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity*1.05,0,0));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity*2.5,0,0));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*25,0,0));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*25,0,0));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(verticalVelocity*6.3,0,0));
-  } else if(contador === 3){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/1.15,0,-verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity*2.1,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*21,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*21,0,-verticalVelocity*2.4));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(verticalVelocity*5.2,0,-verticalVelocity*2.4*1.5));
-  } else if(contador === 4){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/2.1,0,-verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(verticalVelocity*2.4,0,-verticalVelocity*armTubeBoxesSpeedFactor*1.5));
-  } else if(contador === 5){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/2.1,0,-verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(-verticalVelocity*2.4,0,-verticalVelocity*armTubeBoxesSpeedFactor*1.5));
-  } else if(contador === 6){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/1.15,0,-verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity*2.1,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*21,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*21,0,-verticalVelocity*2.4));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(-verticalVelocity*5.2,0,-verticalVelocity*2.4*1.5));
-  } else if(contador === 7){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity*1.05,0,0));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity*2.5,0,0));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*25,0,0));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*25,0,0));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(-verticalVelocity*6.3,0,0));
-  } else if(contador === 8){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/1.15,0,verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity*2.1,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*21,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*21,0,verticalVelocity*2.4));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(-verticalVelocity*5.2,0,verticalVelocity*2.4*1.5));
-  } else if(contador === 9){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/2.1,0,verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(-verticalVelocity*2.4,0,verticalVelocity*armTubeBoxesSpeedFactor*1.5));
-  }
+  angle = 2 * Math.PI / cantidadDecoradores;
+  cos_angle = Math.cos(contador * angle);
+  sin_angle = Math.sin(contador * angle);
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity*cos_angle,0,verticalVelocity*sin_angle));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity*cos_angle*2.4,0,verticalVelocity*sin_angle*4));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*cos_angle*24,0,verticalVelocity*sin_angle*4));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*cos_angle*24,0,verticalVelocity*sin_angle*4));
+  mat4.translate(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,vec3.fromValues(verticalVelocity*cos_angle*6,0,verticalVelocity*sin_angle*6));
   objects[offset + 1].updateWorldMatrix();
   objects[offset + 2].updateWorldMatrix();
   objects[offset + 3].updateWorldMatrix();
@@ -307,97 +254,17 @@ function station1HookDeployDecorator2R5(){
 }
 
 function station1HookMoveGoBackFromCorrespondingPositionR5(){
-  if (contador === 0) {
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/2.1,0,-verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 1){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/1.15,0,-verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity*2.1,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*21,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*21,0,-verticalVelocity*2.4));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 2){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity*1.05,0,0));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity*2.5,0,0));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*25,0,0));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*25,0,0));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 3){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/1.15,0,verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity*2.1,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*21,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*21,0,verticalVelocity*2.4));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 4){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity/2.1,0,verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 5){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/2.1,0,verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*10,0,verticalVelocity*armTubeBoxesSpeedFactor));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 6){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/1.15,0,verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity*2.1,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*21,0,verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*21,0,verticalVelocity*2.4));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 7){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity*1.05,0,0));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity*2.5,0,0));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*25,0,0));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*25,0,0));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 8){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/1.15,0,-verticalVelocity/1.9));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity*2.1,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*21,0,-verticalVelocity*2.4));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*21,0,-verticalVelocity*2.4));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  } else if(contador === 9){
-    mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(verticalVelocity/2.1,0,-verticalVelocity));
-    mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(verticalVelocity,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(verticalVelocity*10,0,-verticalVelocity*armTubeBoxesSpeedFactor));
-    objects[offset + 1].updateWorldMatrix();
-    objects[offset + 2].updateWorldMatrix();
-    objects[offset + 3].updateWorldMatrix();
-    objects[offset + 4].updateWorldMatrix();
-  }
+  angle = 2 * Math.PI / cantidadDecoradores;
+  cos_angle = Math.cos(contador * angle);
+  sin_angle = Math.sin(contador * angle);
+  mat4.translate(objects[offset + 1].localMatrix,objects[offset + 1].localMatrix,vec3.fromValues(-verticalVelocity*cos_angle,0,-verticalVelocity*sin_angle));
+  mat4.translate(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,vec3.fromValues(-verticalVelocity*cos_angle*2.4,0,-verticalVelocity*sin_angle*4));
+  mat4.translate(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,vec3.fromValues(-verticalVelocity*cos_angle*24,0,-verticalVelocity*sin_angle*4));
+  mat4.translate(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,vec3.fromValues(-verticalVelocity*cos_angle*24,0,-verticalVelocity*sin_angle*4));
+  objects[offset + 1].updateWorldMatrix();
+  objects[offset + 2].updateWorldMatrix();
+  objects[offset + 3].updateWorldMatrix();
+  objects[offset + 4].updateWorldMatrix();
   distance += 1;
   if (distance > 18) {
     distance = 0;
