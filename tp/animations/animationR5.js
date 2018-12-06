@@ -121,16 +121,18 @@ function station1HookMoveToDecoratorCorrespondingPositionR5(){
   }
 }
 
-function station1RotateDecoratorR5() {
+function station1RotateDecoratorR5(){
   targetAngle = contador * 360 / cantidadDecoradores;
   if(targetAngle > 0) {
+    mat4.rotateY(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,-degToRad(1));
     mat4.rotateY(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,-degToRad(1));
+    objects[offset + 2].updateWorldMatrix();
     objects[21 + contador].updateWorldMatrix();
   }
 
   angleDecorator += 1;
   if(angleDecorator >= targetAngle) {
-    angleDecorator = 0;
+    // angleDecorator = 0;
     animationLoop(station1HookDeployDecoratorR5);
     return false;
   }
@@ -264,6 +266,20 @@ function station1HookDeployDecorator2R5(){
   distance += 1;
   if (distance > 38) {
     distance = 0;
+    // animationLoop(station1HookMoveGoBackFromCorrespondingPositionR5);
+    animationLoop(station1RotateDecorator2R5);
+    return false;
+  }
+}
+
+function station1RotateDecorator2R5(){
+  if(targetAngle > 0) {
+    mat4.rotateY(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,degToRad(1));
+    objects[offset + 2].updateWorldMatrix();
+  }
+
+  angleDecorator -= 1;
+  if(angleDecorator == 0) {
     animationLoop(station1HookMoveGoBackFromCorrespondingPositionR5);
     return false;
   }
