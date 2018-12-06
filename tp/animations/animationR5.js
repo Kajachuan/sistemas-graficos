@@ -6,6 +6,7 @@ var plateSpeedFactor = 0.91;
 var bandSpeedFactor = 0.1;
 var armTubeBoxesSpeedFactor = 4;
 distance= 0;
+angleDecorator = 0;
 
 function station1R5(){
   mat4.translate(objects[18].localMatrix,objects[18].localMatrix,vec3.fromValues(-horizontalVelocity*ringSpeedFactor,0,0));
@@ -115,6 +116,21 @@ function station1HookMoveToDecoratorCorrespondingPositionR5(){
   distance += 1;
   if (distance > 18) {
     distance = 0;
+    animationLoop(station1RotateDecoratorR5);
+    return false;
+  }
+}
+
+function station1RotateDecoratorR5() {
+  targetAngle = contador * 360 / cantidadDecoradores;
+  if(targetAngle > 0) {
+    mat4.rotateY(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,-degToRad(1));
+    objects[21 + contador].updateWorldMatrix();
+  }
+
+  angleDecorator += 1;
+  if(angleDecorator >= targetAngle) {
+    angleDecorator = 0;
     animationLoop(station1HookDeployDecoratorR5);
     return false;
   }
