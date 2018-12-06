@@ -41,7 +41,7 @@ function GUI (){
 		gui = new dat.GUI();
 
 		var f0 = gui.addFolder('Torta');
-		f0.add(window, 'tipoTorta', ["Crema", "Chocolate"]).name("Sabor") // ??????
+		f0.add(window, 'tipoTorta', ["Crema", "Chocolate"]).name("Sabor");
 
 		var f1 = gui.addFolder('Base');
 		//gui.add(object, property, [min], [max], [step])
@@ -58,7 +58,7 @@ function GUI (){
 		f3.add(window, 'decorador', ["Ciruelas", "Campanas", "Paletas"]).name("Tipo");
 		f3.add(window, 'cantidadDecoradores', 2, 10, 1).name("Cantidad");
 
-		var f4 = gui.addFolder('Contorno');
+		var f4 = gui.addFolder('Contornos');
 		f4.add(window, 'contorno', ["Caramelos", "Obleas"]).name("Tipo");
 		f4.add(window, 'cantidadContorno', 2, 50, 1).name("Cantidad");
 

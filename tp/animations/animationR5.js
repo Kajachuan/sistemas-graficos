@@ -116,7 +116,10 @@ function station1HookMoveToDecoratorCorrespondingPositionR5(){
   distance += 1;
   if (distance > 18) {
     distance = 0;
-    animationLoop(station1RotateDecoratorR5);
+    if(decorador == "Paletas")
+      animationLoop(station1RotateDecoratorR5);
+    else
+      animationLoop(station1HookDeployDecoratorR5);
     return false;
   }
 }
@@ -132,7 +135,6 @@ function station1RotateDecoratorR5(){
 
   angleDecorator += 1;
   if(angleDecorator >= targetAngle) {
-    // angleDecorator = 0;
     animationLoop(station1HookDeployDecoratorR5);
     return false;
   }
@@ -266,8 +268,10 @@ function station1HookDeployDecorator2R5(){
   distance += 1;
   if (distance > 38) {
     distance = 0;
-    // animationLoop(station1HookMoveGoBackFromCorrespondingPositionR5);
-    animationLoop(station1RotateDecorator2R5);
+    if(decorador == "Paletas")
+      animationLoop(station1RotateDecorator2R5);
+    else
+      animationLoop(station1HookMoveGoBackFromCorrespondingPositionR5);
     return false;
   }
 }
@@ -318,9 +322,18 @@ function station2R5(){
   objects[19].updateWorldMatrix();
   objects[20].updateWorldMatrix();
   objects[11].move();
-  for (var counter = 0; counter < cantidadDecoradores; counter++){
-    mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
-    objects[21 + counter].updateWorldMatrix();
+  if(decorador == "Paletas")
+    for (var counter = 0; counter < cantidadDecoradores; counter++){
+      mat4.rotateY(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,degToRad(counter * 360/cantidadDecoradores));
+      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      mat4.rotateY(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,degToRad(-counter * 360/cantidadDecoradores));
+      objects[21 + counter].updateWorldMatrix();
+    }
+  else {
+    for (var counter = 0; counter < cantidadDecoradores; counter++){
+      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      objects[21 + counter].updateWorldMatrix();
+    }
   }
   distance += 1;
   if (distance > 277) {
@@ -416,9 +429,20 @@ function bandFinalR5(){
   objects[19].updateWorldMatrix();
   objects[20].updateWorldMatrix();
   objects[11].move();
-  for (var counter = 0; counter < cantidadDecoradores; counter++){
-    mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
-    objects[21 + counter].updateWorldMatrix();
+  if(decorador == "Paletas") {
+    for (var counter = 0; counter < cantidadDecoradores; counter++){
+      mat4.rotateY(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,degToRad(counter * 360/cantidadDecoradores));
+      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      mat4.rotateY(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,degToRad(-counter * 360/cantidadDecoradores));
+      objects[21 + counter].updateWorldMatrix();
+    }
+  }
+
+  else {
+    for (var counter = 0; counter < cantidadDecoradores; counter++){
+      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      objects[21 + counter].updateWorldMatrix();
+    }
   }
 
   if (contorno == "Caramelos") {
