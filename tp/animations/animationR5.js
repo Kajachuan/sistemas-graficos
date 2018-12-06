@@ -547,23 +547,8 @@ function station2RotateCakeAndContornosR5(){
     if (c < (cantidadContorno-1)){
       c += 1;
       animationLoop(station2DeployContornoR5);
-    } else {
-      if (contorno == "Caramelos") {
-        for (var j = 0; j < cantidadContorno; j++) {
-          mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(j * 360/cantidadContorno));
-          objects[21 + cantidadDecoradores + j].updateWorldMatrix();
-        }
-      }
-
-      else {
-        for (var j = 0; j < cantidadContorno; j++) {
-          mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,0.4));
-          mat4.rotateY(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,degToRad(j * 360/cantidadContorno - 90));
-          mat4.scale(objects[21 + cantidadDecoradores + j].localMatrix,objects[21 + cantidadDecoradores + j].localMatrix,vec3.fromValues(1,1,2.5));
-          objects[21 + cantidadDecoradores + j].updateWorldMatrix();
-        }
-      }
-
+    }
+    else {
       animationLoop(bandFinalR5);
     }
     return false;
@@ -585,29 +570,26 @@ function bandFinalR5(){
 
   if (contorno == "Caramelos") {
     for (var counter = 0; counter < cantidadContorno; counter++){
+      mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(counter * 360/cantidadContorno));
       mat4.translate(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(-counter * 360/cantidadContorno));
       objects[21 + cantidadDecoradores + counter].updateWorldMatrix();
     }
   }
 
   else {
     for (var counter = 0; counter < cantidadContorno; counter++){
+      mat4.scale(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(1,1,0.4));
+      mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(counter * 360/cantidadContorno - 90));
       mat4.translate(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(-horizontalVelocity*50.1,0,0));
+      mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(-counter * 360/cantidadContorno + 90));
+      mat4.scale(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(1,1,2.5));
       objects[21 + cantidadDecoradores + counter].updateWorldMatrix();
     }
   }
 
   distance += 1;
   if (distance > 220) {
-    if (contorno == "Obleas") {
-      for (var counter = 0; counter < cantidadContorno; counter++){
-        mat4.scale(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(1,1,0.4));
-        mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(-counter * 360/cantidadContorno + 90));
-        mat4.scale(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(1,1,2.5));
-        objects[21 + cantidadDecoradores + counter].updateWorldMatrix();
-      }
-    }
-
     var f6 = gui.addFolder('Resetear escena');
     f6.add(window, "reset").name("Resetear");
     f6.open();
