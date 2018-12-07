@@ -476,7 +476,7 @@ function bandFinalR5(){
   if(decorador == "Paletas") {
     for (var counter = 0; counter < cantidadDecoradores; counter++){
       mat4.rotateY(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,degToRad(counter * 360/cantidadDecoradores));
-      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*9.975,0,0));
       mat4.rotateY(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,degToRad(-counter * 360/cantidadDecoradores));
       objects[21 + counter].updateWorldMatrix();
     }
@@ -484,7 +484,7 @@ function bandFinalR5(){
 
   else {
     for (var counter = 0; counter < cantidadDecoradores; counter++){
-      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      mat4.translate(objects[21 + counter].localMatrix,objects[21 + counter].localMatrix,vec3.fromValues(-horizontalVelocity*9.975,0,0));
       objects[21 + counter].updateWorldMatrix();
     }
   }
@@ -492,7 +492,7 @@ function bandFinalR5(){
   if (contorno == "Caramelos") {
     for (var counter = 0; counter < cantidadContorno; counter++){
       mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(counter * 360/cantidadContorno));
-      mat4.translate(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(-horizontalVelocity*10.075,0,0));
+      mat4.translate(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,vec3.fromValues(-horizontalVelocity*9.975,0,0));
       mat4.rotateY(objects[21 + cantidadDecoradores + counter].localMatrix,objects[21 + cantidadDecoradores + counter].localMatrix,degToRad(-counter * 360/cantidadContorno));
       objects[21 + cantidadDecoradores + counter].updateWorldMatrix();
     }
