@@ -128,8 +128,21 @@ function station1RotateDecoratorR5(){
   targetAngle = contador * 360 / cantidadDecoradores;
   if(targetAngle > 0) {
     mat4.rotateY(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,-degToRad(1));
+
+    mat4.scale(objects[offset + 3].localMatrix, objects[offset + 3].localMatrix,vec3.fromValues(6,1,1));
+    mat4.translate(objects[offset + 3].localMatrix, objects[offset + 3].localMatrix,vec3.fromValues(0,0,-0.011))
+    mat4.rotateY(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,-degToRad(1));
+    mat4.scale(objects[offset + 3].localMatrix, objects[offset + 3].localMatrix,vec3.fromValues(1/6,1,1));
+
+    mat4.scale(objects[offset + 4].localMatrix, objects[offset + 4].localMatrix,vec3.fromValues(6,1,1));
+    mat4.translate(objects[offset + 4].localMatrix, objects[offset + 4].localMatrix,vec3.fromValues(0,0,0.011))
+    mat4.rotateY(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,-degToRad(1));
+    mat4.scale(objects[offset + 4].localMatrix, objects[offset + 4].localMatrix,vec3.fromValues(1/6,1,1));
+
     mat4.rotateY(objects[21 + contador].localMatrix,objects[21 + contador].localMatrix,-degToRad(1));
     objects[offset + 2].updateWorldMatrix();
+    objects[offset + 3].updateWorldMatrix();
+    objects[offset + 4].updateWorldMatrix();
     objects[21 + contador].updateWorldMatrix();
   }
 
@@ -279,7 +292,19 @@ function station1HookDeployDecorator2R5(){
 function station1RotateDecorator2R5(){
   if(targetAngle > 0) {
     mat4.rotateY(objects[offset + 2].localMatrix,objects[offset + 2].localMatrix,degToRad(1));
+
+    mat4.scale(objects[offset + 3].localMatrix, objects[offset + 3].localMatrix,vec3.fromValues(6,1,1));
+    mat4.translate(objects[offset + 3].localMatrix, objects[offset + 3].localMatrix,vec3.fromValues(0,0,0.011))
+    mat4.rotateY(objects[offset + 3].localMatrix,objects[offset + 3].localMatrix,degToRad(1));
+    mat4.scale(objects[offset + 3].localMatrix, objects[offset + 3].localMatrix,vec3.fromValues(1/6,1,1));
+
+    mat4.scale(objects[offset + 4].localMatrix, objects[offset + 4].localMatrix,vec3.fromValues(6,1,1));
+    mat4.translate(objects[offset + 4].localMatrix, objects[offset + 4].localMatrix,vec3.fromValues(0,0,-0.011))
+    mat4.rotateY(objects[offset + 4].localMatrix,objects[offset + 4].localMatrix,degToRad(1));
+    mat4.scale(objects[offset + 4].localMatrix, objects[offset + 4].localMatrix,vec3.fromValues(1/6,1,1));
     objects[offset + 2].updateWorldMatrix();
+    objects[offset + 3].updateWorldMatrix();
+    objects[offset + 4].updateWorldMatrix();
   }
 
   angleDecorator -= 1;
